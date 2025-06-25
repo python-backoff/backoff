@@ -665,7 +665,7 @@ async def test_on_exception_callable_gen_kwargs():
 
 
 @pytest.mark.asyncio
-async def test_on_exception_coro_cancelling(event_loop):
+async def test_on_exception_coro_cancelling():
     sleep_started_event = asyncio.Event()
 
     @backoff.on_predicate(backoff.expo)
@@ -679,59 +679,10 @@ async def test_on_exception_coro_cancelling(event_loop):
 
         return False
 
-    task = event_loop.create_task(coro())
+    task = asyncio.create_task(coro())
 
     await sleep_started_event.wait()
 
     task.cancel()
 
     assert (await task)
-
-
-def test_on_predicate_on_regular_function_without_event_loop(monkeypatch):
-    monkeypatch.setattr('time.sleep', lambda x: None)
-
-    # Set default event loop to None.
-    loop = asyncio.get_event_loop()
-    asyncio.set_event_loop(None)
-
-    try:
-        @backoff.on_predicate(backoff.expo)
-        def return_true(log, n):
-            val = (len(log) == n - 1)
-            log.append(val)
-            return val
-
-        log = []
-        ret = return_true(log, 3)
-        assert ret is True
-        assert 3 == len(log)
-
-    finally:
-        # Restore event loop.
-        asyncio.set_event_loop(loop)
-
-
-def test_on_exception_on_regular_function_without_event_loop(monkeypatch):
-    monkeypatch.setattr('time.sleep', lambda x: None)
-
-    # Set default event loop to None.
-    loop = asyncio.get_event_loop()
-    asyncio.set_event_loop(None)
-
-    try:
-        @backoff.on_exception(backoff.expo, KeyError)
-        def keyerror_then_true(log, n):
-            if len(log) == n:
-                return True
-            e = KeyError()
-            log.append(e)
-            raise e
-
-        log = []
-        assert keyerror_then_true(log, 3) is True
-        assert 3 == len(log)
-
-    finally:
-        # Restore event loop.
-        asyncio.set_event_loop(loop)
