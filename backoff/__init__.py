@@ -10,7 +10,7 @@ APIs. Somewhat more generally, it may also be of use for dynamically
 polling resources for externally generated content.
 
 For examples and full documentation see the README at
-https://github.com/litl/backoff
+https://github.com/python-backoff/backoff
 """
 from backoff._decorator import on_exception, on_predicate
 from backoff._jitter import full_jitter, random_jitter

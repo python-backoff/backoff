@@ -3,6 +3,7 @@ name = "backoff"
 version = "2.2.1"
 description = "Function decoration for backoff and retry"
 authors = [{ name = "Bob Green", email = "rgreen@aquent.com" }]
+maintainers = [{ name = "Edgar Ramírez-Mondragón", email = "edgarrm358@gmail.com" }]
 requires-python = ">=3.7"
 readme = "README.rst"
 license = "MIT"
@@ -34,7 +35,7 @@ classifiers = [
 ]
 
 [project.urls]
-Repository = "https://github.com/litl/backoff"
+Repository = "https://github.com/python-backoff/backoff"
 
 [dependency-groups]
 dev = [
