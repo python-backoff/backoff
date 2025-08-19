@@ -76,6 +76,11 @@ description = "run unit tests"
 dependency_groups = [ "tests" ]
 commands = [ [ "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
 
+[tool.pytest.ini_options]
+filterwarnings = [
+    "error",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
