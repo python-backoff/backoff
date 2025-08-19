@@ -1,48 +1,81 @@
-[tool.poetry]
+[project]
 name = "backoff"
 version = "2.2.1"
 description = "Function decoration for backoff and retry"
-authors = ["Bob Green <rgreen@aquent.com>"]
+authors = [{ name = "Bob Green", email = "rgreen@aquent.com" }]
+requires-python = ">=3.7"
 readme = "README.rst"
-repository = "https://github.com/litl/backoff"
 license = "MIT"
-keywords = ["retry", "backoff", "decorators"]
-classifiers = ['Development Status :: 5 - Production/Stable',
-               'Intended Audience :: Developers',
-               'Programming Language :: Python',
-               'License :: OSI Approved :: MIT License',
-               'Natural Language :: English',
-               'Operating System :: OS Independent',
-               'Programming Language :: Python',
-               'Programming Language :: Python :: 3',
-               'Programming Language :: Python :: 3.7',
-               'Programming Language :: Python :: 3.8',
-               'Programming Language :: Python :: 3.9',
-               'Programming Language :: Python :: 3.10',
-               'Programming Language :: Python :: 3.11',
-               'Programming Language :: Python :: 3.12',
-               'Programming Language :: Python :: 3.13',
-               'Programming Language :: Python :: 3.14',
-               'Topic :: Internet :: WWW/HTTP',
-               'Topic :: Software Development :: Libraries :: Python Modules',
-               'Topic :: Utilities']
-packages = [
-    { include = "backoff" },
+keywords = [
+    "retry",
+    "backoff",
+    "decorators",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.7"
+[project.urls]
+Repository = "https://github.com/litl/backoff"
 
-[tool.poetry.dev-dependencies]
-flake8 = "^4.0.1"
-mypy = "^0.942"
-pytest = "^7.1.2"
-pytest-asyncio = "^0.18.3"
-pytest-cov = "^3.0.0"
-requests = "^2.26.0"
-responses = "^0.20.0"
-types-requests = "^2.27.20"
+[dependency-groups]
+dev = [
+    { include-group = "tests" },
+    "flake8>=4.0.1",
+    "mypy>=0.942",
+    "types-requests>=2.27.20",
+]
+tests = [
+    "pytest>=7.1.2",
+    "pytest-asyncio>=0.18.3",
+    "pytest-cov>=3.0.0",
+    "requests>=2.26.0",
+    "responses>=0.20.0",
+]
+
+[tool.hatch.build.targets.sdist]
+include = ["backoff"]
+
+[tool.hatch.build.targets.wheel]
+include = ["backoff"]
+
+[tool.tox]
+min_version = "4.22"
+requires = [ "tox", "tox-uv" ]
+env_list = [
+  "3.7",
+  "3.8",
+  "3.9",
+  "3.10",
+  "3.11",
+  "3.12",
+  "3.13",
+  "3.14",
+]
+
+[tool.tox.env_run_base]
+description = "run unit tests"
+dependency_groups = [ "tests" ]
+commands = [ [ "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
