@@ -39,17 +39,24 @@ Repository = "https://github.com/python-backoff/backoff"
 
 [dependency-groups]
 dev = [
-    { include-group = "tests" },
-    "flake8>=4.0.1",
-    "mypy>=0.942",
-    "types-requests>=2.27.20",
+    { include-group = "lint" },
+    { include-group = "test" },
+    { include-group = "typing" },
 ]
-tests = [
+lint = [
+    "ruff>=0.12.9",
+]
+test = [
     "coverage>=7.2.7",
     "pytest>=7.1.2",
     "pytest-asyncio>=0.18.3",
     "requests>=2.26.0",
     "responses>=0.20.0",
+]
+typing = [
+    { include-group = "test" },
+    "mypy>=0.942",
+    "types-requests>=2.27.20",
 ]
 
 [tool.hatch.build.targets.sdist]
@@ -62,6 +69,7 @@ include = ["backoff"]
 min_version = "4.22"
 requires = [ "tox", "tox-uv" ]
 env_list = [
+  "format",
   "3.7",
   "3.8",
   "3.9",
@@ -70,12 +78,16 @@ env_list = [
   "3.12",
   "3.13",
   "3.14",
+  "lint",
+  "typing",
 ]
 
 [tool.tox.env_run_base]
 description = "run unit tests"
-dependency_groups = [ "tests" ]
-commands = [ [ "coverage", "run", "-m", "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
+dependency_groups = [ "test" ]
+commands = [
+    [ "coverage", "run", "-m", "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ],
+]
 
 [tool.tox.env.coverage]
 description = "generate coverage report"
@@ -89,11 +101,39 @@ depends = [
   "3.13",
   "3.14",
 ]
-dependency_groups = [ "tests" ]
+dependency_groups = [ "test" ]
 commands = [
   [ "coverage", "combine" ],
   [ "coverage", "report" ],
   [ "coverage", "xml" ],
+]
+
+[tool.tox.env.format]
+description = "format code"
+dependency_groups = [ "lint" ]
+commands = [
+    [ "ruff", "check", "--fix", { replace = "posargs", default = [ "backoff", "tests" ], extend = true } ],
+]
+
+[tool.tox.env.lint]
+description = "lint code"
+dependency_groups = [ "lint" ]
+commands = [
+    [ "ruff", "check", { replace = "posargs", default = [ "backoff", "tests" ], extend = true } ],
+]
+
+[tool.tox.env.typing]
+description = "run type checking"
+dependency_groups = [ "typing" ]
+commands = [
+  [
+    "mypy",
+    "--show-error-codes",
+    { replace = "posargs", default = [
+      "backoff",
+      "tests",
+    ], extend = true },
+  ],
 ]
 
 [tool.pytest.ini_options]
