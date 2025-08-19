@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Use `inspect.iscoroutinefunction` instead of `asyncio.iscoroutinefunction` to avoid Python 3.14 deprecation warning https://github.com/python-backoff/backoff/pull/3
+- Use uv for dependencies and packaging https://github.com/python-backoff/backoff/pull/7
+
 ## [v2.2.1] - 2022-10-05
 
 - Fix type hint for wait generators https://github.com/litl/backoff/issues/177
