@@ -33,7 +33,7 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.7"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 flake8 = "^4.0.1"
 mypy = "^0.942"
 pytest = "^7.1.2"
