@@ -2,13 +2,14 @@
 import datetime
 import functools
 import asyncio
+import inspect
 from datetime import timedelta
 
 from backoff._common import (_init_wait_gen, _maybe_call, _next_wait)
 
 
 def _ensure_coroutine(coro_or_func):
-    if asyncio.iscoroutinefunction(coro_or_func):
+    if inspect.iscoroutinefunction(coro_or_func):
         return coro_or_func
     else:
         @functools.wraps(coro_or_func)
@@ -47,10 +48,10 @@ def retry_predicate(target, wait_gen, predicate,
     on_giveup = _ensure_coroutines(on_giveup)
 
     # Easy to implement, please report if you need this.
-    assert not asyncio.iscoroutinefunction(max_tries)
-    assert not asyncio.iscoroutinefunction(jitter)
+    assert not inspect.iscoroutinefunction(max_tries)
+    assert not inspect.iscoroutinefunction(jitter)
 
-    assert asyncio.iscoroutinefunction(target)
+    assert inspect.iscoroutinefunction(target)
 
     @functools.wraps(target)
     async def retry(*args, **kwargs):
@@ -124,8 +125,8 @@ def retry_exception(target, wait_gen, exception,
     giveup = _ensure_coroutine(giveup)
 
     # Easy to implement, please report if you need this.
-    assert not asyncio.iscoroutinefunction(max_tries)
-    assert not asyncio.iscoroutinefunction(jitter)
+    assert not inspect.iscoroutinefunction(max_tries)
+    assert not inspect.iscoroutinefunction(jitter)
 
     @functools.wraps(target)
     async def retry(*args, **kwargs):
