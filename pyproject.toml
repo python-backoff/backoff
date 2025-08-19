@@ -67,7 +67,7 @@ include = ["backoff"]
 
 [tool.tox]
 min_version = "4.22"
-requires = [ "tox", "tox-uv" ]
+requires = [ "tox", "tox-gh", "tox-uv" ]
 env_list = [
   "format",
   "3.7",
@@ -135,6 +135,16 @@ commands = [
     ], extend = true },
   ],
 ]
+
+[tool.tox.gh.python]
+"3.14" = ["3.14", "lint", "typing"]
+"3.13" = ["3.13"]
+"3.12" = ["3.12"]
+"3.11" = ["3.11"]
+"3.10" = ["3.10"]
+"3.9" = ["3.9"]
+"3.8" = ["3.8"]
+"3.7" = ["3.7"]
 
 [tool.pytest.ini_options]
 filterwarnings = [
