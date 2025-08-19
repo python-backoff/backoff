@@ -45,9 +45,9 @@ dev = [
     "types-requests>=2.27.20",
 ]
 tests = [
+    "coverage>=7.2.7",
     "pytest>=7.1.2",
     "pytest-asyncio>=0.18.3",
-    "pytest-cov>=3.0.0",
     "requests>=2.26.0",
     "responses>=0.20.0",
 ]
@@ -75,11 +75,48 @@ env_list = [
 [tool.tox.env_run_base]
 description = "run unit tests"
 dependency_groups = [ "tests" ]
-commands = [ [ "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
+commands = [ [ "coverage", "run", "-m", "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
+
+[tool.tox.env.coverage]
+description = "generate coverage report"
+depends = [
+  "3.7",
+  "3.8",
+  "3.9",
+  "3.10",
+  "3.11",
+  "3.12",
+  "3.13",
+  "3.14",
+]
+dependency_groups = [ "tests" ]
+commands = [
+  [ "coverage", "combine" ],
+  [ "coverage", "report" ],
+  [ "coverage", "xml" ],
+]
 
 [tool.pytest.ini_options]
 filterwarnings = [
     "error",
+]
+
+[tool.coverage.paths]
+package = [
+  "backoff/",
+  "*/site-packages/backoff/",
+]
+
+[tool.coverage.report]
+fail_under = 100
+show_missing = true
+
+[tool.coverage.run]
+branch = true
+parallel = true
+relative_files = true
+source = [
+  "backoff",
 ]
 
 [build-system]
