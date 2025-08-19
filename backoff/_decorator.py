@@ -1,5 +1,5 @@
 # coding:utf-8
-import asyncio
+import inspect
 import logging
 import operator
 from typing import Any, Callable, Iterable, Optional, Type, Union
@@ -98,7 +98,7 @@ def on_predicate(wait_gen: _WaitGenerator,
             log_level=giveup_log_level
         )
 
-        if asyncio.iscoroutinefunction(target):
+        if inspect.iscoroutinefunction(target):
             retry = _async.retry_predicate
         else:
             retry = _sync.retry_predicate
@@ -198,7 +198,7 @@ def on_exception(wait_gen: _WaitGenerator,
             log_level=giveup_log_level,
         )
 
-        if asyncio.iscoroutinefunction(target):
+        if inspect.iscoroutinefunction(target):
             retry = _async.retry_exception
         else:
             retry = _sync.retry_exception
