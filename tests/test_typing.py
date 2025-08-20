@@ -18,7 +18,7 @@ def foo():
     backoff.constant,
     ValueError,
     interval=1,
-    max_tries=3
+    max_tries=3,
 )
 def bar():
     raise ValueError()

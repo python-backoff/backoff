@@ -173,6 +173,11 @@ source = [
   "backoff",
 ]
 
+[tool.ruff.lint]
+extend-select = [
+  "COM",  # flake8-commas
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
