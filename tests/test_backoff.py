@@ -460,9 +460,9 @@ def test_on_predicate_iterable_handlers():
     loggers = [Logger() for _ in range(3)]
 
     @backoff.on_predicate(backoff.constant,
-                          on_backoff=(l.backoffs.append for l in loggers),
-                          on_giveup=(l.giveups.append for l in loggers),
-                          on_success=(l.successes.append for l in loggers),
+                          on_backoff=(l.backoffs.append for l in loggers),  # noqa: E741
+                          on_giveup=(l.giveups.append for l in loggers),  # noqa: E741
+                          on_success=(l.successes.append for l in loggers),  # noqa: E741
                           max_tries=3,
                           jitter=None,
                           interval=0)
