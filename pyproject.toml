@@ -60,7 +60,7 @@ typing = [
 ]
 
 [tool.hatch.build.targets.sdist]
-include = ["backoff"]
+include = ["backoff", "tests"]
 
 [tool.hatch.build.targets.wheel]
 include = ["backoff"]
