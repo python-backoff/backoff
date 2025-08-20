@@ -120,6 +120,7 @@ description = "format code"
 dependency_groups = [ "lint" ]
 commands = [
     [ "ruff", "check", "--fix", { replace = "posargs", default = [ "backoff", "tests" ], extend = true } ],
+    # [ "ruff", "format", { replace = "posargs", default = [ "backoff", "tests" ], extend = true } ],
 ]
 
 [tool.tox.env.lint]
@@ -177,6 +178,11 @@ parallel = true
 relative_files = true
 source = [
   "backoff",
+]
+
+[tool.ruff.lint]
+extend-select = [
+  "COM",  # flake8-commas
 ]
 
 [build-system]

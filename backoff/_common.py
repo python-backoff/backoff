@@ -65,14 +65,14 @@ def _prepare_logger(logger):
 # Configure handler list with user specified handler and optionally
 # with a default handler bound to the specified logger.
 def _config_handlers(
-    user_handlers, *, default_handler=None, logger=None, log_level=None
+    user_handlers, *, default_handler=None, logger=None, log_level=None,
 ):
     handlers = []
     if logger is not None:
         assert log_level is not None, "Log level is not specified"
         # bind the specified logger to the default log handler
         log_handler = functools.partial(
-            default_handler, logger=logger, log_level=log_level
+            default_handler, logger=logger, log_level=log_level,
         )
         handlers.append(log_handler)
 
