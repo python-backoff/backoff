@@ -8,7 +8,9 @@
       "matchDatasources": [
         "github-actions"
       ],
-      "groupName": "github-actions"
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "GitHub Actions",
+      "groupSlug": "github-actions"
     }
   ]
 }
