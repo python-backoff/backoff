@@ -78,6 +78,7 @@ env_list = [
   "3.12",
   "3.13",
   "3.14",
+  "coverage",
   "lint",
   "typing",
 ]
@@ -156,6 +157,9 @@ package = [
   "backoff/",
   "*/site-packages/backoff/",
 ]
+
+[tool.ruff]
+line-length = 88
 
 [tool.coverage.report]
 fail_under = 100
