@@ -2,10 +2,11 @@
 
 ## Unreleased
 
-- Adapt test cases to pytest-asyncio 1.0 compatibility https://github.com/python-backoff/backoff/pull/1
-- Use `inspect.iscoroutinefunction` instead of `asyncio.iscoroutinefunction` to avoid Python 3.14 deprecation warning https://github.com/python-backoff/backoff/pull/3
-- Use uv for dependencies and packaging https://github.com/python-backoff/backoff/pull/7
-- Include tests in source distribution https://github.com/python-backoff/backoff/pull/13
+- Adapt test cases to pytest-asyncio 1.0 compatibility https://github.com/python-backoff/backoff/pull/1 (from @pastalian)
+- Use `inspect.iscoroutinefunction` instead of `asyncio.iscoroutinefunction` to avoid Python 3.14 deprecation warning https://github.com/python-backoff/backoff/pull/3 (from @edgarrmondragon)
+- Use uv for dependencies and packaging https://github.com/python-backoff/backoff/pull/7 (from @edgarrmondragon)
+- Include tests in source distribution https://github.com/python-backoff/backoff/pull/13 (from @edgarrmondragon)
+- Use `time.monotonic` instead of `datetime.datetime.now` https://github.com/python-backoff/backoff/pull/23 (from @luccabb)
 
 ## [v2.2.1] - 2022-10-05
 
