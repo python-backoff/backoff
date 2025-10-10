@@ -8,6 +8,5 @@ dist/
 .cache/
 *.egg-info
 .vscode
-.python-version
 .tox/
 coverage.xml
