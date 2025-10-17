@@ -29,6 +29,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
     "Topic :: Internet :: WWW/HTTP",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Utilities",
@@ -78,6 +79,7 @@ env_list = [
   "3.12",
   "3.13",
   "3.14",
+  "3.15",
   "coverage",
   "lint",
   "typing",
@@ -101,6 +103,7 @@ depends = [
   "3.12",
   "3.13",
   "3.14",
+  "3.15",
 ]
 dependency_groups = [ "test" ]
 commands = [
@@ -138,6 +141,7 @@ commands = [
 ]
 
 [tool.tox.gh.python]
+"3.15" = ["3.15"]
 "3.14" = ["3.14", "lint", "typing"]
 "3.13" = ["3.13"]
 "3.12" = ["3.12"]
