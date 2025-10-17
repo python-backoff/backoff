@@ -40,9 +40,15 @@ Repository = "https://github.com/python-backoff/backoff"
 
 [dependency-groups]
 dev = [
+    { include-group = "docs" },
     { include-group = "lint" },
     { include-group = "test" },
     { include-group = "typing" },
+]
+docs = [
+    "mkdocs>=1.5.3",
+    "mkdocs-material>=9.2.7",
+    "mkdocstrings[python]>=0.22.0",
 ]
 lint = [
     "ruff>=0.12.9",
