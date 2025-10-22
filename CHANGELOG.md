@@ -8,6 +8,7 @@
 - Adapt test cases to pytest-asyncio 1.0 compatibility https://github.com/python-backoff/backoff/pull/1 from @pastalian
 - Include tests in source distribution https://github.com/python-backoff/backoff/pull/13
 - Added `logging.LoggerAdapter` to `_MaybeLogger` union https://github.com/python-backoff/backoff/pull/34 from @jcbertin
+- Add `exception` to the typing-only `Details` dictionary for cases when `on_exception` is used https://github.com/python-backoff/backoff/pull/35
 
 ### Packaging
 
