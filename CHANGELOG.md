@@ -13,6 +13,7 @@
 ### Packaging
 
 - Use uv for dependencies and packaging https://github.com/python-backoff/backoff/pull/7
+- Remove duplicate classifier https://github.com/python-backoff/backoff/pull/37
 
 ## [v2.2.1] - 2022-10-05
 
