@@ -27,6 +27,7 @@ class _Details(TypedDict):
 class Details(_Details, total=False):
     wait: float  # present in the on_backoff handler case for either decorator
     value: Any  # present in the on_predicate decorator case
+    exception: Exception  # present in the on_exception decorator case
 
 
 T = TypeVar("T")
@@ -38,7 +39,7 @@ _Handler = Union[
 ]
 _Jitterer = Callable[[float], float]
 _MaybeCallable = Union[T, Callable[[], T]]
-_MaybeLogger = Union[str, logging.Logger, None]
+_MaybeLogger = Union[str, logging.Logger, logging.LoggerAdapter, None]
 _MaybeSequence = Union[T, Sequence[T]]
 _Predicate = Callable[[T], bool]
 _WaitGenerator = Callable[..., Generator[float, None, None]]
