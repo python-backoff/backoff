@@ -27,6 +27,7 @@ class _Details(TypedDict):
 class Details(_Details, total=False):
     wait: float  # present in the on_backoff handler case for either decorator
     value: Any  # present in the on_predicate decorator case
+    exception: Exception  # present in the on_exception decorator case
 
 
 T = TypeVar("T")
