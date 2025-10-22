@@ -11,6 +11,7 @@ import unittest.mock
 import pytest
 
 import backoff
+from backoff._typing import Details
 from tests.common import _save_target
 
 
@@ -194,13 +195,35 @@ def test_on_exception_constant_iterable(monkeypatch):
     giveups = []
     successes = []
 
+    def on_backoff(details: Details):
+        nonlocal backoffs
+        assert details["tries"] == len(backoffs) + 1
+        assert "exception" in details
+        assert isinstance(details["exception"], KeyError)
+
+        backoffs.append(details)
+
+    def on_giveup(details: Details):
+        nonlocal giveups
+        assert details["tries"] == 4
+        assert "exception" in details
+        assert isinstance(details["exception"], KeyError)
+
+        giveups.append(details)
+
+    def on_success(details: Details):
+        nonlocal successes
+
+        successes.append(details)
+
+
     @backoff.on_exception(
         backoff.constant,
         KeyError,
         interval=(1, 2, 3),
-        on_backoff=backoffs.append,
-        on_giveup=giveups.append,
-        on_success=successes.append,
+        on_backoff=on_backoff,
+        on_giveup=on_giveup,
+        on_success=on_success,
     )
     def endless_exceptions():
         raise KeyError('foo')
