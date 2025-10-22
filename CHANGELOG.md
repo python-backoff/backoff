@@ -2,10 +2,16 @@
 
 ## Unreleased
 
-- Adapt test cases to pytest-asyncio 1.0 compatibility https://github.com/python-backoff/backoff/pull/1
+### Fixed
+
 - Use `inspect.iscoroutinefunction` instead of `asyncio.iscoroutinefunction` to avoid Python 3.14 deprecation warning https://github.com/python-backoff/backoff/pull/3
-- Use uv for dependencies and packaging https://github.com/python-backoff/backoff/pull/7
+- Adapt test cases to pytest-asyncio 1.0 compatibility https://github.com/python-backoff/backoff/pull/1 from @pastalian
 - Include tests in source distribution https://github.com/python-backoff/backoff/pull/13
+- Added `logging.LoggerAdapter` to `_MaybeLogger` union https://github.com/python-backoff/backoff/pull/34 from @jcbertin
+
+### Packaging
+
+- Use uv for dependencies and packaging https://github.com/python-backoff/backoff/pull/7
 
 ## [v2.2.1] - 2022-10-05
 
