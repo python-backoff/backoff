@@ -35,6 +35,7 @@ classifiers = [
 ]
 
 [project.urls]
+Documentation = "https://python-backoff.github.io/backoff"
 Repository = "https://github.com/python-backoff/backoff"
 
 [dependency-groups]
