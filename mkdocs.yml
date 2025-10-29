@@ -41,5 +41,19 @@ plugins:
             show_root_heading: yes
             show_source: yes
 nav:
-  - "index.md"
-  - "api.md"
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - User Guide:
+      - Decorators: user-guide/decorators.md
+      - Wait Strategies: user-guide/wait-strategies.md
+      - Configuration: user-guide/configuration.md
+      - Event Handlers: user-guide/event-handlers.md
+      - Logging: user-guide/logging.md
+      - Async Support: user-guide/async.md
+  - Advanced:
+      - Combining Decorators: advanced/combining-decorators.md
+      - Runtime Configuration: advanced/runtime-config.md
+      - Custom Strategies: advanced/custom-strategies.md
+  - Examples: examples.md
+  - API Reference: api/reference.md
+  - FAQ: faq.md
