@@ -9,6 +9,7 @@
 - Include tests in source distribution https://github.com/python-backoff/backoff/pull/13
 - Added `logging.LoggerAdapter` to `_MaybeLogger` union https://github.com/python-backoff/backoff/pull/34 from @jcbertin
 - Add `exception` to the typing-only `Details` dictionary for cases when `on_exception` is used https://github.com/python-backoff/backoff/pull/35
+- Add GitHub Actions for CI, documentation, and publishing https://github.com/python-backoff/backoff/pull/39 from @tysoncung
 
 ### Packaging
 

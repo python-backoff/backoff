@@ -10,3 +10,6 @@ dist/
 .vscode
 .tox/
 coverage.xml
+
+# mkdocs
+site/
