@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+env:
+  FORCE_COLOR: 1
+  UV_NO_SYNC: 1
+
 permissions:
   contents: write
 
@@ -18,16 +22,17 @@ jobs:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
-        with:
-          python-version: '3.x'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@557e51de59eb14aaaba2ed9621916900a91d50c6 # v6.6.1
 
       - name: Install dependencies
         run: |
-          pip install mkdocs-material mkdocstrings[python]
+          uv sync --group docs
 
       - name: Build documentation
-        run: mkdocs build
+        run: uv run mkdocs build
 
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: mkdocs gh-deploy --force
+        run: uv run mkdocs gh-deploy --force
