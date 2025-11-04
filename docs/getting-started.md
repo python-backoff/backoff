@@ -7,7 +7,7 @@ This guide will walk you through the basics of using backoff for retrying functi
 Install backoff using pip:
 
 ```bash
-pip install backoff
+pip install python-backoff
 ```
 
 ## Basic Concepts
