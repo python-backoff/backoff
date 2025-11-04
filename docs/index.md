@@ -23,7 +23,7 @@ This module provides function decorators which can be used to wrap a function su
 Install via pip:
 
 ```bash
-pip install backoff
+pip install python-backoff
 ```
 
 Basic retry on exception:
