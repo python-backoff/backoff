@@ -5,8 +5,8 @@ backoff
     :target: https://github.com/python-backoff/backoff/actions/workflows/ci.yaml
 .. image:: https://github.com/python-backoff/backoff/workflows/CodeQL/badge.svg
     :target: https://github.com/python-backoff/backoff/actions/workflows/codeql-analysis.yml
-.. image:: https://img.shields.io/pypi/v/backoff.svg
-    :target: https://pypi.python.org/pypi/backoff
+.. image:: https://img.shields.io/pypi/v/python-backoff.svg
+    :target: https://pypi.python.org/pypi/python-backoff
 .. image:: https://img.shields.io/github/license/python-backoff/backoff
     :target: https://github.com/python-backoff/backoff/blob/main/LICENSE
 
