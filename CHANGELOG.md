@@ -4,17 +4,17 @@
 
 ### Fixed
 
-- Use `inspect.iscoroutinefunction` instead of `asyncio.iscoroutinefunction` to avoid Python 3.14 deprecation warning https://github.com/python-backoff/backoff/pull/3
-- Adapt test cases to pytest-asyncio 1.0 compatibility https://github.com/python-backoff/backoff/pull/1 from @pastalian
-- Include tests in source distribution https://github.com/python-backoff/backoff/pull/13
-- Added `logging.LoggerAdapter` to `_MaybeLogger` union https://github.com/python-backoff/backoff/pull/34 from @jcbertin
-- Add `exception` to the typing-only `Details` dictionary for cases when `on_exception` is used https://github.com/python-backoff/backoff/pull/35
-- Add GitHub Actions for CI, documentation, and publishing https://github.com/python-backoff/backoff/pull/39 from @tysoncung
+- Use `inspect.iscoroutinefunction` instead of `asyncio.iscoroutinefunction` to avoid Python 3.14 deprecation warning https://github.com/python-backoff/backoff/pull/3 (from @edgarrmondragon)
+- Adapt test cases to pytest-asyncio 1.0 compatibility https://github.com/python-backoff/backoff/pull/1 (from @pastalian)
+- Include tests in source distribution https://github.com/python-backoff/backoff/pull/13 (from @edgarrmondragon)
+- Added `logging.LoggerAdapter` to `_MaybeLogger` union https://github.com/python-backoff/backoff/pull/34 (from @jcbertin)
+- Add `exception` to the typing-only `Details` dictionary for cases when `on_exception` is used https://github.com/python-backoff/backoff/pull/35 (from @edgarrmondragon)
+- Add GitHub Actions for CI, documentation, and publishing https://github.com/python-backoff/backoff/pull/39 (from @tysoncung)
 
 ### Packaging
 
-- Use uv for dependencies and packaging https://github.com/python-backoff/backoff/pull/7
-- Remove duplicate classifier https://github.com/python-backoff/backoff/pull/37
+- Use uv for dependencies and packaging https://github.com/python-backoff/backoff/pull/7 (from @edgarrmondragon)
+- Remove duplicate classifier https://github.com/python-backoff/backoff/pull/37 (from @edgarrmondragon)
 
 ## [v2.2.1] - 2022-10-05
 
