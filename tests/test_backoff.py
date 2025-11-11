@@ -847,7 +847,7 @@ def test_on_exception_logger_user_str(monkeypatch, caplog):
 
 
 def _on_exception_factory(
-    backoff_log_level, giveup_log_level, max_tries
+    backoff_log_level, giveup_log_level, max_tries,
 ):
     @backoff.on_exception(
         backoff.expo,
@@ -867,7 +867,7 @@ def _on_exception_factory(
 
 
 def _on_predicate_factory(
-    backoff_log_level, giveup_log_level, max_tries
+    backoff_log_level, giveup_log_level, max_tries,
 ):
     @backoff.on_predicate(
         backoff.expo,
@@ -896,17 +896,17 @@ def _on_predicate_factory(
             repeat=2,
         )
         for factory in (_on_predicate_factory, _on_exception_factory)
-    )
+    ),
 )
 def test_event_log_levels(
-    caplog, func_factory, backoff_log_level, giveup_log_level
+    caplog, func_factory, backoff_log_level, giveup_log_level,
 ):
     max_tries = 3
     func = func_factory(backoff_log_level, giveup_log_level, max_tries)
 
     with unittest.mock.patch('time.sleep', return_value=None):
         with caplog.at_level(
-            min(backoff_log_level, giveup_log_level), logger="backoff"
+            min(backoff_log_level, giveup_log_level), logger="backoff",
         ):
             func()
 

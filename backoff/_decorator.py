@@ -8,7 +8,7 @@ from backoff._common import (
     _prepare_logger,
     _config_handlers,
     _log_backoff,
-    _log_giveup
+    _log_giveup,
 )
 from backoff._jitter import full_jitter
 from backoff import _async, _sync
@@ -89,13 +89,13 @@ def on_predicate(wait_gen: _WaitGenerator,
             on_backoff,
             default_handler=_log_backoff,
             logger=logger,
-            log_level=backoff_log_level
+            log_level=backoff_log_level,
         )
         on_giveup = _config_handlers(
             on_giveup,
             default_handler=_log_giveup,
             logger=logger,
-            log_level=giveup_log_level
+            log_level=giveup_log_level,
         )
 
         if inspect.iscoroutinefunction(target):
@@ -113,7 +113,7 @@ def on_predicate(wait_gen: _WaitGenerator,
             on_success=on_success,
             on_backoff=on_backoff,
             on_giveup=on_giveup,
-            wait_gen_kwargs=wait_gen_kwargs
+            wait_gen_kwargs=wait_gen_kwargs,
         )
 
     # Return a function which decorates a target with a retry loop.
@@ -215,7 +215,7 @@ def on_exception(wait_gen: _WaitGenerator,
             on_backoff=on_backoff,
             on_giveup=on_giveup,
             raise_on_giveup=raise_on_giveup,
-            wait_gen_kwargs=wait_gen_kwargs
+            wait_gen_kwargs=wait_gen_kwargs,
         )
 
     # Return a function which decorates a target with a retry loop.
