@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Use `time.monotonic` instead of `datetime.datetime.now` https://github.com/python-backoff/backoff/pull/23 (from @luccabb)
 - Drop support for Python 3.7 https://github.com/python-backoff/backoff/pull/49 (from @edgarrmondragon)
 
 ## [v2.2.2] - 2025-11-17
@@ -16,7 +17,6 @@
 - Added `logging.LoggerAdapter` to `_MaybeLogger` union https://github.com/python-backoff/backoff/pull/34 (from @jcbertin)
 - Add `exception` to the typing-only `Details` dictionary for cases when `on_exception` is used https://github.com/python-backoff/backoff/pull/35 (from @edgarrmondragon)
 - Add GitHub Actions for CI, documentation, and publishing https://github.com/python-backoff/backoff/pull/39 (from @tysoncung)
-- Use `time.monotonic` instead of `datetime.datetime.now` https://github.com/python-backoff/backoff/pull/23 (from @luccabb)
 
 ### Packaging
 
