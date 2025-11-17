@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Drop support for Python 3.7 https://github.com/python-backoff/backoff/pull/49 (from @edgarrmondragon)
+
 ## [v2.2.2] - 2025-11-17
 
 ### Fixed
