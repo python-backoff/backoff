@@ -1,7 +1,7 @@
 # backoff
 
 [![Build Status](https://github.com/python-backoff/backoff/actions/workflows/ci.yaml/badge.svg)](https://github.com/python-backoff/backoff/actions/workflows/ci.yaml)
-[![PyPI Version](https://img.shields.io/pypi/v/backoff.svg)](https://pypi.python.org/pypi/backoff)
+[![PyPI Version](https://img.shields.io/pypi/v/python-backoff.svg)](https://pypi.python.org/pypi/python-backoff)
 [![License](https://img.shields.io/github/license/python-backoff/backoff)](https://github.com/python-backoff/backoff/blob/main/LICENSE)
 
 **Function decoration for backoff and retry**
@@ -87,6 +87,6 @@ def poll_for_result(job_id):
 ## Project Links
 
 - [GitHub Repository](https://github.com/python-backoff/backoff)
-- [PyPI Package](https://pypi.org/project/backoff/)
+- [PyPI Package](https://pypi.org/project/python-backoff/)
 - [Issue Tracker](https://github.com/python-backoff/backoff/issues)
 - [Changelog](https://github.com/python-backoff/backoff/blob/main/CHANGELOG.md)
