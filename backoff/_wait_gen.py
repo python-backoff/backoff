@@ -8,7 +8,7 @@ from typing import Any, Callable, Generator, Iterable, Optional, Union
 def expo(
     base: float = 2,
     factor: float = 1,
-    max_value: Optional[float] = None
+    max_value: Optional[float] = None,
 ) -> Generator[float, Any, None]:
 
     """Generator for exponential decay.
@@ -35,7 +35,7 @@ def expo(
 def decay(
     initial_value: float = 1,
     decay_factor: float = 1,
-    min_value: Optional[float] = None
+    min_value: Optional[float] = None,
 ) -> Generator[float, Any, None]:
 
     """Generator for exponential decay[1]:
@@ -83,7 +83,7 @@ def fibo(max_value: Optional[int] = None) -> Generator[int, None, None]:
 
 
 def constant(
-    interval: Union[int, Iterable[float]] = 1
+    interval: Union[int, Iterable[float]] = 1,
 ) -> Generator[float, None, None]:
     """Generator for constant intervals.
 
@@ -104,7 +104,7 @@ def constant(
 
 def runtime(
     *,
-    value: Callable[[Any], float]
+    value: Callable[[Any], float],
 ) -> Generator[float, None, None]:
     """Generator that is based on parsing the return value or thrown
         exception of the decorated method
