@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [v2.2.2] - 2025-11-17
+
 ### Fixed
 
 - Use `inspect.iscoroutinefunction` instead of `asyncio.iscoroutinefunction` to avoid Python 3.14 deprecation warning https://github.com/python-backoff/backoff/pull/3 (from @edgarrmondragon)
