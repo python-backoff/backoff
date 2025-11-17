@@ -1,5 +1,4 @@
 # coding:utf-8
-import datetime
 import itertools
 import logging
 import random
@@ -47,19 +46,17 @@ def test_on_predicate_max_tries(monkeypatch):
 
 def test_on_predicate_max_time(monkeypatch):
     nows = [
-        datetime.datetime(2018, 1, 1, 12, 0, 10, 5),
-        datetime.datetime(2018, 1, 1, 12, 0, 9, 0),
-        datetime.datetime(2018, 1, 1, 12, 0, 1, 0),
-        datetime.datetime(2018, 1, 1, 12, 0, 0, 0),
+        10.000005,
+        9,
+        1,
+        0
     ]
 
-    class Datetime:
-        @staticmethod
-        def now():
-            return nows.pop()
+    def monotonic():
+        return nows.pop()
 
     monkeypatch.setattr('time.sleep', lambda x: None)
-    monkeypatch.setattr('datetime.datetime', Datetime)
+    monkeypatch.setattr('time.monotonic', monotonic)
 
     def giveup(details):
         assert details['tries'] == 3
@@ -80,19 +77,17 @@ def test_on_predicate_max_time(monkeypatch):
 
 def test_on_predicate_max_time_callable(monkeypatch):
     nows = [
-        datetime.datetime(2018, 1, 1, 12, 0, 10, 5),
-        datetime.datetime(2018, 1, 1, 12, 0, 9, 0),
-        datetime.datetime(2018, 1, 1, 12, 0, 1, 0),
-        datetime.datetime(2018, 1, 1, 12, 0, 0, 0),
+        10.000005,
+        9,
+        1,
+        0
     ]
 
-    class Datetime:
-        @staticmethod
-        def now():
-            return nows.pop()
+    def monotonic():
+        return nows.pop()
 
     monkeypatch.setattr('time.sleep', lambda x: None)
-    monkeypatch.setattr('datetime.datetime', Datetime)
+    monkeypatch.setattr('time.monotonic', monotonic)
 
     def giveup(details):
         assert details['tries'] == 3
@@ -502,7 +497,6 @@ def test_on_predicate_iterable_handlers():
         assert len(logger.giveups) == 1
 
         details = dict(logger.giveups[0])
-        print(details)
         elapsed = details.pop('elapsed')
         assert isinstance(elapsed, float)
         assert details == {'args': (1, 2, 3),
@@ -591,7 +585,6 @@ def test_on_predicate_success_0_arg_jitter(monkeypatch):
 
     for i in range(2):
         details = backoffs[i]
-        print(details)
         elapsed = details.pop('elapsed')
         assert isinstance(elapsed, float)
         assert details == {'args': (1, 2, 3),
