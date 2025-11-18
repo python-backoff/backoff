@@ -6,6 +6,7 @@
 
 - Use `time.monotonic` instead of `datetime.datetime.now` https://github.com/python-backoff/backoff/pull/23 (from @luccabb)
 - Drop support for Python 3.7 https://github.com/python-backoff/backoff/pull/49 (from @edgarrmondragon)
+- Improve performance of expo by multiplying previous result https://github.com/python-backoff/backoff/pull/50 (from @whonore)
 
 ## [v2.2.2] - 2025-11-17
 

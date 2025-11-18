@@ -67,6 +67,14 @@ def test_expo_max_value():
         assert expect == next(gen)
 
 
+def test_expo_max_value_factor():
+    gen = backoff.expo(factor=3, max_value=2 ** 4)
+    gen.send(None)
+    expected = [3 * 1, 3 * 2, 3 * 4, 16, 16, 16, 16]
+    for expect in expected:
+        assert expect == next(gen)
+
+
 def test_fibo():
     gen = backoff.fibo()
     gen.send(None)

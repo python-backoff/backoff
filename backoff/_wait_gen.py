@@ -22,12 +22,12 @@ def expo(
     """
     # Advance past initial .send() call
     yield  # type: ignore[misc]
-    n = 0
+    base_n: float = 1
     while True:
-        a = factor * base ** n
+        a = factor * base_n
         if max_value is None or a < max_value:
             yield a
-            n += 1
+            base_n *= base
         else:
             yield max_value
 
