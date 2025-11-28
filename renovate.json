@@ -3,14 +3,28 @@
   "extends": [
     "config:recommended"
   ],
+  "timezone": "America/Mexico_City",
+  "lockfileMaintenance": {
+    "enabled": true,
+    "schedule": ["* 12-18 * * 5"]
+  },
   "packageRules": [
     {
+      "description": "Group minor and patch updates for GitHub Actions to reduce PR noise",
       "matchManagers": [
         "github-actions"
       ],
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "GitHub Actions",
       "groupSlug": "github-actions"
+    },
+    {
+      "description": "Group digest updates for all dependencies to maintain lockfile consistency",
+      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": ["digest"],
+      "depTypeList": ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"],
+      "groupName": "lockfile maintenance",
+      "schedule": ["* 12-18 * * 5"]
     }
   ]
 }
