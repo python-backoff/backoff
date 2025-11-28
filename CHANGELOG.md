@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [v2.3.0] - 2025-11-28
+
 ### Changed
 
 - Use `time.monotonic` instead of `datetime.datetime.now` https://github.com/python-backoff/backoff/pull/23 (from @luccabb)
