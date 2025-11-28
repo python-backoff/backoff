@@ -168,7 +168,7 @@ gets a non-falsey result could be defined like like this:
     def poll_for_message(queue):
         return queue.get()
 
-The jitter is disabled in order to keep the polling frequency fixed.  
+The jitter is disabled in order to keep the polling frequency fixed.
 
 @backoff.runtime
 ----------------
