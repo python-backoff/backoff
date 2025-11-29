@@ -1,0 +1,3321 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../examples/">
+      
+      
+        <link rel="next" href="../../faq/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>API Reference - backoff</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="backoff" class="md-header__button md-logo" aria-label="backoff" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            backoff
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/python-backoff/backoff" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    python-backoff/backoff
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../getting-started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../user-guide/decorators/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../advanced/combining-decorators/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Advanced
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../examples/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Examples
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  API Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../faq/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  FAQ
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="backoff" class="md-nav__button md-logo" aria-label="backoff" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    backoff
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/python-backoff/backoff" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    python-backoff/backoff
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/decorators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decorators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/wait-strategies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wait Strategies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/event-handlers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/async/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Async Support
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../advanced/combining-decorators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combining Decorators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../advanced/runtime-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runtime Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../advanced/custom-strategies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Strategies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#decorators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decorators
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Decorators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on_exception" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        on_exception
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.on_exception" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        on_exception
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="on_exception">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on_predicate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        on_predicate
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.on_predicate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        on_predicate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wait-generators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wait Generators
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Wait Generators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#expo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        expo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.expo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        expo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="expo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fibo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fibo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.fibo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fibo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="fibo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        constant
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.constant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        constant
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="constant">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        runtime
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        runtime
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jitter-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jitter Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Jitter Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#full_jitter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        full_jitter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.full_jitter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        full_jitter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="full_jitter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#random_jitter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        random_jitter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.random_jitter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        random_jitter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Definitions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backoff.types.__all__" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __all__
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backoff.types.Details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Details
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#decorators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decorators
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Decorators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on_exception" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        on_exception
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.on_exception" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        on_exception
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="on_exception">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#on_predicate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        on_predicate
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.on_predicate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        on_predicate
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wait-generators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wait Generators
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Wait Generators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#expo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        expo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.expo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        expo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="expo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fibo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fibo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.fibo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fibo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="fibo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#constant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        constant
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.constant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        constant
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="constant">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        runtime
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        runtime
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#jitter-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Jitter Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Jitter Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#full_jitter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        full_jitter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.full_jitter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        full_jitter
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="full_jitter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#random_jitter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        random_jitter
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.random_jitter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        random_jitter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#type-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type Definitions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#backoff.types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backoff.types.__all__" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __all__
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backoff.types.Details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Details
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="api-reference">API Reference</h1>
+<p>Complete API documentation for the backoff module.</p>
+<h2 id="decorators">Decorators</h2>
+<h3 id="on_exception">on_exception</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="backoff.on_exception" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span><span class="n">wait_gen</span><span class="p">,</span> <span class="n">exception</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">max_tries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">jitter</span><span class="o">=</span><span class="n">full_jitter</span><span class="p">,</span> <span class="n">giveup</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="n">on_success</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">on_backoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">on_giveup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raise_on_giveup</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="s1">&#39;backoff&#39;</span><span class="p">,</span> <span class="n">backoff_log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">giveup_log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="o">**</span><span class="n">wait_gen_kwargs</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Returns decorator for backoff and retry triggered by exception.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>wait_gen</code>
+            </td>
+            <td>
+                  <code><span title="backoff._typing._WaitGenerator">_WaitGenerator</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A generator yielding successive wait times in
+seconds.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>exception</code>
+            </td>
+            <td>
+                  <code><span title="backoff._typing._MaybeSequence">_MaybeSequence</span>[<span title="typing.Type">Type</span>[<span title="Exception">Exception</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An exception type (or tuple of types) which triggers
+backoff.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>max_tries</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="backoff._typing._MaybeCallable">_MaybeCallable</span>[<span title="int">int</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The maximum number of attempts to make before giving
+up. Once exhausted, the exception will be allowed to escape.
+The default value of None means there is no limit to the
+number of tries. If a callable is passed, it will be
+evaluated at runtime and its return value used.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>max_time</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="backoff._typing._MaybeCallable">_MaybeCallable</span>[<span title="float">float</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The maximum total amount of time to try for before
+giving up. Once expired, the exception will be allowed to
+escape. If a callable is passed, it will be
+evaluated at runtime and its return value used.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>jitter</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="backoff._typing._Jitterer">_Jitterer</span>, None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A function of the value yielded by wait_gen returning
+the actual time to wait. This distributes wait times
+stochastically in order to avoid timing collisions across
+concurrent clients. Wait times are jittered by default
+using the full_jitter function. Jittering may be disabled
+altogether by passing jitter=None.</p>
+              </div>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="backoff.full_jitter(value) (backoff._jitter.full_jitter)" href="#backoff.full_jitter">full_jitter</a></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>giveup</code>
+            </td>
+            <td>
+                  <code><span title="backoff._typing._Predicate">_Predicate</span>[<span title="Exception">Exception</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Function accepting an exception instance and
+returning whether or not to give up. Optional. The default
+is to always continue.</p>
+              </div>
+            </td>
+            <td>
+                  <code>lambda e: False</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>on_success</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="backoff._typing._Handler">_Handler</span>, <span title="typing.Iterable">Iterable</span>[<span title="backoff._typing._Handler">_Handler</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Callable (or iterable of callables) with a unary
+signature to be called in the event of success. The
+parameter is a dict containing details about the invocation.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>on_backoff</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="backoff._typing._Handler">_Handler</span>, <span title="typing.Iterable">Iterable</span>[<span title="backoff._typing._Handler">_Handler</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Callable (or iterable of callables) with a unary
+signature to be called in the event of a backoff. The
+parameter is a dict containing details about the invocation.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>on_giveup</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="backoff._typing._Handler">_Handler</span>, <span title="typing.Iterable">Iterable</span>[<span title="backoff._typing._Handler">_Handler</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Callable (or iterable of callables) with a unary
+signature to be called in the event that max_tries
+is exceeded.  The parameter is a dict containing details
+about the invocation.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>raise_on_giveup</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Boolean indicating whether the registered exceptions
+should be raised on giveup. Defaults to <code>True</code></p>
+              </div>
+            </td>
+            <td>
+                  <code>True</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>logger</code>
+            </td>
+            <td>
+                  <code><span title="backoff._typing._MaybeLogger">_MaybeLogger</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name or Logger object to log to. Defaults to 'backoff'.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;backoff&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>backoff_log_level</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>log level for the backoff event. Defaults to "INFO"</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="logging.INFO">INFO</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>giveup_log_level</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>log level for the give up event. Defaults to "ERROR"</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="logging.ERROR">ERROR</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>**wait_gen_kwargs</code>
+            </td>
+            <td>
+                  <code><span title="typing.Any">Any</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Any additional keyword args specified will be
+passed to wait_gen when it is initialized.  Any callable
+args will first be evaluated and their return values passed.
+This is useful for runtime configuration.</p>
+              </div>
+            </td>
+            <td>
+                  <code>{}</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>backoff/_decorator.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">on_exception</span><span class="p">(</span><span class="n">wait_gen</span><span class="p">:</span> <span class="n">_WaitGenerator</span><span class="p">,</span>
+                 <span class="n">exception</span><span class="p">:</span> <span class="n">_MaybeSequence</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]],</span>
+                 <span class="o">*</span><span class="p">,</span>
+                 <span class="n">max_tries</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">_MaybeCallable</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">max_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">_MaybeCallable</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">jitter</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">_Jitterer</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">full_jitter</span><span class="p">,</span>
+                 <span class="n">giveup</span><span class="p">:</span> <span class="n">_Predicate</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">on_success</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">_Handler</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">_Handler</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">on_backoff</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">_Handler</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">_Handler</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">on_giveup</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">_Handler</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">_Handler</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">raise_on_giveup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">logger</span><span class="p">:</span> <span class="n">_MaybeLogger</span> <span class="o">=</span> <span class="s1">&#39;backoff&#39;</span><span class="p">,</span>
+                 <span class="n">backoff_log_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+                 <span class="n">giveup_log_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">wait_gen_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">_CallableT</span><span class="p">],</span> <span class="n">_CallableT</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns decorator for backoff and retry triggered by exception.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wait_gen: A generator yielding successive wait times in</span>
+<span class="sd">            seconds.</span>
+<span class="sd">        exception: An exception type (or tuple of types) which triggers</span>
+<span class="sd">            backoff.</span>
+<span class="sd">        max_tries: The maximum number of attempts to make before giving</span>
+<span class="sd">            up. Once exhausted, the exception will be allowed to escape.</span>
+<span class="sd">            The default value of None means there is no limit to the</span>
+<span class="sd">            number of tries. If a callable is passed, it will be</span>
+<span class="sd">            evaluated at runtime and its return value used.</span>
+<span class="sd">        max_time: The maximum total amount of time to try for before</span>
+<span class="sd">            giving up. Once expired, the exception will be allowed to</span>
+<span class="sd">            escape. If a callable is passed, it will be</span>
+<span class="sd">            evaluated at runtime and its return value used.</span>
+<span class="sd">        jitter: A function of the value yielded by wait_gen returning</span>
+<span class="sd">            the actual time to wait. This distributes wait times</span>
+<span class="sd">            stochastically in order to avoid timing collisions across</span>
+<span class="sd">            concurrent clients. Wait times are jittered by default</span>
+<span class="sd">            using the full_jitter function. Jittering may be disabled</span>
+<span class="sd">            altogether by passing jitter=None.</span>
+<span class="sd">        giveup: Function accepting an exception instance and</span>
+<span class="sd">            returning whether or not to give up. Optional. The default</span>
+<span class="sd">            is to always continue.</span>
+<span class="sd">        on_success: Callable (or iterable of callables) with a unary</span>
+<span class="sd">            signature to be called in the event of success. The</span>
+<span class="sd">            parameter is a dict containing details about the invocation.</span>
+<span class="sd">        on_backoff: Callable (or iterable of callables) with a unary</span>
+<span class="sd">            signature to be called in the event of a backoff. The</span>
+<span class="sd">            parameter is a dict containing details about the invocation.</span>
+<span class="sd">        on_giveup: Callable (or iterable of callables) with a unary</span>
+<span class="sd">            signature to be called in the event that max_tries</span>
+<span class="sd">            is exceeded.  The parameter is a dict containing details</span>
+<span class="sd">            about the invocation.</span>
+<span class="sd">        raise_on_giveup: Boolean indicating whether the registered exceptions</span>
+<span class="sd">            should be raised on giveup. Defaults to `True`</span>
+<span class="sd">        logger: Name or Logger object to log to. Defaults to &#39;backoff&#39;.</span>
+<span class="sd">        backoff_log_level: log level for the backoff event. Defaults to &quot;INFO&quot;</span>
+<span class="sd">        giveup_log_level: log level for the give up event. Defaults to &quot;ERROR&quot;</span>
+<span class="sd">        **wait_gen_kwargs: Any additional keyword args specified will be</span>
+<span class="sd">            passed to wait_gen when it is initialized.  Any callable</span>
+<span class="sd">            args will first be evaluated and their return values passed.</span>
+<span class="sd">            This is useful for runtime configuration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorate</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+        <span class="k">nonlocal</span> <span class="n">logger</span><span class="p">,</span> <span class="n">on_success</span><span class="p">,</span> <span class="n">on_backoff</span><span class="p">,</span> <span class="n">on_giveup</span>
+
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">_prepare_logger</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+        <span class="n">on_success</span> <span class="o">=</span> <span class="n">_config_handlers</span><span class="p">(</span><span class="n">on_success</span><span class="p">)</span>
+        <span class="n">on_backoff</span> <span class="o">=</span> <span class="n">_config_handlers</span><span class="p">(</span>
+            <span class="n">on_backoff</span><span class="p">,</span>
+            <span class="n">default_handler</span><span class="o">=</span><span class="n">_log_backoff</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+            <span class="n">log_level</span><span class="o">=</span><span class="n">backoff_log_level</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">on_giveup</span> <span class="o">=</span> <span class="n">_config_handlers</span><span class="p">(</span>
+            <span class="n">on_giveup</span><span class="p">,</span>
+            <span class="n">default_handler</span><span class="o">=</span><span class="n">_log_giveup</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+            <span class="n">log_level</span><span class="o">=</span><span class="n">giveup_log_level</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">iscoroutinefunction</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+            <span class="n">retry</span> <span class="o">=</span> <span class="n">_async</span><span class="o">.</span><span class="n">retry_exception</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">retry</span> <span class="o">=</span> <span class="n">_sync</span><span class="o">.</span><span class="n">retry_exception</span>
+
+        <span class="k">return</span> <span class="n">retry</span><span class="p">(</span>
+            <span class="n">target</span><span class="p">,</span>
+            <span class="n">wait_gen</span><span class="p">,</span>
+            <span class="n">exception</span><span class="p">,</span>
+            <span class="n">max_tries</span><span class="o">=</span><span class="n">max_tries</span><span class="p">,</span>
+            <span class="n">max_time</span><span class="o">=</span><span class="n">max_time</span><span class="p">,</span>
+            <span class="n">jitter</span><span class="o">=</span><span class="n">jitter</span><span class="p">,</span>
+            <span class="n">giveup</span><span class="o">=</span><span class="n">giveup</span><span class="p">,</span>
+            <span class="n">on_success</span><span class="o">=</span><span class="n">on_success</span><span class="p">,</span>
+            <span class="n">on_backoff</span><span class="o">=</span><span class="n">on_backoff</span><span class="p">,</span>
+            <span class="n">on_giveup</span><span class="o">=</span><span class="n">on_giveup</span><span class="p">,</span>
+            <span class="n">raise_on_giveup</span><span class="o">=</span><span class="n">raise_on_giveup</span><span class="p">,</span>
+            <span class="n">wait_gen_kwargs</span><span class="o">=</span><span class="n">wait_gen_kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Return a function which decorates a target with a retry loop.</span>
+    <span class="k">return</span> <span class="n">decorate</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><h3 id="on_predicate">on_predicate</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="backoff.on_predicate" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">backoff</span><span class="o">.</span><span class="n">on_predicate</span><span class="p">(</span><span class="n">wait_gen</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">not_</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">max_tries</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">jitter</span><span class="o">=</span><span class="n">full_jitter</span><span class="p">,</span> <span class="n">on_success</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">on_backoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">on_giveup</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="s1">&#39;backoff&#39;</span><span class="p">,</span> <span class="n">backoff_log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">giveup_log_level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="o">**</span><span class="n">wait_gen_kwargs</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Returns decorator for backoff and retry triggered by predicate.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>wait_gen</code>
+            </td>
+            <td>
+                  <code><span title="backoff._typing._WaitGenerator">_WaitGenerator</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A generator yielding successive wait times in
+seconds.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>predicate</code>
+            </td>
+            <td>
+                  <code><span title="backoff._typing._Predicate">_Predicate</span>[<span title="typing.Any">Any</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A function which when called on the return value of
+the target function will trigger backoff when considered
+truthily. If not specified, the default behavior is to
+backoff on falsey return values.</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="operator.not_">not_</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>max_tries</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="backoff._typing._MaybeCallable">_MaybeCallable</span>[<span title="int">int</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The maximum number of attempts to make before giving
+up. In the case of failure, the result of the last attempt
+will be returned. The default value of None means there
+is no limit to the number of tries. If a callable is passed,
+it will be evaluated at runtime and its return value used.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>max_time</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="backoff._typing._MaybeCallable">_MaybeCallable</span>[<span title="float">float</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The maximum total amount of time in seconds to try for before
+giving up. If this time expires, the result of the last
+attempt will be returned. If a callable is passed, it will
+be evaluated at runtime and its return value used.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>jitter</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="backoff._typing._Jitterer">_Jitterer</span>, None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A function of the value yielded by wait_gen returning
+the actual time to wait. This distributes wait times
+stochastically in order to avoid timing collisions across
+concurrent clients. Wait times are jittered by default
+using the full_jitter function. Jittering may be disabled
+altogether by passing jitter=None.</p>
+              </div>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="backoff.full_jitter(value) (backoff._jitter.full_jitter)" href="#backoff.full_jitter">full_jitter</a></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>on_success</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="backoff._typing._Handler">_Handler</span>, <span title="typing.Iterable">Iterable</span>[<span title="backoff._typing._Handler">_Handler</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Callable (or iterable of callables) with a unary
+signature to be called in the event of success. The
+parameter is a dict containing details about the invocation.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>on_backoff</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="backoff._typing._Handler">_Handler</span>, <span title="typing.Iterable">Iterable</span>[<span title="backoff._typing._Handler">_Handler</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Callable (or iterable of callables) with a unary
+signature to be called in the event of a backoff. The
+parameter is a dict containing details about the invocation.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>on_giveup</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="backoff._typing._Handler">_Handler</span>, <span title="typing.Iterable">Iterable</span>[<span title="backoff._typing._Handler">_Handler</span>], None]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Callable (or iterable of callables) with a unary
+signature to be called in the event that max_tries
+is exceeded.  The parameter is a dict containing details
+about the invocation.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>logger</code>
+            </td>
+            <td>
+                  <code><span title="backoff._typing._MaybeLogger">_MaybeLogger</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name of logger or Logger object to log to. Defaults to
+'backoff'.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;backoff&#39;</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>backoff_log_level</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>log level for the backoff event. Defaults to "INFO"</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="logging.INFO">INFO</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>giveup_log_level</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>log level for the give up event. Defaults to "ERROR"</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="logging.ERROR">ERROR</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>**wait_gen_kwargs</code>
+            </td>
+            <td>
+                  <code><span title="typing.Any">Any</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Any additional keyword args specified will be
+passed to wait_gen when it is initialized.  Any callable
+args will first be evaluated and their return values passed.
+This is useful for runtime configuration.</p>
+              </div>
+            </td>
+            <td>
+                  <code>{}</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>backoff/_decorator.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">on_predicate</span><span class="p">(</span><span class="n">wait_gen</span><span class="p">:</span> <span class="n">_WaitGenerator</span><span class="p">,</span>
+                 <span class="n">predicate</span><span class="p">:</span> <span class="n">_Predicate</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">operator</span><span class="o">.</span><span class="n">not_</span><span class="p">,</span>
+                 <span class="o">*</span><span class="p">,</span>
+                 <span class="n">max_tries</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">_MaybeCallable</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">max_time</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">_MaybeCallable</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">jitter</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">_Jitterer</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">full_jitter</span><span class="p">,</span>
+                 <span class="n">on_success</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">_Handler</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">_Handler</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">on_backoff</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">_Handler</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">_Handler</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">on_giveup</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">_Handler</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">_Handler</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">logger</span><span class="p">:</span> <span class="n">_MaybeLogger</span> <span class="o">=</span> <span class="s1">&#39;backoff&#39;</span><span class="p">,</span>
+                 <span class="n">backoff_log_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+                 <span class="n">giveup_log_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">wait_gen_kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">_CallableT</span><span class="p">],</span> <span class="n">_CallableT</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns decorator for backoff and retry triggered by predicate.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        wait_gen: A generator yielding successive wait times in</span>
+<span class="sd">            seconds.</span>
+<span class="sd">        predicate: A function which when called on the return value of</span>
+<span class="sd">            the target function will trigger backoff when considered</span>
+<span class="sd">            truthily. If not specified, the default behavior is to</span>
+<span class="sd">            backoff on falsey return values.</span>
+<span class="sd">        max_tries: The maximum number of attempts to make before giving</span>
+<span class="sd">            up. In the case of failure, the result of the last attempt</span>
+<span class="sd">            will be returned. The default value of None means there</span>
+<span class="sd">            is no limit to the number of tries. If a callable is passed,</span>
+<span class="sd">            it will be evaluated at runtime and its return value used.</span>
+<span class="sd">        max_time: The maximum total amount of time in seconds to try for before</span>
+<span class="sd">            giving up. If this time expires, the result of the last</span>
+<span class="sd">            attempt will be returned. If a callable is passed, it will</span>
+<span class="sd">            be evaluated at runtime and its return value used.</span>
+<span class="sd">        jitter: A function of the value yielded by wait_gen returning</span>
+<span class="sd">            the actual time to wait. This distributes wait times</span>
+<span class="sd">            stochastically in order to avoid timing collisions across</span>
+<span class="sd">            concurrent clients. Wait times are jittered by default</span>
+<span class="sd">            using the full_jitter function. Jittering may be disabled</span>
+<span class="sd">            altogether by passing jitter=None.</span>
+<span class="sd">        on_success: Callable (or iterable of callables) with a unary</span>
+<span class="sd">            signature to be called in the event of success. The</span>
+<span class="sd">            parameter is a dict containing details about the invocation.</span>
+<span class="sd">        on_backoff: Callable (or iterable of callables) with a unary</span>
+<span class="sd">            signature to be called in the event of a backoff. The</span>
+<span class="sd">            parameter is a dict containing details about the invocation.</span>
+<span class="sd">        on_giveup: Callable (or iterable of callables) with a unary</span>
+<span class="sd">            signature to be called in the event that max_tries</span>
+<span class="sd">            is exceeded.  The parameter is a dict containing details</span>
+<span class="sd">            about the invocation.</span>
+<span class="sd">        logger: Name of logger or Logger object to log to. Defaults to</span>
+<span class="sd">            &#39;backoff&#39;.</span>
+<span class="sd">        backoff_log_level: log level for the backoff event. Defaults to &quot;INFO&quot;</span>
+<span class="sd">        giveup_log_level: log level for the give up event. Defaults to &quot;ERROR&quot;</span>
+<span class="sd">        **wait_gen_kwargs: Any additional keyword args specified will be</span>
+<span class="sd">            passed to wait_gen when it is initialized.  Any callable</span>
+<span class="sd">            args will first be evaluated and their return values passed.</span>
+<span class="sd">            This is useful for runtime configuration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorate</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+        <span class="k">nonlocal</span> <span class="n">logger</span><span class="p">,</span> <span class="n">on_success</span><span class="p">,</span> <span class="n">on_backoff</span><span class="p">,</span> <span class="n">on_giveup</span>
+
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">_prepare_logger</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+        <span class="n">on_success</span> <span class="o">=</span> <span class="n">_config_handlers</span><span class="p">(</span><span class="n">on_success</span><span class="p">)</span>
+        <span class="n">on_backoff</span> <span class="o">=</span> <span class="n">_config_handlers</span><span class="p">(</span>
+            <span class="n">on_backoff</span><span class="p">,</span>
+            <span class="n">default_handler</span><span class="o">=</span><span class="n">_log_backoff</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+            <span class="n">log_level</span><span class="o">=</span><span class="n">backoff_log_level</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">on_giveup</span> <span class="o">=</span> <span class="n">_config_handlers</span><span class="p">(</span>
+            <span class="n">on_giveup</span><span class="p">,</span>
+            <span class="n">default_handler</span><span class="o">=</span><span class="n">_log_giveup</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+            <span class="n">log_level</span><span class="o">=</span><span class="n">giveup_log_level</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">iscoroutinefunction</span><span class="p">(</span><span class="n">target</span><span class="p">):</span>
+            <span class="n">retry</span> <span class="o">=</span> <span class="n">_async</span><span class="o">.</span><span class="n">retry_predicate</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">retry</span> <span class="o">=</span> <span class="n">_sync</span><span class="o">.</span><span class="n">retry_predicate</span>
+
+        <span class="k">return</span> <span class="n">retry</span><span class="p">(</span>
+            <span class="n">target</span><span class="p">,</span>
+            <span class="n">wait_gen</span><span class="p">,</span>
+            <span class="n">predicate</span><span class="p">,</span>
+            <span class="n">max_tries</span><span class="o">=</span><span class="n">max_tries</span><span class="p">,</span>
+            <span class="n">max_time</span><span class="o">=</span><span class="n">max_time</span><span class="p">,</span>
+            <span class="n">jitter</span><span class="o">=</span><span class="n">jitter</span><span class="p">,</span>
+            <span class="n">on_success</span><span class="o">=</span><span class="n">on_success</span><span class="p">,</span>
+            <span class="n">on_backoff</span><span class="o">=</span><span class="n">on_backoff</span><span class="p">,</span>
+            <span class="n">on_giveup</span><span class="o">=</span><span class="n">on_giveup</span><span class="p">,</span>
+            <span class="n">wait_gen_kwargs</span><span class="o">=</span><span class="n">wait_gen_kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Return a function which decorates a target with a retry loop.</span>
+    <span class="k">return</span> <span class="n">decorate</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><h2 id="wait-generators">Wait Generators</h2>
+<h3 id="expo">expo</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="backoff.expo" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Generator for exponential decay.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>base</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The mathematical base of the exponentiation operation</p>
+              </div>
+            </td>
+            <td>
+                  <code>2</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>factor</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Factor to multiply the exponentiation by.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>max_value</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The maximum value to yield. Once the value in the
+ true exponential sequence exceeds this, the value
+ of max_value will forever after be yielded.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>backoff/_wait_gen.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">expo</span><span class="p">(</span>
+    <span class="n">base</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">max_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generator for exponential decay.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        base: The mathematical base of the exponentiation operation</span>
+<span class="sd">        factor: Factor to multiply the exponentiation by.</span>
+<span class="sd">        max_value: The maximum value to yield. Once the value in the</span>
+<span class="sd">             true exponential sequence exceeds this, the value</span>
+<span class="sd">             of max_value will forever after be yielded.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Advance past initial .send() call</span>
+    <span class="k">yield</span>  <span class="c1"># type: ignore[misc]</span>
+    <span class="n">base_n</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">factor</span> <span class="o">*</span> <span class="n">base_n</span>
+        <span class="k">if</span> <span class="n">max_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">max_value</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">a</span>
+            <span class="n">base_n</span> <span class="o">*=</span> <span class="n">base</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">max_value</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><h3 id="fibo">fibo</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="backoff.fibo" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">backoff</span><span class="o">.</span><span class="n">fibo</span><span class="p">(</span><span class="n">max_value</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Generator for fibonaccial decay.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>max_value</code>
+            </td>
+            <td>
+                  <code><span title="typing.Optional">Optional</span>[<span title="int">int</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The maximum value to yield. Once the value in the
+ true fibonacci sequence exceeds this, the value
+ of max_value will forever after be yielded.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>backoff/_wait_gen.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fibo</span><span class="p">(</span><span class="n">max_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generator for fibonaccial decay.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        max_value: The maximum value to yield. Once the value in the</span>
+<span class="sd">             true fibonacci sequence exceeds this, the value</span>
+<span class="sd">             of max_value will forever after be yielded.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Advance past initial .send() call</span>
+    <span class="k">yield</span>  <span class="c1"># type: ignore[misc]</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">max_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">max_value</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">a</span>
+            <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">max_value</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><h3 id="constant">constant</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="backoff.constant" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">backoff</span><span class="o">.</span><span class="n">constant</span><span class="p">(</span><span class="n">interval</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Generator for constant intervals.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>interval</code>
+            </td>
+            <td>
+                  <code><span title="typing.Union">Union</span>[<span title="int">int</span>, <span title="typing.Iterable">Iterable</span>[<span title="float">float</span>]]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A constant value to yield or an iterable of such values.</p>
+              </div>
+            </td>
+            <td>
+                  <code>1</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>backoff/_wait_gen.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">constant</span><span class="p">(</span>
+    <span class="n">interval</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generator for constant intervals.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        interval: A constant value to yield or an iterable of such values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Advance past initial .send() call</span>
+    <span class="k">yield</span>  <span class="c1"># type: ignore[misc]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">itr</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="n">itr</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">itr</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">val</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><h3 id="runtime">runtime</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="backoff.runtime" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">backoff</span><span class="o">.</span><span class="n">runtime</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Generator that is based on parsing the return value or thrown
+    exception of the decorated method</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>value</code>
+            </td>
+            <td>
+                  <code><span title="typing.Callable">Callable</span>[[<span title="typing.Any">Any</span>], <span title="float">float</span>]</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>a callable which takes as input the decorated
+function's return value or thrown exception and
+determines how long to wait</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>backoff/_wait_gen.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">runtime</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">float</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generator that is based on parsing the return value or thrown</span>
+<span class="sd">        exception of the decorated method</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        value: a callable which takes as input the decorated</span>
+<span class="sd">            function&#39;s return value or thrown exception and</span>
+<span class="sd">            determines how long to wait</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ret_or_exc</span> <span class="o">=</span> <span class="k">yield</span>  <span class="c1"># type: ignore[misc]</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">ret_or_exc</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">value</span><span class="p">(</span><span class="n">ret_or_exc</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><h2 id="jitter-functions">Jitter Functions</h2>
+<h3 id="full_jitter">full_jitter</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="backoff.full_jitter" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">backoff</span><span class="o">.</span><span class="n">full_jitter</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Jitter the value across the full range (0 to value).</p>
+<p>This corresponds to the "Full Jitter" algorithm specified in the
+AWS blog's post on the performance of various jitter algorithms.
+(http://www.awsarchitectureblog.com/2015/03/backoff.html)</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>value</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The unadulterated backoff value.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>backoff/_jitter.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">full_jitter</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Jitter the value across the full range (0 to value).</span>
+
+<span class="sd">    This corresponds to the &quot;Full Jitter&quot; algorithm specified in the</span>
+<span class="sd">    AWS blog&#39;s post on the performance of various jitter algorithms.</span>
+<span class="sd">    (http://www.awsarchitectureblog.com/2015/03/backoff.html)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        value: The unadulterated backoff value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><h3 id="random_jitter">random_jitter</h3>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="backoff.random_jitter" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">backoff</span><span class="o">.</span><span class="n">random_jitter</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></code>
+
+</h2>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Jitter the value a random number of milliseconds.</p>
+<p>This adds up to 1 second of additional time to the original value.
+Prior to backoff version 1.2 this was the default jitter behavior.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>value</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The unadulterated backoff value.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>backoff/_jitter.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">random_jitter</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Jitter the value a random number of milliseconds.</span>
+
+<span class="sd">    This adds up to 1 second of additional time to the original value.</span>
+<span class="sd">    Prior to backoff version 1.2 this was the default jitter behavior.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        value: The unadulterated backoff value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div><h2 id="type-definitions">Type Definitions</h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="backoff.types" class="doc doc-heading">
+            <code>backoff.types</code>
+
+
+</h2>
+
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="backoff.types.__all__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Details&#39;</span><span class="p">]</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="backoff.types.Details" class="doc doc-heading">
+            <code>Details</code>
+
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="backoff._typing._Details">_Details</span></code></p>
+
+
+
+
+
+
+
+
+
+
+              <details class="mkdocstrings-source">
+                <summary>Source code in <code>backoff/_typing.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Details</span><span class="p">(</span><span class="n">_Details</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">wait</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># present in the on_backoff handler case for either decorator</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">Any</span>  <span class="c1"># present in the on_predicate decorator case</span>
+    <span class="n">exception</span><span class="p">:</span> <span class="ne">Exception</span>  <span class="c1"># present in the on_exception decorator case</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "content.code.select", "content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>

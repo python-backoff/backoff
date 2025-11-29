@@ -1,0 +1,2499 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../api/reference/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>FAQ - backoff</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#frequently-asked-questions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="backoff" class="md-header__button md-logo" aria-label="backoff" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            backoff
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              FAQ
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/python-backoff/backoff" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    python-backoff/backoff
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../getting-started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../user-guide/decorators/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../advanced/combining-decorators/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Advanced
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../examples/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Examples
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../api/reference/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  API Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  FAQ
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="backoff" class="md-nav__button md-logo" aria-label="backoff" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    backoff
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/python-backoff/backoff" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    python-backoff/backoff
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/decorators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Decorators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/wait-strategies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wait Strategies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/event-handlers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Event Handlers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../user-guide/async/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Async Support
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Advanced
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/combining-decorators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Combining Decorators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/runtime-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runtime Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/custom-strategies/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Strategies
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General Questions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-backoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is backoff?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-should-i-use-backoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When should I use backoff?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-is-backoff-different-from-just-using-a-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How is backoff different from just using a loop?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Questions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-limit-the-number-of-retries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I limit the number of retries?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-limit-the-total-time-spent-retrying" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I limit the total time spent retrying?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-both-max_tries-and-max_time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I use both max_tries and max_time?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-disable-jitter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I disable jitter?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exception-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception Handling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exception Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#which-exceptions-should-i-retry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which exceptions should I retry?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-stop-retrying-for-certain-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I stop retrying for certain errors?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-happens-when-retries-are-exhausted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happens when retries are exhausted?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-retry-multiple-exception-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I retry multiple exception types?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wait-strategy-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wait Strategy Questions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Wait Strategy Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#which-wait-strategy-should-i-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which wait strategy should I use?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-jitter-and-why-is-it-important" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is jitter and why is it important?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-respect-retry-after-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I respect Retry-After headers?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#async-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Async Questions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Async Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#does-backoff-work-with-asyncawait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does backoff work with async/await?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-event-handlers-be-async" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can event handlers be async?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logging-and-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging and Monitoring
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Logging and Monitoring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-log-retry-attempts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I log retry attempts?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-the-default-logger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I use the default logger?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-disable-all-logging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I disable all logging?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-information-is-available-in-event-handlers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What information is available in event handlers?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Questions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#does-backoff-add-overhead" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does backoff add overhead?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-backoff-in-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I use backoff in production?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-many-retries-is-too-many" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How many retries is too many?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#will-backoff-cause-memory-leaks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Will backoff cause memory leaks?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Usage
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#can-i-combine-multiple-decorators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I combine multiple decorators?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-implement-a-circuit-breaker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I implement a circuit breaker?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-runtime-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I use runtime configuration?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-test-code-that-uses-backoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I test code that uses backoff?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-is-my-function-not-retrying" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why is my function not retrying?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-are-wait-times-not-what-i-expect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why are wait times not what I expect?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-see-whats-happening-during-retries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I see what's happening during retries?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-and-alternatives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration and Alternatives
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Migration and Alternatives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-does-backoff-compare-to-tenacity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How does backoff compare to tenacity?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-migrate-from-retrying-or-retry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I migrate from retrying or retry?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-backoff-still-maintained" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Is backoff still maintained?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General Questions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-backoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is backoff?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-should-i-use-backoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When should I use backoff?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-is-backoff-different-from-just-using-a-loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How is backoff different from just using a loop?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Configuration Questions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-limit-the-number-of-retries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I limit the number of retries?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-limit-the-total-time-spent-retrying" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I limit the total time spent retrying?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-both-max_tries-and-max_time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I use both max_tries and max_time?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-disable-jitter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I disable jitter?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exception-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exception Handling
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exception Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#which-exceptions-should-i-retry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which exceptions should I retry?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-stop-retrying-for-certain-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I stop retrying for certain errors?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-happens-when-retries-are-exhausted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What happens when retries are exhausted?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-retry-multiple-exception-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I retry multiple exception types?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wait-strategy-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wait Strategy Questions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Wait Strategy Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#which-wait-strategy-should-i-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which wait strategy should I use?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-is-jitter-and-why-is-it-important" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is jitter and why is it important?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-respect-retry-after-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I respect Retry-After headers?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#async-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Async Questions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Async Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#does-backoff-work-with-asyncawait" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does backoff work with async/await?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-event-handlers-be-async" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can event handlers be async?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logging-and-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging and Monitoring
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Logging and Monitoring">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-log-retry-attempts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I log retry attempts?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-the-default-logger" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I use the default logger?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-disable-all-logging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I disable all logging?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-information-is-available-in-event-handlers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What information is available in event handlers?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Questions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#does-backoff-add-overhead" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Does backoff add overhead?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-backoff-in-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I use backoff in production?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-many-retries-is-too-many" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How many retries is too many?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#will-backoff-cause-memory-leaks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Will backoff cause memory leaks?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced Usage
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#can-i-combine-multiple-decorators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I combine multiple decorators?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-implement-a-circuit-breaker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I implement a circuit breaker?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-use-runtime-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I use runtime configuration?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-do-i-test-code-that-uses-backoff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How do I test code that uses backoff?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-is-my-function-not-retrying" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why is my function not retrying?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-are-wait-times-not-what-i-expect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why are wait times not what I expect?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-see-whats-happening-during-retries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I see what's happening during retries?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migration-and-alternatives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Migration and Alternatives
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Migration and Alternatives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-does-backoff-compare-to-tenacity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How does backoff compare to tenacity?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#can-i-migrate-from-retrying-or-retry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Can I migrate from retrying or retry?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-backoff-still-maintained" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Is backoff still maintained?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="frequently-asked-questions">Frequently Asked Questions</h1>
+<h2 id="general-questions">General Questions</h2>
+<h3 id="what-is-backoff">What is backoff?</h3>
+<p>Backoff is a Python library that provides decorators for retrying functions when they fail or don't meet certain conditions. It's commonly used for handling transient failures in network requests, API calls, database operations, and other unreliable operations.</p>
+<h3 id="when-should-i-use-backoff">When should I use backoff?</h3>
+<p>Use backoff when:</p>
+<ul>
+<li>Making network requests that might fail temporarily</li>
+<li>Calling external APIs with rate limits</li>
+<li>Connecting to databases that might be temporarily unavailable</li>
+<li>Polling for results from async operations</li>
+<li>Handling any operation that might fail transiently</li>
+</ul>
+<h3 id="how-is-backoff-different-from-just-using-a-loop">How is backoff different from just using a loop?</h3>
+<p>Backoff provides:</p>
+<ul>
+<li>Automatic retry logic with configurable strategies</li>
+<li>Built-in exponential/fibonacci/constant wait patterns</li>
+<li>Jitter to prevent thundering herd</li>
+<li>Event handlers for logging and monitoring</li>
+<li>Clean decorator syntax</li>
+<li>Async/await support</li>
+<li>Type hints and better IDE support</li>
+</ul>
+<h2 id="configuration-questions">Configuration Questions</h2>
+<h3 id="how-do-i-limit-the-number-of-retries">How do I limit the number of retries?</h3>
+<p>Use <code>max_tries</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">max_tries</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">():</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<h3 id="how-do-i-limit-the-total-time-spent-retrying">How do I limit the total time spent retrying?</h3>
+<p>Use <code>max_time</code> (in seconds):</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">():</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<h3 id="can-i-use-both-max_tries-and-max_time">Can I use both max_tries and max_time?</h3>
+<p>Yes! The function will stop retrying when either limit is reached:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">max_tries</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_time</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">():</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<h3 id="how-do-i-disable-jitter">How do I disable jitter?</h3>
+<p>Pass <code>jitter=None</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">():</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<p>This gives you predictable wait times, useful for testing or when exact timing matters.</p>
+<h2 id="exception-handling">Exception Handling</h2>
+<h3 id="which-exceptions-should-i-retry">Which exceptions should I retry?</h3>
+<p>Retry transient failures (temporary issues):</p>
+<ul>
+<li>✅ Network timeouts</li>
+<li>✅ Connection errors</li>
+<li>✅ 5xx server errors</li>
+<li>✅ 429 rate limiting</li>
+<li>✅ Database connection failures</li>
+</ul>
+<p>Don't retry permanent failures:</p>
+<ul>
+<li>❌ 4xx client errors (except 429)</li>
+<li>❌ Authentication failures</li>
+<li>❌ Validation errors</li>
+<li>❌ Resource not found errors</li>
+</ul>
+<h3 id="how-do-i-stop-retrying-for-certain-errors">How do I stop retrying for certain errors?</h3>
+<p>Use the <code>giveup</code> parameter:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">is_permanent_error</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;response&#39;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">400</span> <span class="o">&lt;=</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&lt;</span> <span class="mi">500</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+<span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+    <span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
+    <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span><span class="p">,</span>
+    <span class="n">giveup</span><span class="o">=</span><span class="n">is_permanent_error</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">api_call</span><span class="p">():</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<h3 id="what-happens-when-retries-are-exhausted">What happens when retries are exhausted?</h3>
+<p>By default (<code>raise_on_giveup=True</code>), the original exception is re-raised. You can disable this:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+    <span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
+    <span class="ne">Exception</span><span class="p">,</span>
+    <span class="n">max_tries</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">raise_on_giveup</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">():</span>
+    <span class="k">pass</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">my_function</span><span class="p">()</span>  <span class="c1"># Returns None if all retries fail</span>
+</code></pre></div>
+<h3 id="can-i-retry-multiple-exception-types">Can I retry multiple exception types?</h3>
+<p>Yes, pass a tuple:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+    <span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
+    <span class="p">(</span><span class="ne">TimeoutError</span><span class="p">,</span> <span class="ne">ConnectionError</span><span class="p">,</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">():</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<h2 id="wait-strategy-questions">Wait Strategy Questions</h2>
+<h3 id="which-wait-strategy-should-i-use">Which wait strategy should I use?</h3>
+<ul>
+<li><strong>Exponential</strong> (<code>backoff.expo</code>) - Most common, fast backoff for network/API calls</li>
+<li><strong>Fibonacci</strong> (<code>backoff.fibo</code>) - Gentler backoff, good for polling</li>
+<li><strong>Constant</strong> (<code>backoff.constant</code>) - Fixed intervals, good for regular polling</li>
+<li><strong>Runtime</strong> (<code>backoff.runtime</code>) - Server-directed wait times (Retry-After headers)</li>
+</ul>
+<h3 id="what-is-jitter-and-why-is-it-important">What is jitter and why is it important?</h3>
+<p>Jitter adds randomness to wait times to prevent the "thundering herd" problem (many clients retrying simultaneously). The default <code>full_jitter</code> uses AWS's algorithm where actual wait time is random between 0 and the calculated wait time.</p>
+<h3 id="how-do-i-respect-retry-after-headers">How do I respect Retry-After headers?</h3>
+<p>Use <code>backoff.runtime</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@backoff</span><span class="o">.</span><span class="n">on_predicate</span><span class="p">(</span>
+    <span class="n">backoff</span><span class="o">.</span><span class="n">runtime</span><span class="p">,</span>
+    <span class="n">predicate</span><span class="o">=</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">429</span><span class="p">,</span>
+    <span class="n">value</span><span class="o">=</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Retry-After&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+    <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">api_call</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="async-questions">Async Questions</h2>
+<h3 id="does-backoff-work-with-asyncawait">Does backoff work with async/await?</h3>
+<p>Yes! Just decorate async functions:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientError</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch_data</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</code></pre></div>
+<h3 id="can-event-handlers-be-async">Can event handlers be async?</h3>
+<p>Yes, you can use async functions for <code>on_success</code>, <code>on_backoff</code>, and <code>on_giveup</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">log_retry</span><span class="p">(</span><span class="n">details</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">async_logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retry </span><span class="si">{</span><span class="n">details</span><span class="p">[</span><span class="s1">&#39;tries&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+    <span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
+    <span class="ne">Exception</span><span class="p">,</span>
+    <span class="n">on_backoff</span><span class="o">=</span><span class="n">log_retry</span>
+<span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">():</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<h2 id="logging-and-monitoring">Logging and Monitoring</h2>
+<h3 id="how-do-i-log-retry-attempts">How do I log retry attempts?</h3>
+<p>Use event handlers:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">log_backoff</span><span class="p">(</span><span class="n">details</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Retry </span><span class="si">{</span><span class="n">details</span><span class="p">[</span><span class="s1">&#39;tries&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> after </span><span class="si">{</span><span class="n">details</span><span class="p">[</span><span class="s1">&#39;elapsed&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+
+<span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+    <span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
+    <span class="ne">Exception</span><span class="p">,</span>
+    <span class="n">on_backoff</span><span class="o">=</span><span class="n">log_backoff</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">():</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<h3 id="can-i-use-the-default-logger">Can I use the default logger?</h3>
+<p>Yes, backoff has a default logger. Enable it:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;backoff&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;backoff&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="how-do-i-disable-all-logging">How do I disable all logging?</h3>
+<p>Pass <code>logger=None</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">():</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<h3 id="what-information-is-available-in-event-handlers">What information is available in event handlers?</h3>
+<p>Event handlers receive a dict with:</p>
+<ul>
+<li><code>target</code> - Function being called</li>
+<li><code>args</code> - Positional arguments</li>
+<li><code>kwargs</code> - Keyword arguments</li>
+<li><code>tries</code> - Number of attempts</li>
+<li><code>elapsed</code> - Total elapsed time</li>
+<li><code>wait</code> - Time to wait (on_backoff only)</li>
+<li><code>value</code> - Return value (on_predicate only)</li>
+<li><code>exception</code> - Exception raised (on_exception only)</li>
+</ul>
+<h2 id="performance-questions">Performance Questions</h2>
+<h3 id="does-backoff-add-overhead">Does backoff add overhead?</h3>
+<p>Minimal. The decorator overhead is negligible compared to typical network/database operation times.</p>
+<h3 id="can-i-use-backoff-in-production">Can I use backoff in production?</h3>
+<p>Absolutely! Backoff is used in production by thousands of projects. It's stable, well-tested, and maintained.</p>
+<h3 id="how-many-retries-is-too-many">How many retries is too many?</h3>
+<p>It depends on your use case:</p>
+<ul>
+<li><strong>Quick operations</strong>: 3-5 retries</li>
+<li><strong>Network requests</strong>: 5-10 retries with max_time=60s</li>
+<li><strong>Long polling</strong>: Higher retries or no limit with max_time</li>
+</ul>
+<h3 id="will-backoff-cause-memory-leaks">Will backoff cause memory leaks?</h3>
+<p>No. Backoff doesn't store state between function calls.</p>
+<h2 id="advanced-usage">Advanced Usage</h2>
+<h3 id="can-i-combine-multiple-decorators">Can I combine multiple decorators?</h3>
+<p>Yes! Stack them for complex retry logic:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@backoff</span><span class="o">.</span><span class="n">on_predicate</span><span class="p">(</span><span class="n">backoff</span><span class="o">.</span><span class="n">fibo</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+<span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span> <span class="n">HTTPError</span><span class="p">)</span>
+<span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span> <span class="n">Timeout</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">complex_operation</span><span class="p">():</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<p>Decorators are applied inside-out (bottom to top).</p>
+<h3 id="how-do-i-implement-a-circuit-breaker">How do I implement a circuit breaker?</h3>
+<p>Use the <code>giveup</code> callback with stateful logic:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CircuitBreaker</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">failures</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">=</span> <span class="n">threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opened_at</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">should_giveup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">failures</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">failures</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">opened_at</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<span class="n">breaker</span> <span class="o">=</span> <span class="n">CircuitBreaker</span><span class="p">()</span>
+
+<span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+    <span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
+    <span class="ne">Exception</span><span class="p">,</span>
+    <span class="n">giveup</span><span class="o">=</span><span class="n">breaker</span><span class="o">.</span><span class="n">should_giveup</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">protected_call</span><span class="p">():</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<h3 id="can-i-use-runtime-configuration">Can I use runtime configuration?</h3>
+<p>Yes, pass callables instead of values:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_max_time</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RETRY_MAX_TIME&#39;</span><span class="p">]</span>
+
+<span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+    <span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
+    <span class="ne">Exception</span><span class="p">,</span>
+    <span class="n">max_time</span><span class="o">=</span><span class="n">get_max_time</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">():</span>
+    <span class="k">pass</span>
+</code></pre></div>
+<h3 id="how-do-i-test-code-that-uses-backoff">How do I test code that uses backoff?</h3>
+<ol>
+<li>Set <code>max_tries=1</code> or <code>jitter=None</code> for predictable tests</li>
+<li>Mock the underlying operation to control failures</li>
+<li>Use event handlers to verify retry behavior</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test_retry_behavior</span><span class="p">():</span>
+    <span class="n">attempts</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">track_attempts</span><span class="p">(</span><span class="n">details</span><span class="p">):</span>
+        <span class="n">attempts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">details</span><span class="p">[</span><span class="s1">&#39;tries&#39;</span><span class="p">])</span>
+
+    <span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+        <span class="n">backoff</span><span class="o">.</span><span class="n">constant</span><span class="p">,</span>
+        <span class="ne">ValueError</span><span class="p">,</span>
+        <span class="n">on_backoff</span><span class="o">=</span><span class="n">track_attempts</span><span class="p">,</span>
+        <span class="n">max_tries</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">interval</span><span class="o">=</span><span class="mf">0.01</span>
+    <span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">failing_function</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Test error&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+        <span class="n">failing_function</span><span class="p">()</span>
+
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">attempts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>  <span class="c1"># Backoff called 2 times (3 tries total)</span>
+</code></pre></div>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="why-is-my-function-not-retrying">Why is my function not retrying?</h3>
+<p>Check:</p>
+<ol>
+<li>Are you catching the right exception?</li>
+<li>Is <code>max_tries</code> or <code>max_time</code> too low?</li>
+<li>Is your <code>giveup</code> function returning True?</li>
+<li>Are you actually calling the decorated function?</li>
+</ol>
+<h3 id="why-are-wait-times-not-what-i-expect">Why are wait times not what I expect?</h3>
+<p>The default <code>full_jitter</code> adds randomness. To see exact wait times, disable jitter:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="can-i-see-whats-happening-during-retries">Can I see what's happening during retries?</h3>
+<p>Enable logging or use event handlers:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;backoff&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+</code></pre></div>
+<p>Or:</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+    <span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
+    <span class="ne">Exception</span><span class="p">,</span>
+    <span class="n">on_backoff</span><span class="o">=</span><span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Try </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;tries&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, wait </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;wait&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+<span class="p">)</span>
+</code></pre></div>
+<h2 id="migration-and-alternatives">Migration and Alternatives</h2>
+<h3 id="how-does-backoff-compare-to-tenacity">How does backoff compare to tenacity?</h3>
+<p>Both are excellent retry libraries. Backoff:</p>
+<ul>
+<li>Simpler, more focused API</li>
+<li>Decorator-first design</li>
+<li>Lighter weight</li>
+<li>More emphasis on wait strategies</li>
+</ul>
+<p>Tenacity:</p>
+<ul>
+<li>More features (stop/wait/retry strategies)</li>
+<li>More complex configuration options</li>
+<li>More actively maintained recently</li>
+</ul>
+<h3 id="can-i-migrate-from-retrying-or-retry">Can I migrate from retrying or retry?</h3>
+<p>Yes, but the API is different. Backoff uses decorators with different parameter names.</p>
+<h3 id="is-backoff-still-maintained">Is backoff still maintained?</h3>
+<p>Yes, backoff is actively maintained. Check the <a href="https://github.com/python-backoff/backoff">GitHub repository</a> for recent activity.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "content.code.select", "content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "search.highlight", "search.share", "search.suggest"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+    
+  </body>
+</html>
