@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Documentation
+
+- Switch to [Zensical for building the documentation](https://zensical.org/) https://github.com/python-backoff/backoff/pull/62 (from @edgarrmondragon)
+
 ## [v2.3.0] - 2025-11-28
 
 ### Changed
