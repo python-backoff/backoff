@@ -5,8 +5,9 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
+  release:
+    types: [published]
+  workflow_dispatch:
 
 env:
   FORCE_COLOR: 1
@@ -16,15 +17,16 @@ permissions:
   contents: write
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  build-docs:
+    name: Build documentation
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
       - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
 
       - name: Install uv
-        uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
+        uses: astral-sh/setup-uv@ed21f2f24f8dd64503750218de024bcf64c7250a # v7.1.5
 
       - name: Install dependencies
         run: |
@@ -33,6 +35,24 @@ jobs:
       - name: Build documentation
         run: uv run zensical build
 
+      - name: Upload documentation as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
+        with:
+          path: site
+
+  publish-docs:
+    name: Publish documentation
+    runs-on: ubuntu-24.04
+    needs: [ build-docs ]
+    permissions:
+      pages: write  # Required for GitHub Pages deployment
+      id-token: write  # Required for GitHub Pages deployment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    if: ${{ github.event_name == 'release' }}
+    steps:
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: uv run zensical gh-deploy --force
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
