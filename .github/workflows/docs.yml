@@ -31,8 +31,8 @@ jobs:
           uv sync --group docs
 
       - name: Build documentation
-        run: uv run mkdocs build
+        run: uv run zensical build
 
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: uv run mkdocs gh-deploy --force
+        run: uv run zensical gh-deploy --force
