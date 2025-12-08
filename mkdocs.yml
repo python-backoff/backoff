@@ -30,6 +30,8 @@ markdown_extensions:
   - pymdownx.highlight
   - pymdownx.superfences
   - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path: ['.']
   - admonition
 plugins:
   - search
@@ -57,3 +59,4 @@ nav:
   - Examples: examples.md
   - API Reference: api/reference.md
   - FAQ: faq.md
+  - Changelog: changelog.md

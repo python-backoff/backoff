@@ -4,57 +4,58 @@
 
 ### Documentation
 
-- Switch to [Zensical for building the documentation](https://zensical.org/) https://github.com/python-backoff/backoff/pull/62 (from @edgarrmondragon)
+- Switch to [Zensical for building the documentation](https://zensical.org/) [#62](https://github.com/python-backoff/backoff/pull/62) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- Include changelog in the documentation [#65](https://github.com/python-backoff/backoff/pull/65) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
 
 ## [v2.3.0] - 2025-11-28
 
 ### Changed
 
-- Use `time.monotonic` instead of `datetime.datetime.now` https://github.com/python-backoff/backoff/pull/23 (from @luccabb)
-- Drop support for Python 3.7 https://github.com/python-backoff/backoff/pull/49 (from @edgarrmondragon)
-- Improve performance of expo by multiplying previous result https://github.com/python-backoff/backoff/pull/50 (from @whonore)
+- Use `time.monotonic` instead of `datetime.datetime.now` [#23](https://github.com/python-backoff/backoff/pull/23) (from [@luccabb](https://github.com/luccabb))
+- Drop support for Python 3.7 [#49](https://github.com/python-backoff/backoff/pull/49) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- Improve performance of expo by multiplying previous result [#50](https://github.com/python-backoff/backoff/pull/50) (from [@whonore](https://github.com/whonore))
 
 ## [v2.2.2] - 2025-11-17
 
 ### Fixed
 
-- Use `inspect.iscoroutinefunction` instead of `asyncio.iscoroutinefunction` to avoid Python 3.14 deprecation warning https://github.com/python-backoff/backoff/pull/3 (from @edgarrmondragon)
-- Adapt test cases to pytest-asyncio 1.0 compatibility https://github.com/python-backoff/backoff/pull/1 (from @pastalian)
-- Include tests in source distribution https://github.com/python-backoff/backoff/pull/13 (from @edgarrmondragon)
-- Added `logging.LoggerAdapter` to `_MaybeLogger` union https://github.com/python-backoff/backoff/pull/34 (from @jcbertin)
-- Add `exception` to the typing-only `Details` dictionary for cases when `on_exception` is used https://github.com/python-backoff/backoff/pull/35 (from @edgarrmondragon)
-- Add GitHub Actions for CI, documentation, and publishing https://github.com/python-backoff/backoff/pull/39 (from @tysoncung)
+- Use `inspect.iscoroutinefunction` instead of `asyncio.iscoroutinefunction` to avoid Python 3.14 deprecation warning [#3](https://github.com/python-backoff/backoff/pull/3) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- Adapt test cases to pytest-asyncio 1.0 compatibility [#1](https://github.com/python-backoff/backoff/pull/1) (from [@pastalian](https://github.com/pastalian))
+- Include tests in source distribution [#13](https://github.com/python-backoff/backoff/pull/13) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- Added `logging.LoggerAdapter` to `_MaybeLogger` union [#34](https://github.com/python-backoff/backoff/pull/34) (from [@jcbertin](https://github.com/jcbertin))
+- Add `exception` to the typing-only `Details` dictionary for cases when `on_exception` is used [#35](https://github.com/python-backoff/backoff/pull/35) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- Add GitHub Actions for CI, documentation, and publishing [#39](https://github.com/python-backoff/backoff/pull/39) (from [@tysoncung](https://github.com/tysoncung))
 
 ### Packaging
 
-- Use uv for dependencies and packaging https://github.com/python-backoff/backoff/pull/7 (from @edgarrmondragon)
-- Remove duplicate classifier https://github.com/python-backoff/backoff/pull/37 (from @edgarrmondragon)
-- Rename project to `backoff` from `python-backoff` https://github.com/python-backoff/backoff/pull/42 (from @edgarrmondragon)
+- Use uv for dependencies and packaging [#7](https://github.com/python-backoff/backoff/pull/7) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- Remove duplicate classifier [#37](https://github.com/python-backoff/backoff/pull/37) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- Rename project to `backoff` from `python-backoff` [#42](https://github.com/python-backoff/backoff/pull/42) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
 
 ## [v2.2.1] - 2022-10-05
 
-- Fix type hint for wait generators https://github.com/litl/backoff/issues/177
+- Fix type hint for wait generators [litl/backoff#177](https://github.com/litl/backoff/issues/177)
 
 ## [v2.2.0] - 2022-10-05
 
-- Improve type annotation for wait generators from @hauntsaninja
-- Include exception in details dict of call handlers from @petamas
-- Improve type hints for call handlers from @cdce8p
+- Improve type annotation for wait generators from [@hauntsaninja](https://github.com/hauntsaninja)
+- Include exception in details dict of call handlers from [@petamas](https://github.com/petamas)
+- Improve type hints for call handlers from [@cdce8p](https://github.com/cdce8p)
 
 ## [v2.1.2] - 2022-06-08
 ### Fixed
 
-- Don't use importlib.metadata for __version__ https://github.com/litl/backoff/issues/166
+- Don't use importlib.metadata for __version__ [litl/backoff#166](https://github.com/litl/backoff/issues/166)
 
 ## [v2.1.1] - 2022-06-08
 ### Fixed
 
-- Fix bug with max_tries/max_time callables https://github.com/litl/backoff/issues/164
+- Fix bug with max_tries/max_time callables [litl/backoff#164](https://github.com/litl/backoff/issues/164)
 
 ## [v2.1.0] - 2022-06-07
 ### Changed
 
-- Get max_tries/max_time values for every call fixes #160 (from @jvrsantacruz)
+- Get max_tries/max_time values for every call fixes #160 (from [@jvrsantacruz](https://github.com/jvrsantacruz))
 
 ## [v2.0.1] - 2022-04-27
 ### Changed
@@ -103,7 +104,7 @@
 ## [v1.8.1] - 2019-10-11
 ### Changed
 - Use arguments in log messages rather than fully formatting log
-  https://github.com/litl/backoff/pull/82 from @lbernick
+  [litl/backoff#82](https://github.com/litl/backoff/pull/82) from [@lbernick](https://github.com/lbernick)
 
 ## [v1.8.0] - 2018-12-20
 ### Added
@@ -136,26 +137,26 @@
 
 ## [v1.4.2] - 2017-04-25
 ### Changed
-- Use documented logger name https://github.com/litl/backoff/pull/32
-  from @pquentin
+- Use documented logger name [litl/backoff#32](https://github.com/litl/backoff/pull/32)
+  from [@pquentin](https://github.com/pquentin)
 
 ## [v1.4.1] - 2017-04-21
 ### Added
 - Expose __version__ at package root
 ### Changed
 - Fix checking for running sync version in coroutine in case when event
-  loop is not set from @rutsky
+  loop is not set from [@rutsky](https://github.com/rutsky)
 
 ## [v1.4.0] - 2017-02-05
 ### Added
-- Async support via `asyncio` coroutines (Python 3.4) from @rutsky
+- Async support via `asyncio` coroutines (Python 3.4) from [@rutsky](https://github.com/rutsky)
 ### Changed
 - Refactor `backoff` module into package with identical API
 
 ## [v1.3.2] - 2016-11-18
 ### Changed
 - Don't log retried args and kwargs by default
-- README.rst syntax highlighting from @dethi
+- README.rst syntax highlighting from [@dethi](https://github.com/dethi)
 
 ## [v1.3.1] - 2016-08-08
 ### Changed
@@ -175,7 +176,7 @@
 
 ## [v1.2.0] - 2016-05-26
 ### Added
-- 'Full jitter' algorithm from @jonascheng
+- 'Full jitter' algorithm from [@jonascheng](https://github.com/jonascheng)
 
 ### Changed
 - Jitter function now accepts raw value and returns jittered value
@@ -196,7 +197,7 @@
 
 ## [v1.0.6] - 2015-02-10
 ### Added
-- Coveralls.io integration from @singingwolfboy
+- Coveralls.io integration from [@singingwolfboy](https://github.com/singingwolfboy)
 ### Changed
 - Fix logging bug for function calls with tuple params
 
@@ -207,9 +208,9 @@
 
 ## [v1.0.4] - 2014-08-12
 ### Added
-- Python 2.6 support from @Bonko
-- Python 3.0 support from @robyoung
-- Run tests in Travis from @robyoung
+- Python 2.6 support from [@Bonko](https://github.com/Bonko)
+- Python 3.0 support from [@robyoung](https://github.com/robyoung)
+- Run tests in Travis from [@robyoung](https://github.com/robyoung)
 
 ## [v1.0.3] - 2014-06-05
 ### Changed
