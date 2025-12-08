@@ -89,4 +89,4 @@ def poll_for_result(job_id):
 - [GitHub Repository](https://github.com/python-backoff/backoff)
 - [PyPI Package](https://pypi.org/project/python-backoff/)
 - [Issue Tracker](https://github.com/python-backoff/backoff/issues)
-- [Changelog](https://github.com/python-backoff/backoff/blob/main/CHANGELOG.md)
+- [Changelog](changelog.md)
