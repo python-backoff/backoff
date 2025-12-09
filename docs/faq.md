@@ -97,14 +97,15 @@ Use the `giveup` parameter:
 
 ```python
 def is_permanent_error(e):
-    if hasattr(e, 'response'):
+    if hasattr(e, "response"):
         return 400 <= e.response.status_code < 500
     return False
+
 
 @backoff.on_exception(
     backoff.expo,
     requests.exceptions.RequestException,
-    giveup=is_permanent_error
+    giveup=is_permanent_error,
 )
 def api_call():
     pass
@@ -119,10 +120,11 @@ By default (`raise_on_giveup=True`), the original exception is re-raised. You ca
     backoff.expo,
     Exception,
     max_tries=5,
-    raise_on_giveup=False
+    raise_on_giveup=False,
 )
 def my_function():
     pass
+
 
 result = my_function()  # Returns None if all retries fail
 ```
@@ -134,7 +136,7 @@ Yes, pass a tuple:
 ```python
 @backoff.on_exception(
     backoff.expo,
-    (TimeoutError, ConnectionError, requests.exceptions.RequestException)
+    (TimeoutError, ConnectionError, requests.exceptions.RequestException),
 )
 def my_function():
     pass
@@ -162,7 +164,7 @@ Use `backoff.runtime`:
     backoff.runtime,
     predicate=lambda r: r.status_code == 429,
     value=lambda r: int(r.headers.get("Retry-After", 1)),
-    jitter=None
+    jitter=None,
 )
 def api_call():
     return requests.get(url)
@@ -190,11 +192,8 @@ Yes, you can use async functions for `on_success`, `on_backoff`, and `on_giveup`
 async def log_retry(details):
     await async_logger.log(f"Retry {details['tries']}")
 
-@backoff.on_exception(
-    backoff.expo,
-    Exception,
-    on_backoff=log_retry
-)
+
+@backoff.on_exception(backoff.expo, Exception, on_backoff=log_retry)
 async def my_function():
     pass
 ```
@@ -209,11 +208,8 @@ Use event handlers:
 def log_backoff(details):
     logger.warning(f"Retry {details['tries']} after {details['elapsed']:.1f}s")
 
-@backoff.on_exception(
-    backoff.expo,
-    Exception,
-    on_backoff=log_backoff
-)
+
+@backoff.on_exception(backoff.expo, Exception, on_backoff=log_backoff)
 def my_function():
     pass
 ```
@@ -225,8 +221,8 @@ Yes, backoff has a default logger. Enable it:
 ```python
 import logging
 
-logging.getLogger('backoff').addHandler(logging.StreamHandler())
-logging.getLogger('backoff').setLevel(logging.INFO)
+logging.getLogger("backoff").addHandler(logging.StreamHandler())
+logging.getLogger("backoff").setLevel(logging.INFO)
 ```
 
 ### How do I disable all logging?
@@ -308,13 +304,11 @@ class CircuitBreaker:
             return True
         return False
 
+
 breaker = CircuitBreaker()
 
-@backoff.on_exception(
-    backoff.expo,
-    Exception,
-    giveup=breaker.should_giveup
-)
+
+@backoff.on_exception(backoff.expo, Exception, giveup=breaker.should_giveup)
 def protected_call():
     pass
 ```
@@ -325,13 +319,10 @@ Yes, pass callables instead of values:
 
 ```python
 def get_max_time():
-    return app.config['RETRY_MAX_TIME']
+    return app.config["RETRY_MAX_TIME"]
 
-@backoff.on_exception(
-    backoff.expo,
-    Exception,
-    max_time=get_max_time
-)
+
+@backoff.on_exception(backoff.expo, Exception, max_time=get_max_time)
 def my_function():
     pass
 ```
@@ -347,14 +338,14 @@ def test_retry_behavior():
     attempts = []
 
     def track_attempts(details):
-        attempts.append(details['tries'])
+        attempts.append(details["tries"])
 
     @backoff.on_exception(
         backoff.constant,
         ValueError,
         on_backoff=track_attempts,
         max_tries=3,
-        interval=0.01
+        interval=0.01,
     )
     def failing_function():
         raise ValueError("Test error")
@@ -382,6 +373,7 @@ The default `full_jitter` adds randomness. To see exact wait times, disable jitt
 
 ```python
 @backoff.on_exception(backoff.expo, Exception, jitter=None)
+def my_function(): ...
 ```
 
 ### Can I see what's happening during retries?
@@ -390,8 +382,9 @@ Enable logging or use event handlers:
 
 ```python
 import logging
+
 logging.basicConfig(level=logging.DEBUG)
-logging.getLogger('backoff').setLevel(logging.DEBUG)
+logging.getLogger("backoff").setLevel(logging.DEBUG)
 ```
 
 Or:
@@ -400,8 +393,9 @@ Or:
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    on_backoff=lambda d: print(f"Try {d['tries']}, wait {d['wait']:.1f}s")
+    on_backoff=lambda d: print(f"Try {d['tries']}, wait {d['wait']:.1f}s"),
 )
+def my_function(): ...
 ```
 
 ## Migration and Alternatives

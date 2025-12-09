@@ -14,7 +14,6 @@ import responses
 
 @responses.activate
 def test_on_predicate_runtime(monkeypatch):
-
     log = []
 
     def sleep(seconds):
@@ -46,7 +45,6 @@ def test_on_predicate_runtime(monkeypatch):
 
 @responses.activate
 def test_on_exception_runtime(monkeypatch):
-
     log = []
 
     def sleep(seconds):

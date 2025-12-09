@@ -10,7 +10,6 @@ def expo(
     factor: float = 1,
     max_value: Optional[float] = None,
 ) -> Generator[float, Any, None]:
-
     """Generator for exponential decay.
 
     Args:
@@ -37,7 +36,6 @@ def decay(
     decay_factor: float = 1,
     min_value: Optional[float] = None,
 ) -> Generator[float, Any, None]:
-
     """Generator for exponential decay[1]:
 
     Args:

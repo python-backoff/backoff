@@ -14,9 +14,9 @@ def my_wait_gen():
     while True:
         yield 5
 
+
 @backoff.on_exception(my_wait_gen, Exception)
-def my_function():
-    pass
+def my_function(): ...
 ```
 
 ## Parameters
@@ -34,15 +34,15 @@ def linear_backoff(start=1, increment=1, max_value=None):
             yield value
             value += increment
 
+
 @backoff.on_exception(
     linear_backoff,
     Exception,
     start=2,
     increment=3,
-    max_value=30
+    max_value=30,
 )
-def my_function():
-    pass
+def my_function(): ...
 ```
 
 ## Examples
@@ -54,14 +54,16 @@ def polynomial_backoff(base=2, exponent=2, max_value=None):
     """Polynomial: base^(tries^exponent)"""
     n = 1
     while True:
-        value = base ** (n ** exponent)
+        value = base ** (n**exponent)
         if max_value and value > max_value:
             yield max_value
         else:
             yield value
         n += 1
 
+
 @backoff.on_exception(polynomial_backoff, Exception, base=2, exponent=1.5)
+def my_function(): ...
 ```
 
 ### Stepped Backoff
@@ -79,11 +81,13 @@ def stepped_backoff(steps):
             for _ in range(max_tries):
                 yield wait_time
 
+
 @backoff.on_exception(
     stepped_backoff,
     Exception,
-    steps=[(3, 1), (3, 5), (None, 30)]
+    steps=[(3, 1), (3, 5), (None, 30)],
 )
+def my_function(): ...
 ```
 
 ### Random Backoff
@@ -91,18 +95,22 @@ def stepped_backoff(steps):
 ```python
 import random
 
+
 def random_backoff(min_wait=1, max_wait=60):
     """Random wait between min and max"""
     while True:
         yield random.uniform(min_wait, max_wait)
 
+
 @backoff.on_exception(random_backoff, Exception, min_wait=1, max_wait=10)
+def my_function(): ...
 ```
 
 ### Time-of-Day Aware
 
 ```python
 from datetime import datetime
+
 
 def business_hours_backoff():
     """Shorter waits during business hours"""
@@ -113,5 +121,7 @@ def business_hours_backoff():
         else:
             yield 60  # 1 minute otherwise
 
+
 @backoff.on_exception(business_hours_backoff, Exception)
+def my_function(): ...
 ```

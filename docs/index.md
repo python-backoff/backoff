@@ -29,12 +29,16 @@ pip install python-backoff
 Basic retry on exception:
 
 ```python
-import backoff
 import requests
 
-@backoff.on_exception(backoff.expo,
-                      requests.exceptions.RequestException,
-                      max_time=60)
+import backoff
+
+
+@backoff.on_exception(
+    backoff.expo,
+    requests.exceptions.RequestException,
+    max_time=60,
+)
 def get_url(url):
     return requests.get(url)
 ```
@@ -59,9 +63,11 @@ def call_api():
 ### Database Retries
 
 ```python
-@backoff.on_exception(backoff.expo,
-                      sqlalchemy.exc.OperationalError,
-                      max_tries=5)
+@backoff.on_exception(
+    backoff.expo,
+    sqlalchemy.exc.OperationalError,
+    max_tries=5,
+)
 def query_database():
     return session.query(Model).all()
 ```
@@ -69,10 +75,12 @@ def query_database():
 ### Polling for Results
 
 ```python
-@backoff.on_predicate(backoff.constant,
-                      lambda result: result is None,
-                      interval=2,
-                      max_time=300)
+@backoff.on_predicate(
+    backoff.constant,
+    lambda result: result is None,
+    interval=2,
+    max_time=300,
+)
 def poll_for_result(job_id):
     return check_job_status(job_id)
 ```

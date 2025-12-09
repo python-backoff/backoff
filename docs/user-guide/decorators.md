@@ -9,11 +9,12 @@ The `on_exception` decorator retries a function when a specified exception is ra
 ### Basic Usage
 
 ```python
-import backoff
 import requests
 
-@backoff.on_exception(backoff.expo,
-                      requests.exceptions.RequestException)
+import backoff
+
+
+@backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
 def get_url(url):
     return requests.get(url)
 ```
@@ -39,9 +40,11 @@ Handle different exceptions with the same backoff:
 ```python
 @backoff.on_exception(
     backoff.expo,
-    (requests.exceptions.Timeout,
-     requests.exceptions.ConnectionError,
-     requests.exceptions.HTTPError)
+    (
+        requests.exceptions.Timeout,
+        requests.exceptions.ConnectionError,
+        requests.exceptions.HTTPError,
+    ),
 )
 def make_request(url):
     return requests.get(url)
@@ -54,15 +57,16 @@ Customize when to stop retrying:
 ```python
 def is_fatal(e):
     """Don't retry on client errors"""
-    if hasattr(e, 'response') and e.response is not None:
+    if hasattr(e, "response") and e.response is not None:
         return 400 <= e.response.status_code < 500
     return False
+
 
 @backoff.on_exception(
     backoff.expo,
     requests.exceptions.RequestException,
     giveup=is_fatal,
-    max_time=300
+    max_time=300,
 )
 def api_call(endpoint):
     response = requests.get(endpoint)
@@ -79,10 +83,11 @@ Return None instead of raising when all retries are exhausted:
     backoff.expo,
     requests.exceptions.RequestException,
     max_tries=5,
-    raise_on_giveup=False
+    raise_on_giveup=False,
 )
 def optional_request(url):
     return requests.get(url)
+
 
 # Returns None if all retries fail
 result = optional_request("https://example.com")
@@ -95,9 +100,7 @@ The `on_predicate` decorator retries when a condition is true about the return v
 ### Basic Usage
 
 ```python
-@backoff.on_predicate(backoff.fibo,
-                      lambda x: x is None,
-                      max_value=13)
+@backoff.on_predicate(backoff.fibo, lambda x: x is None, max_value=13)
 def poll_for_result(job_id):
     result = check_job(job_id)
     return result if result else None
@@ -134,7 +137,7 @@ Define specific conditions for retry:
 @backoff.on_predicate(
     backoff.expo,
     lambda result: result["status"] == "pending",
-    max_time=600
+    max_time=600,
 )
 def poll_job_status(job_id):
     return api.get_job(job_id)
@@ -145,10 +148,11 @@ def poll_job_status(job_id):
 ```python
 def needs_retry(result):
     return (
-        result is None or
-        result.get("status") in ["pending", "processing"] or
-        not result.get("ready", False)
+        result is None
+        or result.get("status") in ["pending", "processing"]
+        or not result.get("ready", False)
     )
+
 
 @backoff.on_predicate(backoff.fibo, needs_retry, max_value=60)
 def complex_poll(resource_id):
@@ -161,12 +165,8 @@ Stack multiple decorators for complex retry logic:
 
 ```python
 @backoff.on_predicate(backoff.fibo, lambda x: x is None, max_value=13)
-@backoff.on_exception(backoff.expo,
-                      requests.exceptions.HTTPError,
-                      max_time=60)
-@backoff.on_exception(backoff.expo,
-                      requests.exceptions.Timeout,
-                      max_time=300)
+@backoff.on_exception(backoff.expo, requests.exceptions.HTTPError, max_time=60)
+@backoff.on_exception(backoff.expo, requests.exceptions.Timeout, max_time=300)
 def robust_poll(endpoint):
     response = requests.get(endpoint)
     response.raise_for_status()
@@ -201,15 +201,18 @@ Example handler:
 
 ```python
 def detailed_log(details):
-    print(f"Try {details['tries']}: "
-          f"elapsed={details['elapsed']:.2f}s, "
-          f"wait={details.get('wait', 0):.2f}s")
+    print(
+        f"Try {details['tries']}: "
+        f"elapsed={details['elapsed']:.2f}s, "
+        f"wait={details.get('wait', 0):.2f}s"
+    )
+
 
 @backoff.on_exception(
     backoff.expo,
     Exception,
     on_backoff=detailed_log,
-    max_tries=5
+    max_tries=5,
 )
 def my_function():
     pass

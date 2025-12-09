@@ -8,7 +8,7 @@ import warnings
 
 
 # Use module-specific logger with a default null handler.
-_logger = logging.getLogger('backoff')
+_logger = logging.getLogger("backoff")
 _logger.addHandler(logging.NullHandler())  # pragma: no cover
 _logger.setLevel(logging.INFO)
 
@@ -65,14 +65,20 @@ def _prepare_logger(logger):
 # Configure handler list with user specified handler and optionally
 # with a default handler bound to the specified logger.
 def _config_handlers(
-    user_handlers, *, default_handler=None, logger=None, log_level=None,
+    user_handlers,
+    *,
+    default_handler=None,
+    logger=None,
+    log_level=None,
 ):
     handlers = []
     if logger is not None:
         assert log_level is not None, "Log level is not specified"
         # bind the specified logger to the default log handler
         log_handler = functools.partial(
-            default_handler, logger=logger, log_level=log_level,
+            default_handler,
+            logger=logger,
+            log_level=log_level,
         )
         handlers.append(log_handler)
 
@@ -81,7 +87,7 @@ def _config_handlers(
 
     # user specified handlers can either be an iterable of handlers
     # or a single handler. either way append them to the list.
-    if hasattr(user_handlers, '__iter__'):
+    if hasattr(user_handlers, "__iter__"):
         # add all handlers in the iterable
         handlers += list(user_handlers)
     else:
@@ -94,27 +100,27 @@ def _config_handlers(
 # Default backoff handler
 def _log_backoff(details, logger, log_level):
     msg = "Backing off %s(...) for %.1fs (%s)"
-    log_args = [details['target'].__name__, details['wait']]
+    log_args = [details["target"].__name__, details["wait"]]
 
     exc_typ, exc, _ = sys.exc_info()
     if exc is not None:
         exc_fmt = traceback.format_exception_only(exc_typ, exc)[-1]
         log_args.append(exc_fmt.rstrip("\n"))
     else:
-        log_args.append(details['value'])
+        log_args.append(details["value"])
     logger.log(log_level, msg, *log_args)
 
 
 # Default giveup handler
 def _log_giveup(details, logger, log_level):
     msg = "Giving up %s(...) after %d tries (%s)"
-    log_args = [details['target'].__name__, details['tries']]
+    log_args = [details["target"].__name__, details["tries"]]
 
     exc_typ, exc, _ = sys.exc_info()
     if exc is not None:
         exc_fmt = traceback.format_exception_only(exc_typ, exc)[-1]
         log_args.append(exc_fmt.rstrip("\n"))
     else:
-        log_args.append(details['value'])
+        log_args.append(details["value"])
 
     logger.log(log_level, msg, *log_args)

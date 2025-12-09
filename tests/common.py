@@ -10,9 +10,9 @@ def _log_hdlrs():
     def log_hdlr(event, details):
         log[event].append(details)
 
-    log_success = functools.partial(log_hdlr, 'success')
-    log_backoff = functools.partial(log_hdlr, 'backoff')
-    log_giveup = functools.partial(log_hdlr, 'giveup')
+    log_success = functools.partial(log_hdlr, "success")
+    log_backoff = functools.partial(log_hdlr, "backoff")
+    log_giveup = functools.partial(log_hdlr, "giveup")
 
     return log, log_success, log_backoff, log_giveup
 
