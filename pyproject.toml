@@ -167,6 +167,15 @@ package = [
 [tool.ruff]
 line-length = 88
 
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 20
+
+[tool.ruff.lint]
+extend-select = [
+  "SIM",  # flake8-simplify
+]
+
 [tool.coverage.report]
 fail_under = 100
 show_missing = true
@@ -177,11 +186,6 @@ parallel = true
 relative_files = true
 source = [
   "backoff",
-]
-
-[tool.ruff.lint]
-extend-select = [
-  "COM",  # flake8-commas
 ]
 
 [build-system]

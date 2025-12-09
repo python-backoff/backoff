@@ -16,7 +16,7 @@ repos:
     rev: v0.14.6
     hooks:
     -   id: ruff-check
-    # -   id: ruff-format
+    -   id: ruff-format
 -   repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.9.13
     hooks:
@@ -26,3 +26,10 @@ repos:
     hooks:
     -   id: check-github-workflows
     -   id: check-renovate
+-   repo: https://github.com/adamtheturtle/doccmd-pre-commit
+    rev: v2025.12.8.5
+    hooks:
+    -   id: doccmd
+        args: ["--language", "python", "--no-pad-file", "--no-pad-groups", "--command", "ruff format", "docs/"]
+        additional_dependencies:
+        - ruff==0.14.8

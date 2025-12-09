@@ -8,8 +8,8 @@ Decorators are applied from bottom to top (inside out):
 
 ```python
 @backoff.on_predicate(backoff.fibo, lambda x: x is None)  # Applied last
-@backoff.on_exception(backoff.expo, HTTPError)             # Applied second
-@backoff.on_exception(backoff.expo, Timeout)               # Applied first
+@backoff.on_exception(backoff.expo, HTTPError)  # Applied second
+@backoff.on_exception(backoff.expo, Timeout)  # Applied first
 def complex_operation():
     pass
 ```
@@ -22,13 +22,13 @@ def complex_operation():
 @backoff.on_exception(
     backoff.expo,
     requests.exceptions.Timeout,
-    max_time=300  # Generous timeout for network issues
+    max_time=300,  # Generous timeout for network issues
 )
 @backoff.on_exception(
     backoff.expo,
     requests.exceptions.HTTPError,
     max_time=60,  # Shorter timeout for HTTP errors
-    giveup=lambda e: 400 <= e.response.status_code < 500
+    giveup=lambda e: 400 <= e.response.status_code < 500,
 )
 def api_call(url):
     response = requests.get(url)
@@ -43,12 +43,12 @@ def api_call(url):
     backoff.constant,
     lambda result: result.get("status") == "pending",
     interval=5,
-    max_time=600
+    max_time=600,
 )
 @backoff.on_exception(
     backoff.expo,
     requests.exceptions.RequestException,
-    max_time=60
+    max_time=60,
 )
 def poll_until_ready(job_id):
     response = requests.get(f"/api/jobs/{job_id}")
@@ -63,24 +63,27 @@ Inner decorators execute first:
 ```python
 calls = []
 
+
 def track_call(func_name):
     def handler(details):
         calls.append(func_name)
+
     return handler
+
 
 @backoff.on_exception(
     backoff.constant,
     ValueError,
-    on_backoff=track_call('outer'),
+    on_backoff=track_call("outer"),
     max_tries=2,
-    interval=0.01
+    interval=0.01,
 )
 @backoff.on_exception(
     backoff.constant,
     TypeError,
-    on_backoff=track_call('inner'),
+    on_backoff=track_call("inner"),
     max_tries=2,
-    interval=0.01
+    interval=0.01,
 )
 def failing_function(error_type):
     raise error_type("Test")
@@ -107,13 +110,13 @@ def network_operation():
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    max_time=600  # Overall 10-minute limit
+    max_time=600,  # Overall 10-minute limit
 )
 @backoff.on_exception(
     backoff.constant,
     Timeout,
     interval=1,
-    max_tries=3  # Quick retries for timeouts
+    max_tries=3,  # Quick retries for timeouts
 )
 def layered_retry():
     pass

@@ -42,10 +42,11 @@ Called when the function completes successfully.
 def log_success(details):
     print(f"{details['target'].__name__} succeeded after {details['tries']} tries")
 
+
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    on_success=log_success
+    on_success=log_success,
 )
 def my_function():
     pass
@@ -62,10 +63,11 @@ def log_backoff(details):
         f"(elapsed: {details['elapsed']:.1f}s)"
     )
 
+
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    on_backoff=log_backoff
+    on_backoff=log_backoff,
 )
 def my_function():
     pass
@@ -77,13 +79,14 @@ For `on_exception`, the exception is available:
 
 ```python
 def log_exception_backoff(details):
-    exc = details.get('exception')
+    exc = details.get("exception")
     print(f"Retrying due to: {type(exc).__name__}: {exc}")
+
 
 @backoff.on_exception(
     backoff.expo,
     requests.exceptions.RequestException,
-    on_backoff=log_exception_backoff
+    on_backoff=log_exception_backoff,
 )
 def api_call():
     pass
@@ -95,14 +98,15 @@ For `on_predicate`, the return value is available:
 
 ```python
 def log_value_backoff(details):
-    value = details.get('value')
+    value = details.get("value")
     print(f"Retrying because value was: {value}")
+
 
 @backoff.on_predicate(
     backoff.constant,
     lambda x: x is None,
     on_backoff=log_value_backoff,
-    interval=2
+    interval=2,
 )
 def poll_resource():
     pass
@@ -119,11 +123,12 @@ def log_giveup(details):
         f"after {details['tries']} tries and {details['elapsed']:.1f}s"
     )
 
+
 @backoff.on_exception(
     backoff.expo,
     Exception,
     on_giveup=log_giveup,
-    max_tries=5
+    max_tries=5,
 )
 def my_function():
     pass
@@ -137,17 +142,24 @@ You can provide multiple handlers as a list:
 def log_to_console(details):
     print(f"Retry #{details['tries']}")
 
+
 def log_to_file(details):
-    with open('retries.log', 'a') as f:
+    with open("retries.log", "a") as f:
         f.write(f"Retry #{details['tries']}\\n")
 
+
 def send_metric(details):
-    metrics.increment('retry_count')
+    metrics.increment("retry_count")
+
 
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    on_backoff=[log_to_console, log_to_file, send_metric]
+    on_backoff=[
+        log_to_console,
+        log_to_file,
+        send_metric,
+    ],
 )
 def my_function():
     pass
@@ -163,19 +175,25 @@ import json
 
 logger = logging.getLogger(__name__)
 
+
 def structured_log_backoff(details):
-    logger.warning(json.dumps({
-        'event': 'retry',
-        'function': details['target'].__name__,
-        'tries': details['tries'],
-        'wait': details['wait'],
-        'elapsed': details['elapsed']
-    }))
+    logger.warning(
+        json.dumps(
+            {
+                "event": "retry",
+                "function": details["target"].__name__,
+                "tries": details["tries"],
+                "wait": details["wait"],
+                "elapsed": details["elapsed"],
+            }
+        )
+    )
+
 
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    on_backoff=structured_log_backoff
+    on_backoff=structured_log_backoff,
 )
 def my_function():
     pass
@@ -186,17 +204,19 @@ def my_function():
 ```python
 from prometheus_client import Counter, Histogram
 
-retry_counter = Counter('backoff_retries_total', 'Total retries', ['function'])
-retry_duration = Histogram('backoff_retry_duration_seconds', 'Retry duration')
+retry_counter = Counter("backoff_retries_total", "Total retries", ["function"])
+retry_duration = Histogram("backoff_retry_duration_seconds", "Retry duration")
+
 
 def record_metrics(details):
-    retry_counter.labels(function=details['target'].__name__).inc()
-    retry_duration.observe(details['elapsed'])
+    retry_counter.labels(function=details["target"].__name__).inc()
+    retry_duration.observe(details["elapsed"])
+
 
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    on_backoff=record_metrics
+    on_backoff=record_metrics,
 )
 def monitored_function():
     pass
@@ -207,18 +227,20 @@ def monitored_function():
 ```python
 import sentry_sdk
 
+
 def report_to_sentry(details):
-    if details['tries'] > 3:  # Only report after 3 failures
+    if details["tries"] > 3:  # Only report after 3 failures
         sentry_sdk.capture_message(
             f"Multiple retries for {details['target'].__name__}",
-            level='warning',
-            extra=details
+            level="warning",
+            extra=details,
         )
+
 
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    on_backoff=report_to_sentry
+    on_backoff=report_to_sentry,
 )
 def my_function():
     pass
@@ -228,17 +250,18 @@ def my_function():
 
 ```python
 def alert_on_giveup(details):
-    if details['tries'] >= 5:
+    if details["tries"] >= 5:
         send_alert(
             f"Function {details['target'].__name__} failed "
             f"after {details['tries']} attempts"
         )
 
+
 @backoff.on_exception(
     backoff.expo,
     Exception,
     on_giveup=alert_on_giveup,
-    max_tries=5
+    max_tries=5,
 )
 def critical_function():
     pass
@@ -251,17 +274,16 @@ Event handlers can be async when used with async functions:
 ```python
 import aiohttp
 
+
 async def async_log_backoff(details):
     async with aiohttp.ClientSession() as session:
-        await session.post(
-            'http://log-service/events',
-            json=details
-        )
+        await session.post("http://log-service/events", json=details)
+
 
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    on_backoff=async_log_backoff
+    on_backoff=async_log_backoff,
 )
 async def async_function():
     pass
@@ -275,19 +297,21 @@ In `on_exception` handlers, you can access exception info:
 import sys
 import traceback
 
+
 def detailed_exception_log(details):
     exc_type, exc_value, exc_tb = sys.exc_info()
-    tb_str = ''.join(traceback.format_tb(exc_tb))
+    tb_str = "".join(traceback.format_tb(exc_tb))
 
     logger.error(
         f"Retry {details['tries']} due to {exc_type.__name__}: {exc_value}\\n"
         f"Traceback:\\n{tb_str}"
     )
 
+
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    on_backoff=detailed_exception_log
+    on_backoff=detailed_exception_log,
 )
 def my_function():
     pass
@@ -300,18 +324,19 @@ Execute handler logic conditionally:
 ```python
 def conditional_alert(details):
     # Only alert after many retries
-    if details['tries'] >= 5:
+    if details["tries"] >= 5:
         send_alert(f"High retry count: {details['tries']}")
 
     # Only log errors, not warnings
-    if details.get('exception'):
-        if isinstance(details['exception'], CriticalError):
+    if details.get("exception"):
+        if isinstance(details["exception"], CriticalError):
             logger.error("Critical error during retry")
+
 
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    on_backoff=conditional_alert
+    on_backoff=conditional_alert,
 )
 def my_function():
     pass
@@ -325,11 +350,13 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
+
 def log_attempt(details):
     logger.info(
         f"[{datetime.now()}] Attempt {details['tries']} "
         f"for {details['target'].__name__}"
     )
+
 
 def log_backoff(details):
     logger.warning(
@@ -338,6 +365,7 @@ def log_backoff(details):
         f"Error: {details.get('exception', 'N/A')}"
     )
 
+
 def log_giveup(details):
     logger.error(
         f"Gave up on {details['target'].__name__} after "
@@ -345,11 +373,13 @@ def log_giveup(details):
         f"Final error: {details.get('exception', 'N/A')}"
     )
 
+
 def log_success(details):
     logger.info(
         f"Success for {details['target'].__name__} after "
         f"{details['tries']} tries in {details['elapsed']:.1f}s"
     )
+
 
 @backoff.on_exception(
     backoff.expo,
@@ -358,7 +388,7 @@ def log_success(details):
     max_time=60,
     on_backoff=[log_attempt, log_backoff],
     on_giveup=log_giveup,
-    on_success=log_success
+    on_success=log_success,
 )
 def comprehensive_retry():
     return requests.get("https://api.example.com/data")

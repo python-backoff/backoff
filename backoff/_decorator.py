@@ -24,19 +24,21 @@ from backoff._typing import (
 )
 
 
-def on_predicate(wait_gen: _WaitGenerator,
-                 predicate: _Predicate[Any] = operator.not_,
-                 *,
-                 max_tries: Optional[_MaybeCallable[int]] = None,
-                 max_time: Optional[_MaybeCallable[float]] = None,
-                 jitter: Union[_Jitterer, None] = full_jitter,
-                 on_success: Union[_Handler, Iterable[_Handler], None] = None,
-                 on_backoff: Union[_Handler, Iterable[_Handler], None] = None,
-                 on_giveup: Union[_Handler, Iterable[_Handler], None] = None,
-                 logger: _MaybeLogger = 'backoff',
-                 backoff_log_level: int = logging.INFO,
-                 giveup_log_level: int = logging.ERROR,
-                 **wait_gen_kwargs: Any) -> Callable[[_CallableT], _CallableT]:
+def on_predicate(
+    wait_gen: _WaitGenerator,
+    predicate: _Predicate[Any] = operator.not_,
+    *,
+    max_tries: Optional[_MaybeCallable[int]] = None,
+    max_time: Optional[_MaybeCallable[float]] = None,
+    jitter: Union[_Jitterer, None] = full_jitter,
+    on_success: Union[_Handler, Iterable[_Handler], None] = None,
+    on_backoff: Union[_Handler, Iterable[_Handler], None] = None,
+    on_giveup: Union[_Handler, Iterable[_Handler], None] = None,
+    logger: _MaybeLogger = "backoff",
+    backoff_log_level: int = logging.INFO,
+    giveup_log_level: int = logging.ERROR,
+    **wait_gen_kwargs: Any,
+) -> Callable[[_CallableT], _CallableT]:
     """Returns decorator for backoff and retry triggered by predicate.
 
     Args:
@@ -80,6 +82,7 @@ def on_predicate(wait_gen: _WaitGenerator,
             args will first be evaluated and their return values passed.
             This is useful for runtime configuration.
     """
+
     def decorate(target):
         nonlocal logger, on_success, on_backoff, on_giveup
 
@@ -120,21 +123,23 @@ def on_predicate(wait_gen: _WaitGenerator,
     return decorate
 
 
-def on_exception(wait_gen: _WaitGenerator,
-                 exception: _MaybeSequence[Type[Exception]],
-                 *,
-                 max_tries: Optional[_MaybeCallable[int]] = None,
-                 max_time: Optional[_MaybeCallable[float]] = None,
-                 jitter: Union[_Jitterer, None] = full_jitter,
-                 giveup: _Predicate[Exception] = lambda e: False,
-                 on_success: Union[_Handler, Iterable[_Handler], None] = None,
-                 on_backoff: Union[_Handler, Iterable[_Handler], None] = None,
-                 on_giveup: Union[_Handler, Iterable[_Handler], None] = None,
-                 raise_on_giveup: bool = True,
-                 logger: _MaybeLogger = 'backoff',
-                 backoff_log_level: int = logging.INFO,
-                 giveup_log_level: int = logging.ERROR,
-                 **wait_gen_kwargs: Any) -> Callable[[_CallableT], _CallableT]:
+def on_exception(
+    wait_gen: _WaitGenerator,
+    exception: _MaybeSequence[Type[Exception]],
+    *,
+    max_tries: Optional[_MaybeCallable[int]] = None,
+    max_time: Optional[_MaybeCallable[float]] = None,
+    jitter: Union[_Jitterer, None] = full_jitter,
+    giveup: _Predicate[Exception] = lambda e: False,
+    on_success: Union[_Handler, Iterable[_Handler], None] = None,
+    on_backoff: Union[_Handler, Iterable[_Handler], None] = None,
+    on_giveup: Union[_Handler, Iterable[_Handler], None] = None,
+    raise_on_giveup: bool = True,
+    logger: _MaybeLogger = "backoff",
+    backoff_log_level: int = logging.INFO,
+    giveup_log_level: int = logging.ERROR,
+    **wait_gen_kwargs: Any,
+) -> Callable[[_CallableT], _CallableT]:
     """Returns decorator for backoff and retry triggered by exception.
 
     Args:
@@ -180,6 +185,7 @@ def on_exception(wait_gen: _WaitGenerator,
             args will first be evaluated and their return values passed.
             This is useful for runtime configuration.
     """
+
     def decorate(target):
         nonlocal logger, on_success, on_backoff, on_giveup
 

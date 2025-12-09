@@ -11,9 +11,11 @@ def _ensure_coroutine(coro_or_func):
     if inspect.iscoroutinefunction(coro_or_func):
         return coro_or_func
     else:
+
         @functools.wraps(coro_or_func)
         async def f(*args, **kwargs):
             return coro_or_func(*args, **kwargs)
+
         return f
 
 
@@ -21,27 +23,32 @@ def _ensure_coroutines(coros_or_funcs):
     return [_ensure_coroutine(f) for f in coros_or_funcs]
 
 
-async def _call_handlers(handlers,
-                         *,
-                         target, args, kwargs, tries, elapsed,
-                         **extra):
+async def _call_handlers(handlers, *, target, args, kwargs, tries, elapsed, **extra):
     details = {
-        'target': target,
-        'args': args,
-        'kwargs': kwargs,
-        'tries': tries,
-        'elapsed': elapsed,
+        "target": target,
+        "args": args,
+        "kwargs": kwargs,
+        "tries": tries,
+        "elapsed": elapsed,
     }
     details.update(extra)
     for handler in handlers:
         await handler(details)
 
 
-def retry_predicate(target, wait_gen, predicate,
-                    *,
-                    max_tries, max_time, jitter,
-                    on_success, on_backoff, on_giveup,
-                    wait_gen_kwargs):
+def retry_predicate(
+    target,
+    wait_gen,
+    predicate,
+    *,
+    max_tries,
+    max_time,
+    jitter,
+    on_success,
+    on_backoff,
+    on_giveup,
+    wait_gen_kwargs,
+):
     on_success = _ensure_coroutines(on_success)
     on_backoff = _ensure_coroutines(on_backoff)
     on_giveup = _ensure_coroutines(on_giveup)
@@ -54,7 +61,6 @@ def retry_predicate(target, wait_gen, predicate,
 
     @functools.wraps(target)
     async def retry(*args, **kwargs):
-
         # update variables from outer function args
         max_tries_value = _maybe_call(max_tries)
         max_time_value = _maybe_call(max_time)
@@ -75,23 +81,22 @@ def retry_predicate(target, wait_gen, predicate,
 
             ret = await target(*args, **kwargs)
             if predicate(ret):
-                max_tries_exceeded = (tries == max_tries_value)
-                max_time_exceeded = (max_time_value is not None and
-                                     elapsed >= max_time_value)
+                max_tries_exceeded = tries == max_tries_value
+                max_time_exceeded = (
+                    max_time_value is not None and elapsed >= max_time_value
+                )
 
                 if max_tries_exceeded or max_time_exceeded:
                     await _call_handlers(on_giveup, **details, value=ret)
                     break
 
                 try:
-                    seconds = _next_wait(wait, ret, jitter, elapsed,
-                                         max_time_value)
+                    seconds = _next_wait(wait, ret, jitter, elapsed, max_time_value)
                 except StopIteration:
                     await _call_handlers(on_giveup, **details, value=ret)
                     break
 
-                await _call_handlers(on_backoff, **details, value=ret,
-                                     wait=seconds)
+                await _call_handlers(on_backoff, **details, value=ret, wait=seconds)
 
                 # Note: there is no convenient way to pass explicit event
                 # loop to decorator, so here we assume that either default
@@ -113,11 +118,21 @@ def retry_predicate(target, wait_gen, predicate,
     return retry
 
 
-def retry_exception(target, wait_gen, exception,
-                    *,
-                    max_tries, max_time, jitter, giveup,
-                    on_success, on_backoff, on_giveup, raise_on_giveup,
-                    wait_gen_kwargs):
+def retry_exception(
+    target,
+    wait_gen,
+    exception,
+    *,
+    max_tries,
+    max_time,
+    jitter,
+    giveup,
+    on_success,
+    on_backoff,
+    on_giveup,
+    raise_on_giveup,
+    wait_gen_kwargs,
+):
     on_success = _ensure_coroutines(on_success)
     on_backoff = _ensure_coroutines(on_backoff)
     on_giveup = _ensure_coroutines(on_giveup)
@@ -129,7 +144,6 @@ def retry_exception(target, wait_gen, exception,
 
     @functools.wraps(target)
     async def retry(*args, **kwargs):
-
         max_tries_value = _maybe_call(max_tries)
         max_time_value = _maybe_call(max_time)
 
@@ -151,9 +165,10 @@ def retry_exception(target, wait_gen, exception,
                 ret = await target(*args, **kwargs)
             except exception as e:
                 giveup_result = await giveup(e)
-                max_tries_exceeded = (tries == max_tries_value)
-                max_time_exceeded = (max_time_value is not None and
-                                     elapsed >= max_time_value)
+                max_tries_exceeded = tries == max_tries_value
+                max_time_exceeded = (
+                    max_time_value is not None and elapsed >= max_time_value
+                )
 
                 if giveup_result or max_tries_exceeded or max_time_exceeded:
                     await _call_handlers(on_giveup, **details, exception=e)
@@ -162,14 +177,12 @@ def retry_exception(target, wait_gen, exception,
                     return None
 
                 try:
-                    seconds = _next_wait(wait, e, jitter, elapsed,
-                                         max_time_value)
+                    seconds = _next_wait(wait, e, jitter, elapsed, max_time_value)
                 except StopIteration:
                     await _call_handlers(on_giveup, **details, exception=e)
                     raise e
 
-                await _call_handlers(on_backoff, **details, wait=seconds,
-                                     exception=e)
+                await _call_handlers(on_backoff, **details, wait=seconds, exception=e)
 
                 # Note: there is no convenient way to pass explicit event
                 # loop to decorator, so here we assume that either default
@@ -185,4 +198,5 @@ def retry_exception(target, wait_gen, exception,
                 await _call_handlers(on_success, **details)
 
                 return ret
+
     return retry
