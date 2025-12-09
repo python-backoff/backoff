@@ -6,6 +6,8 @@
 
 - Switch to [Zensical for building the documentation](https://zensical.org/) [#62](https://github.com/python-backoff/backoff/pull/62) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
 - Include changelog in the documentation [#65](https://github.com/python-backoff/backoff/pull/65) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- Link to canonical `requests` documentation hosted on "Read the Docs" [#67](https://github.com/python-backoff/backoff/pull/67) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+
 
 ### Internal
 
