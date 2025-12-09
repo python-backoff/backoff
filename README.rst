@@ -76,7 +76,10 @@ to make to the target function before giving up.
 .. code-block:: python
 
     @backoff.on_exception(
-        backoff.expo, requests.exceptions.RequestException, max_tries=8, jitter=None,
+        backoff.expo,
+        requests.exceptions.RequestException,
+        max_tries=8,
+        jitter=None,
     )
     def get_url(url):
         return requests.get(url)
@@ -95,7 +98,10 @@ be retried:
 
 
     @backoff.on_exception(
-        backoff.expo, requests.exceptions.RequestException, max_time=300, giveup=fatal_code,
+        backoff.expo,
+        requests.exceptions.RequestException,
+        max_time=300,
+        giveup=fatal_code,
     )
     def get_url(url):
         return requests.get(url)
@@ -278,7 +284,9 @@ implemented like so:
 
 
     @backoff.on_exception(
-        backoff.expo, requests.exceptions.RequestException, on_backoff=backoff_hdlr,
+        backoff.expo,
+        requests.exceptions.RequestException,
+        on_backoff=backoff_hdlr,
     )
     def get_url(url):
         return requests.get(url)
