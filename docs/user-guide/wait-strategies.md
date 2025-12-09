@@ -9,6 +9,7 @@ Exponential backoff doubles the wait time after each retry.
 ```python
 import backoff
 
+
 @backoff.on_exception(backoff.expo, Exception)
 def my_function():
     pass
@@ -29,12 +30,14 @@ def my_function():
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    base=2,      # Start at 2 seconds
-    factor=3,    # Triple each time
-    max_value=60 # Cap at 60 seconds
+    base=2,  # Start at 2 seconds
+    factor=3,  # Triple each time
+    max_value=60,  # Cap at 60 seconds
 )
 def custom_expo():
     pass
+
+
 # Wait sequence: 2s, 6s, 18s, 54s, 60s, 60s, ...
 ```
 
@@ -67,10 +70,12 @@ def my_function():
 @backoff.on_exception(
     backoff.fibo,
     Exception,
-    max_value=30  # Cap at 30 seconds
+    max_value=30,  # Cap at 30 seconds
 )
 def fibo_with_cap():
     pass
+
+
 # Wait sequence: 1s, 1s, 2s, 3s, 5s, 8s, 13s, 21s, 30s, 30s, ...
 ```
 
@@ -88,7 +93,7 @@ Fixed wait time between all retries.
 @backoff.on_exception(
     backoff.constant,
     Exception,
-    interval=5  # Always wait 5 seconds
+    interval=5,  # Always wait 5 seconds
 )
 def my_function():
     pass
@@ -108,7 +113,7 @@ def my_function():
     backoff.constant,
     interval=10,
     jitter=None,  # Disable jitter for exact intervals
-    max_time=300
+    max_time=300,
 )
 def poll_every_10_seconds():
     pass
@@ -128,7 +133,7 @@ Dynamic wait time based on function return value or exception.
 @backoff.on_predicate(
     backoff.runtime,
     predicate=lambda r: r.status_code == 429,
-    value=lambda r: int(r.headers.get("Retry-After", 1))
+    value=lambda r: int(r.headers.get("Retry-After", 1)),
 )
 def respect_retry_after():
     return requests.get(url)
@@ -151,11 +156,12 @@ def get_retry_after(response):
             return int(retry_after)
     return 1  # Default
 
+
 @backoff.on_predicate(
     backoff.runtime,
     predicate=lambda r: r.status_code == 429,
     value=get_retry_after,
-    jitter=None
+    jitter=None,
 )
 def api_call():
     return requests.get(api_url)
@@ -169,11 +175,8 @@ class RetryableError(Exception):
         super().__init__(message)
         self.wait_seconds = wait_seconds
 
-@backoff.on_exception(
-    backoff.runtime,
-    RetryableError,
-    value=lambda e: e.wait_seconds
-)
+
+@backoff.on_exception(backoff.runtime, RetryableError, value=lambda e: e.wait_seconds)
 def custom_retry():
     raise RetryableError("Try again", wait_seconds=30)
 ```
@@ -194,8 +197,14 @@ Uses AWS's Full Jitter algorithm - wait time is random between 0 and the calcula
 
 ```python
 @backoff.on_exception(backoff.expo, Exception)
+def my_function():
+    pass
+
+
 # Equivalent to:
 @backoff.on_exception(backoff.expo, Exception, jitter=backoff.full_jitter)
+def my_function():
+    pass
 ```
 
 For exponential backoff: actual wait is random between 0 and 2^n seconds.
@@ -206,6 +215,8 @@ Adds random milliseconds (0-1000ms) to the calculated wait time.
 
 ```python
 @backoff.on_exception(backoff.expo, Exception, jitter=backoff.random_jitter)
+def my_function():
+    pass
 ```
 
 ### Custom Jitter
@@ -213,10 +224,12 @@ Adds random milliseconds (0-1000ms) to the calculated wait time.
 ```python
 import random
 
+
 def custom_jitter(value):
     """Add 10-50% randomness"""
     jitter_amount = value * random.uniform(0.1, 0.5)
     return value + jitter_amount
+
 
 @backoff.on_exception(backoff.expo, Exception, jitter=custom_jitter)
 def my_function():
@@ -227,6 +240,8 @@ def my_function():
 
 ```python
 @backoff.on_exception(backoff.expo, Exception, jitter=None)
+def my_function():
+    pass
 ```
 
 ## Comparison

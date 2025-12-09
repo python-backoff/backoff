@@ -40,8 +40,7 @@ is raised. Here's an example using exponential backoff when any
 
 .. code-block:: python
 
-    @backoff.on_exception(backoff.expo,
-                          requests.exceptions.RequestException)
+    @backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
     def get_url(url):
         return requests.get(url)
 
@@ -50,9 +49,9 @@ the same backoff behavior is desired for more than one exception type:
 
 .. code-block:: python
 
-    @backoff.on_exception(backoff.expo,
-                          (requests.exceptions.Timeout,
-                           requests.exceptions.ConnectionError))
+    @backoff.on_exception(
+        backoff.expo, (requests.exceptions.Timeout, requests.exceptions.ConnectionError)
+    )
     def get_url(url):
         return requests.get(url)
 
@@ -66,9 +65,7 @@ of total time in seconds that can elapse before giving up.
 
 .. code-block:: python
 
-    @backoff.on_exception(backoff.expo,
-                          requests.exceptions.RequestException,
-                          max_time=60)
+    @backoff.on_exception(backoff.expo, requests.exceptions.RequestException, max_time=60)
     def get_url(url):
         return requests.get(url)
 
@@ -78,10 +75,9 @@ to make to the target function before giving up.
 
 .. code-block:: python
 
-    @backoff.on_exception(backoff.expo,
-                          requests.exceptions.RequestException,
-                          max_tries=8,
-                          jitter=None)
+    @backoff.on_exception(
+        backoff.expo, requests.exceptions.RequestException, max_tries=8, jitter=None
+    )
     def get_url(url):
         return requests.get(url)
 
@@ -97,10 +93,10 @@ be retried:
     def fatal_code(e):
         return 400 <= e.response.status_code < 500
 
-    @backoff.on_exception(backoff.expo,
-                          requests.exceptions.RequestException,
-                          max_time=300,
-                          giveup=fatal_code)
+
+    @backoff.on_exception(
+        backoff.expo, requests.exceptions.RequestException, max_time=300, giveup=fatal_code
+    )
     def get_url(url):
         return requests.get(url)
 
@@ -118,11 +114,14 @@ case, regardless of the logic in the `on_exception` handler.
     def fatal_code(e):
         return 400 <= e.response.status_code < 500
 
-    @backoff.on_exception(backoff.expo,
-                          requests.exceptions.RequestException,
-                          max_time=300,
-                          raise_on_giveup=False,
-                          giveup=fatal_code)
+
+    @backoff.on_exception(
+        backoff.expo,
+        requests.exceptions.RequestException,
+        max_time=300,
+        raise_on_giveup=False,
+        giveup=fatal_code,
+    )
     def get_url(url):
         return requests.get(url)
 
@@ -217,12 +216,8 @@ backoff behavior for different cases:
 .. code-block:: python
 
     @backoff.on_predicate(backoff.fibo, max_value=13)
-    @backoff.on_exception(backoff.expo,
-                          requests.exceptions.HTTPError,
-                          max_time=60)
-    @backoff.on_exception(backoff.expo,
-                          requests.exceptions.Timeout,
-                          max_time=300)
+    @backoff.on_exception(backoff.expo, requests.exceptions.HTTPError, max_time=60)
+    @backoff.on_exception(backoff.expo, requests.exceptions.Timeout, max_time=300)
     def poll_for_message(queue):
         return queue.get()
 
@@ -245,9 +240,9 @@ runtime to obtain the value:
         # and that it has a dictionary-like 'config' property
         return app.config["BACKOFF_MAX_TIME"]
 
-    @backoff.on_exception(backoff.expo,
-                          ValueError,
-                          max_time=lookup_max_time)
+
+    @backoff.on_exception(backoff.expo, ValueError, max_time=lookup_max_time)
+    def my_function(): ...
 
 Event handlers
 --------------
@@ -275,13 +270,16 @@ implemented like so:
 .. code-block:: python
 
     def backoff_hdlr(details):
-        print ("Backing off {wait:0.1f} seconds after {tries} tries "
-               "calling function {target} with args {args} and kwargs "
-               "{kwargs}".format(**details))
+        print(
+            "Backing off {wait:0.1f} seconds after {tries} tries "
+            "calling function {target} with args {args} and kwargs "
+            "{kwargs}".format(**details)
+        )
 
-    @backoff.on_exception(backoff.expo,
-                          requests.exceptions.RequestException,
-                          on_backoff=backoff_hdlr)
+
+    @backoff.on_exception(
+        backoff.expo, requests.exceptions.RequestException, on_backoff=backoff_hdlr
+    )
     def get_url(url):
         return requests.get(url)
 
@@ -293,9 +291,11 @@ handler functions as the value of the ``on_backoff`` keyword arg:
 
 .. code-block:: python
 
-    @backoff.on_exception(backoff.expo,
-                          requests.exceptions.RequestException,
-                          on_backoff=[backoff_hdlr1, backoff_hdlr2])
+    @backoff.on_exception(
+        backoff.expo,
+        requests.exceptions.RequestException,
+        on_backoff=[backoff_hdlr1, backoff_hdlr2],
+    )
     def get_url(url):
         return requests.get(url)
 
@@ -343,7 +343,7 @@ as:
 
 .. code-block:: python
 
-    logging.getLogger('backoff').addHandler(logging.StreamHandler())
+    logging.getLogger("backoff").addHandler(logging.StreamHandler())
 
 The default logging level is INFO, which corresponds to logging
 anytime a retry event occurs. If you would instead like to log
@@ -351,7 +351,7 @@ only when a giveup event occurs, set the logger level to ERROR.
 
 .. code-block:: python
 
-    logging.getLogger('backoff').setLevel(logging.ERROR)
+    logging.getLogger("backoff").setLevel(logging.ERROR)
 
 It is also possible to specify an alternate logger with the ``logger``
 keyword argument.  If a string value is specified the logger will be
@@ -359,25 +359,30 @@ looked up by name.
 
 .. code-block:: python
 
-   @backoff.on_exception(backoff.expo,
-                         requests.exceptions.RequestException,
-			 logger='my_logger')
-   # ...
+    @backoff.on_exception(
+        backoff.expo,
+        requests.exceptions.RequestException,
+        logger="my_logger",
+    )
+    def my_function(): ...
 
 It is also supported to specify a Logger (or LoggerAdapter) object
 directly.
 
 .. code-block:: python
 
-    my_logger = logging.getLogger('my_logger')
+    my_logger = logging.getLogger("my_logger")
     my_handler = logging.StreamHandler()
     my_logger.addHandler(my_handler)
     my_logger.setLevel(logging.ERROR)
 
-    @backoff.on_exception(backoff.expo,
-                          requests.exceptions.RequestException,
-			  logger=my_logger)
-    # ...
+
+    @backoff.on_exception(
+        backoff.expo,
+        requests.exceptions.RequestException,
+        logger=my_logger,
+    )
+    def my_function(): ...
 
 Default logging can be disabled all together by specifying
 ``logger=None``. In this case, if desired alternative logging behavior

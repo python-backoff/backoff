@@ -37,12 +37,7 @@ def my_function():
 Use both to create flexible retry policies:
 
 ```python
-@backoff.on_exception(
-    backoff.expo,
-    Exception,
-    max_tries=10,
-    max_time=300
-)
+@backoff.on_exception(backoff.expo, Exception, max_tries=10, max_time=300)
 def my_function():
     pass
 ```
@@ -58,14 +53,16 @@ class Config:
     MAX_RETRIES = 5
     MAX_TIME = 60
 
+
 @backoff.on_exception(
     backoff.expo,
     Exception,
     max_tries=lambda: Config.MAX_RETRIES,
-    max_time=lambda: Config.MAX_TIME
+    max_time=lambda: Config.MAX_TIME,
 )
 def configurable_function():
     pass
+
 
 # Can change at runtime
 Config.MAX_RETRIES = 10
@@ -76,11 +73,12 @@ Config.MAX_RETRIES = 10
 ```python
 import os
 
+
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    max_tries=lambda: int(os.getenv('MAX_RETRIES', '5')),
-    max_time=lambda: int(os.getenv('MAX_TIME', '60'))
+    max_tries=lambda: int(os.getenv("MAX_RETRIES", "5")),
+    max_time=lambda: int(os.getenv("MAX_TIME", "60")),
 )
 def env_configured():
     pass
@@ -96,9 +94,9 @@ Each wait strategy accepts different parameters.
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    base=2,        # Base wait time
-    factor=2,      # Multiplication factor
-    max_value=60   # Maximum wait time
+    base=2,  # Base wait time
+    factor=2,  # Multiplication factor
+    max_value=60,  # Maximum wait time
 )
 def expo_config():
     pass
@@ -110,7 +108,7 @@ def expo_config():
 @backoff.on_exception(
     backoff.fibo,
     Exception,
-    max_value=30   # Maximum wait time
+    max_value=30,  # Maximum wait time
 )
 def fibo_config():
     pass
@@ -122,7 +120,7 @@ def fibo_config():
 @backoff.on_exception(
     backoff.constant,
     Exception,
-    interval=5     # Fixed interval in seconds
+    interval=5,  # Fixed interval in seconds
 )
 def constant_config():
     pass
@@ -134,7 +132,7 @@ def constant_config():
 @backoff.on_predicate(
     backoff.runtime,
     predicate=lambda r: r.status_code == 429,
-    value=lambda r: int(r.headers.get("Retry-After", 1))
+    value=lambda r: int(r.headers.get("Retry-After", 1)),
 )
 def runtime_config():
     return requests.get(url)
@@ -148,8 +146,14 @@ Control randomization of wait times.
 
 ```python
 @backoff.on_exception(backoff.expo, Exception)
+def my_function():
+    pass
+
+
 # Same as:
 @backoff.on_exception(backoff.expo, Exception, jitter=backoff.full_jitter)
+def my_function():
+    pass
 ```
 
 Wait time is random between 0 and calculated value.
@@ -158,6 +162,8 @@ Wait time is random between 0 and calculated value.
 
 ```python
 @backoff.on_exception(backoff.expo, Exception, jitter=backoff.random_jitter)
+def my_function():
+    pass
 ```
 
 Adds 0-1000ms to calculated value.
@@ -166,6 +172,8 @@ Adds 0-1000ms to calculated value.
 
 ```python
 @backoff.on_exception(backoff.expo, Exception, jitter=None)
+def my_function():
+    pass
 ```
 
 Exact wait times, no randomization.
@@ -175,8 +183,10 @@ Exact wait times, no randomization.
 ```python
 import random
 
+
 def custom_jitter(value):
     return value * random.uniform(0.8, 1.2)
+
 
 @backoff.on_exception(backoff.expo, Exception, jitter=custom_jitter)
 def my_function():
@@ -191,11 +201,8 @@ def my_function():
 def should_giveup(e):
     return isinstance(e, ValueError)
 
-@backoff.on_exception(
-    backoff.expo,
-    Exception,
-    giveup=should_giveup
-)
+
+@backoff.on_exception(backoff.expo, Exception, giveup=should_giveup)
 def my_function():
     pass
 ```
@@ -204,16 +211,15 @@ def my_function():
 
 ```python
 def fatal_error(e):
-    if hasattr(e, 'response'):
+    if hasattr(e, "response"):
         status = e.response.status_code
         # Don't retry client errors except rate limiting
         return 400 <= status < 500 and status != 429
     return False
 
+
 @backoff.on_exception(
-    backoff.expo,
-    requests.exceptions.RequestException,
-    giveup=fatal_error
+    backoff.expo, requests.exceptions.RequestException, giveup=fatal_error
 )
 def api_call():
     pass
@@ -228,7 +234,7 @@ def complex_giveup(e):
         return True
 
     # Give up on 4xx except 429
-    if hasattr(e, 'response'):
+    if hasattr(e, "response"):
         status = e.response.status_code
         if 400 <= status < 500 and status != 429:
             return True
@@ -246,13 +252,9 @@ Control whether to raise exception when giving up:
 def raises_on_failure():
     pass
 
+
 # Returns None instead
-@backoff.on_exception(
-    backoff.expo,
-    Exception,
-    max_tries=3,
-    raise_on_giveup=False
-)
+@backoff.on_exception(backoff.expo, Exception, max_tries=3, raise_on_giveup=False)
 def returns_none_on_failure():
     pass
 ```
@@ -275,6 +277,7 @@ def wait_for_truthy():
 def needs_retry(result):
     return result.get("status") == "pending"
 
+
 @backoff.on_predicate(backoff.expo, needs_retry, max_time=300)
 def poll_status():
     return api.get_status()
@@ -292,6 +295,7 @@ def should_retry(result):
         return True
     return False
 
+
 @backoff.on_predicate(backoff.fibo, should_retry, max_value=60)
 def complex_poll():
     return get_resource()
@@ -307,7 +311,7 @@ def complex_poll():
     requests.exceptions.RequestException,
     max_tries=5,
     max_time=60,
-    giveup=lambda e: 400 <= getattr(e.response, 'status_code', 500) < 500
+    giveup=lambda e: 400 <= getattr(e.response, "status_code", 500) < 500,
 )
 def api_request():
     pass
@@ -317,10 +321,7 @@ def api_request():
 
 ```python
 @backoff.on_exception(
-    backoff.expo,
-    sqlalchemy.exc.OperationalError,
-    max_tries=3,
-    max_time=30
+    backoff.expo, sqlalchemy.exc.OperationalError, max_tries=3, max_time=30
 )
 def db_query():
     pass
@@ -334,7 +335,7 @@ def db_query():
     lambda result: result["status"] != "complete",
     interval=5,
     jitter=None,
-    max_time=600
+    max_time=600,
 )
 def poll_job():
     return check_job_status()
@@ -347,7 +348,7 @@ def poll_job():
     backoff.fibo,
     lambda result: not result.is_ready(),
     max_value=60,
-    max_time=3600  # 1 hour
+    max_time=3600,  # 1 hour
 )
 def wait_for_completion():
     return check_operation()

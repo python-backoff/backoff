@@ -7,14 +7,14 @@ def test_decay():
     gen = backoff.decay()
     gen.send(None)
     for i in range(10):
-        assert math.e ** -i == next(gen)
+        assert math.e**-i == next(gen)
 
 
 def test_decay_init100():
     gen = backoff.decay(initial_value=100)
     gen.send(None)
     for i in range(10):
-        assert 100 * math.e ** -i == next(gen)
+        assert 100 * math.e**-i == next(gen)
 
 
 def test_decay_init100_decay3():
@@ -35,32 +35,32 @@ def test_expo():
     gen = backoff.expo()
     gen.send(None)
     for i in range(9):
-        assert 2 ** i == next(gen)
+        assert 2**i == next(gen)
 
 
 def test_expo_base3():
     gen = backoff.expo(base=3)
     gen.send(None)
     for i in range(9):
-        assert 3 ** i == next(gen)
+        assert 3**i == next(gen)
 
 
 def test_expo_factor3():
     gen = backoff.expo(factor=3)
     gen.send(None)
     for i in range(9):
-        assert 3 * 2 ** i == next(gen)
+        assert 3 * 2**i == next(gen)
 
 
 def test_expo_base3_factor5():
     gen = backoff.expo(base=3, factor=5)
     gen.send(None)
     for i in range(9):
-        assert 5 * 3 ** i == next(gen)
+        assert 5 * 3**i == next(gen)
 
 
 def test_expo_max_value():
-    gen = backoff.expo(max_value=2 ** 4)
+    gen = backoff.expo(max_value=2**4)
     gen.send(None)
     expected = [1, 2, 4, 8, 16, 16, 16]
     for expect in expected:
@@ -68,7 +68,7 @@ def test_expo_max_value():
 
 
 def test_expo_max_value_factor():
-    gen = backoff.expo(factor=3, max_value=2 ** 4)
+    gen = backoff.expo(factor=3, max_value=2**4)
     gen.send(None)
     expected = [3 * 1, 3 * 2, 3 * 4, 16, 16, 16, 16]
     for expect in expected:
@@ -95,7 +95,7 @@ def test_constant():
     gen = backoff.constant(interval=3)
     gen.send(None)
     for i in range(9):
-        assert 3 == next(gen)
+        assert next(gen) == 3
 
 
 def test_runtime():

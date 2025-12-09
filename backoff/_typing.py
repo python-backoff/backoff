@@ -1,8 +1,17 @@
 # coding:utf-8
 import logging
 import sys
-from typing import (Any, Callable, Coroutine, Dict, Generator, Sequence, Tuple,
-                    TypeVar, Union)
+from typing import (
+    Any,
+    Callable,
+    Coroutine,
+    Dict,
+    Generator,
+    Sequence,
+    Tuple,
+    TypeVar,
+    Union,
+)
 
 if sys.version_info >= (3, 8):  # pragma: no cover
     from typing import TypedDict
@@ -11,6 +20,7 @@ else:  # pragma: no cover
     try:
         from typing_extensions import TypedDict
     except ImportError:
+
         class TypedDict(dict):
             def __init_subclass__(cls, **kwargs: Any) -> None:
                 return super().__init_subclass__()
@@ -32,7 +42,7 @@ class Details(_Details, total=False):
 
 T = TypeVar("T")
 
-_CallableT = TypeVar('_CallableT', bound=Callable[..., Any])
+_CallableT = TypeVar("_CallableT", bound=Callable[..., Any])
 _Handler = Union[
     Callable[[Details], None],
     Callable[[Details], Coroutine[Any, Any, None]],

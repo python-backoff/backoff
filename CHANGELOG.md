@@ -7,6 +7,10 @@
 - Switch to [Zensical for building the documentation](https://zensical.org/) [#62](https://github.com/python-backoff/backoff/pull/62) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
 - Include changelog in the documentation [#65](https://github.com/python-backoff/backoff/pull/65) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
 
+### Internal
+
+- Use Ruff to give the codebase a consistent format [#66](https://github.com/python-backoff/backoff/pull/66) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+
 ## [v2.3.0] - 2025-11-28
 
 ### Changed
