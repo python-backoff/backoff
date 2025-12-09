@@ -26,7 +26,7 @@ for asynchronous code.
 Examples
 ========
 
-Since Kenneth Reitz's `requests <http://python-requests.org>`_ module
+Since Kenneth Reitz's `requests <https://requests.readthedocs.io>`_ module
 has become a defacto standard for synchronous HTTP clients in Python,
 networking examples below are written using it, but it is in no way required
 by the backoff module.
