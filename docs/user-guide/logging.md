@@ -38,7 +38,11 @@ Specify a custom logger by name or instance.
 ### Logger by Name
 
 ```python
-@backoff.on_exception(backoff.expo, Exception, logger="my_custom_logger")
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    logger="my_custom_logger",
+)
 def my_function():
     pass
 ```
@@ -53,7 +57,11 @@ my_logger.addHandler(logging.FileHandler("retries.log"))
 my_logger.setLevel(logging.WARNING)
 
 
-@backoff.on_exception(backoff.expo, Exception, logger=my_logger)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    logger=my_logger,
+)
 def my_function():
     pass
 ```
@@ -75,7 +83,12 @@ def my_custom_log(details):
     print(f"Custom log: {details}")
 
 
-@backoff.on_exception(backoff.expo, Exception, logger=None, on_backoff=my_custom_log)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    logger=None,
+    on_backoff=my_custom_log,
+)
 def my_function():
     pass
 ```
@@ -88,7 +101,8 @@ def my_function():
 import logging
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
 )
 
 logging.getLogger("backoff").addHandler(logging.StreamHandler())
@@ -152,12 +166,22 @@ critical_logger = logging.getLogger("critical_ops")
 routine_logger = logging.getLogger("routine_ops")
 
 
-@backoff.on_exception(backoff.expo, Exception, logger=critical_logger, max_tries=10)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    logger=critical_logger,
+    max_tries=10,
+)
 def critical_operation():
     pass
 
 
-@backoff.on_exception(backoff.expo, Exception, logger=routine_logger, max_tries=3)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    logger=routine_logger,
+    max_tries=3,
+)
 def routine_operation():
     pass
 ```
@@ -194,7 +218,12 @@ logger.addHandler(file_handler)
 
 
 # Use in decorator
-@backoff.on_exception(backoff.expo, Exception, logger=logger, max_tries=5)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    logger=logger,
+    max_tries=5,
+)
 def my_function():
     pass
 ```

@@ -93,7 +93,10 @@ class RateLimiter:
 rate_limiter = RateLimiter()
 
 
-@backoff.on_predicate(backoff.constant, interval=lambda: rate_limiter.get_interval())
+@backoff.on_predicate(
+    backoff.constant,
+    interval=lambda: rate_limiter.get_interval(),
+)
 def adaptive_poll():
     return check_resource()
 ```

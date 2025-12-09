@@ -36,7 +36,13 @@ def linear_backoff(start=1, increment=1, max_value=None):
             value += increment
 
 
-@backoff.on_exception(linear_backoff, Exception, start=2, increment=3, max_value=30)
+@backoff.on_exception(
+    linear_backoff,
+    Exception,
+    start=2,
+    increment=3,
+    max_value=30,
+)
 def my_function():
     pass
 ```
@@ -58,7 +64,12 @@ def polynomial_backoff(base=2, exponent=2, max_value=None):
         n += 1
 
 
-@backoff.on_exception(polynomial_backoff, Exception, base=2, exponent=1.5)
+@backoff.on_exception(
+    polynomial_backoff,
+    Exception,
+    base=2,
+    exponent=1.5,
+)
 def my_function():
     pass
 ```
@@ -79,7 +90,11 @@ def stepped_backoff(steps):
                 yield wait_time
 
 
-@backoff.on_exception(stepped_backoff, Exception, steps=[(3, 1), (3, 5), (None, 30)])
+@backoff.on_exception(
+    stepped_backoff,
+    Exception,
+    steps=[(3, 1), (3, 5), (None, 30)],
+)
 def my_function():
     pass
 ```
@@ -96,7 +111,12 @@ def random_backoff(min_wait=1, max_wait=60):
         yield random.uniform(min_wait, max_wait)
 
 
-@backoff.on_exception(random_backoff, Exception, min_wait=1, max_wait=10)
+@backoff.on_exception(
+    random_backoff,
+    Exception,
+    min_wait=1,
+    max_wait=10,
+)
 def my_function():
     pass
 ```

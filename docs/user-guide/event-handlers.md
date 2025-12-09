@@ -43,7 +43,11 @@ def log_success(details):
     print(f"{details['target'].__name__} succeeded after {details['tries']} tries")
 
 
-@backoff.on_exception(backoff.expo, Exception, on_success=log_success)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_success=log_success,
+)
 def my_function():
     pass
 ```
@@ -60,7 +64,11 @@ def log_backoff(details):
     )
 
 
-@backoff.on_exception(backoff.expo, Exception, on_backoff=log_backoff)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_backoff=log_backoff,
+)
 def my_function():
     pass
 ```
@@ -76,7 +84,9 @@ def log_exception_backoff(details):
 
 
 @backoff.on_exception(
-    backoff.expo, requests.exceptions.RequestException, on_backoff=log_exception_backoff
+    backoff.expo,
+    requests.exceptions.RequestException,
+    on_backoff=log_exception_backoff,
 )
 def api_call():
     pass
@@ -93,7 +103,10 @@ def log_value_backoff(details):
 
 
 @backoff.on_predicate(
-    backoff.constant, lambda x: x is None, on_backoff=log_value_backoff, interval=2
+    backoff.constant,
+    lambda x: x is None,
+    on_backoff=log_value_backoff,
+    interval=2,
 )
 def poll_resource():
     pass
@@ -111,7 +124,12 @@ def log_giveup(details):
     )
 
 
-@backoff.on_exception(backoff.expo, Exception, on_giveup=log_giveup, max_tries=5)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_giveup=log_giveup,
+    max_tries=5,
+)
 def my_function():
     pass
 ```
@@ -135,7 +153,13 @@ def send_metric(details):
 
 
 @backoff.on_exception(
-    backoff.expo, Exception, on_backoff=[log_to_console, log_to_file, send_metric]
+    backoff.expo,
+    Exception,
+    on_backoff=[
+        log_to_console,
+        log_to_file,
+        send_metric,
+    ],
 )
 def my_function():
     pass
@@ -166,7 +190,11 @@ def structured_log_backoff(details):
     )
 
 
-@backoff.on_exception(backoff.expo, Exception, on_backoff=structured_log_backoff)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_backoff=structured_log_backoff,
+)
 def my_function():
     pass
 ```
@@ -185,7 +213,11 @@ def record_metrics(details):
     retry_duration.observe(details["elapsed"])
 
 
-@backoff.on_exception(backoff.expo, Exception, on_backoff=record_metrics)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_backoff=record_metrics,
+)
 def monitored_function():
     pass
 ```
@@ -205,7 +237,11 @@ def report_to_sentry(details):
         )
 
 
-@backoff.on_exception(backoff.expo, Exception, on_backoff=report_to_sentry)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_backoff=report_to_sentry,
+)
 def my_function():
     pass
 ```
@@ -221,7 +257,12 @@ def alert_on_giveup(details):
         )
 
 
-@backoff.on_exception(backoff.expo, Exception, on_giveup=alert_on_giveup, max_tries=5)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_giveup=alert_on_giveup,
+    max_tries=5,
+)
 def critical_function():
     pass
 ```
@@ -239,7 +280,11 @@ async def async_log_backoff(details):
         await session.post("http://log-service/events", json=details)
 
 
-@backoff.on_exception(backoff.expo, Exception, on_backoff=async_log_backoff)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_backoff=async_log_backoff,
+)
 async def async_function():
     pass
 ```
@@ -263,7 +308,11 @@ def detailed_exception_log(details):
     )
 
 
-@backoff.on_exception(backoff.expo, Exception, on_backoff=detailed_exception_log)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_backoff=detailed_exception_log,
+)
 def my_function():
     pass
 ```
@@ -284,7 +333,11 @@ def conditional_alert(details):
             logger.error("Critical error during retry")
 
 
-@backoff.on_exception(backoff.expo, Exception, on_backoff=conditional_alert)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_backoff=conditional_alert,
+)
 def my_function():
     pass
 ```

@@ -26,7 +26,10 @@ import backoff
 import requests
 
 
-@backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
+@backoff.on_exception(
+    backoff.expo,
+    requests.exceptions.RequestException,
+)
 def get_url(url):
     return requests.get(url)
 ```
@@ -43,7 +46,10 @@ In production, you'll want to limit retries:
 
 ```python
 @backoff.on_exception(
-    backoff.expo, requests.exceptions.RequestException, max_time=60, max_tries=5
+    backoff.expo,
+    requests.exceptions.RequestException,
+    max_time=60,
+    max_tries=5,
 )
 def get_url(url):
     return requests.get(url)
@@ -61,7 +67,10 @@ You can retry on multiple exception types:
 ```python
 @backoff.on_exception(
     backoff.expo,
-    (requests.exceptions.Timeout, requests.exceptions.ConnectionError),
+    (
+        requests.exceptions.Timeout,
+        requests.exceptions.ConnectionError,
+    ),
     max_time=30,
 )
 def get_url(url):
@@ -79,7 +88,10 @@ def fatal_code(e):
 
 
 @backoff.on_exception(
-    backoff.expo, requests.exceptions.RequestException, max_time=300, giveup=fatal_code
+    backoff.expo,
+    requests.exceptions.RequestException,
+    max_time=300,
+    giveup=fatal_code,
 )
 def get_url(url):
     return requests.get(url)
@@ -128,7 +140,11 @@ Wait times: 1s, 1s, 2s, 3s, 5s, 8s, 13s, ...
 ### Constant
 
 ```python
-@backoff.on_exception(backoff.constant, Exception, interval=5)
+@backoff.on_exception(
+    backoff.constant,
+    Exception,
+    interval=5,
+)
 def my_function(): ...
 ```
 
@@ -166,7 +182,11 @@ Backoff works seamlessly with async functions:
 import aiohttp
 
 
-@backoff.on_exception(backoff.expo, aiohttp.ClientError, max_time=60)
+@backoff.on_exception(
+    backoff.expo,
+    aiohttp.ClientError,
+    max_time=60,
+)
 async def get_url(url):
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:

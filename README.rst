@@ -40,7 +40,10 @@ is raised. Here's an example using exponential backoff when any
 
 .. code-block:: python
 
-    @backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
+    @backoff.on_exception(
+        backoff.expo,
+        requests.exceptions.RequestException,
+    )
     def get_url(url):
         return requests.get(url)
 
@@ -50,7 +53,11 @@ the same backoff behavior is desired for more than one exception type:
 .. code-block:: python
 
     @backoff.on_exception(
-        backoff.expo, (requests.exceptions.Timeout, requests.exceptions.ConnectionError)
+        backoff.expo,
+        (
+            requests.exceptions.Timeout,
+            requests.exceptions.ConnectionError,
+        ),
     )
     def get_url(url):
         return requests.get(url)
@@ -65,7 +72,11 @@ of total time in seconds that can elapse before giving up.
 
 .. code-block:: python
 
-    @backoff.on_exception(backoff.expo, requests.exceptions.RequestException, max_time=60)
+    @backoff.on_exception(
+        backoff.expo,
+        requests.exceptions.RequestException,
+        max_time=60,
+    )
     def get_url(url):
         return requests.get(url)
 
@@ -147,7 +158,11 @@ return value of the target function is the empty list:
 
 .. code-block:: python
 
-    @backoff.on_predicate(backoff.fibo, lambda x: x == [], max_value=13)
+    @backoff.on_predicate(
+        backoff.fibo,
+        lambda x: x == [],
+        max_value=13,
+    )
     def poll_for_messages(queue):
         return queue.get()
 
@@ -169,7 +184,11 @@ gets a non-falsey result could be defined like like this:
 
 .. code-block:: python
 
-    @backoff.on_predicate(backoff.constant, jitter=None, interval=1)
+    @backoff.on_predicate(
+        backoff.constant,
+        jitter=None,
+        interval=1,
+    )
     def poll_for_message(queue):
         return queue.get()
 
@@ -222,8 +241,16 @@ backoff behavior for different cases:
 .. code-block:: python
 
     @backoff.on_predicate(backoff.fibo, max_value=13)
-    @backoff.on_exception(backoff.expo, requests.exceptions.HTTPError, max_time=60)
-    @backoff.on_exception(backoff.expo, requests.exceptions.Timeout, max_time=300)
+    @backoff.on_exception(
+        backoff.expo,
+        requests.exceptions.HTTPError,
+        max_time=60,
+    )
+    @backoff.on_exception(
+        backoff.expo,
+        requests.exceptions.Timeout,
+        max_time=300,
+    )
     def poll_for_message(queue):
         return queue.get()
 
@@ -247,7 +274,11 @@ runtime to obtain the value:
         return app.config["BACKOFF_MAX_TIME"]
 
 
-    @backoff.on_exception(backoff.expo, ValueError, max_time=lookup_max_time)
+    @backoff.on_exception(
+        backoff.expo,
+        ValueError,
+        max_time=lookup_max_time,
+    )
     def my_function(): ...
 
 Event handlers
@@ -302,7 +333,10 @@ handler functions as the value of the ``on_backoff`` keyword arg:
     @backoff.on_exception(
         backoff.expo,
         requests.exceptions.RequestException,
-        on_backoff=[backoff_hdlr1, backoff_hdlr2],
+        on_backoff=[
+            backoff_hdlr1,
+            backoff_hdlr2,
+        ],
     )
     def get_url(url):
         return requests.get(url)
@@ -334,7 +368,11 @@ asynchronous HTTP client/server library.
 
 .. code-block:: python
 
-    @backoff.on_exception(backoff.expo, aiohttp.ClientError, max_time=60)
+    @backoff.on_exception(
+        backoff.expo,
+        aiohttp.ClientError,
+        max_time=60,
+    )
     async def get_url(url):
         async with aiohttp.ClientSession(raise_for_status=True) as session:
             async with session.get(url) as response:

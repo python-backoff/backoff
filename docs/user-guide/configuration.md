@@ -37,7 +37,12 @@ def my_function():
 Use both to create flexible retry policies:
 
 ```python
-@backoff.on_exception(backoff.expo, Exception, max_tries=10, max_time=300)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    max_tries=10,
+    max_time=300,
+)
 def my_function():
     pass
 ```
@@ -151,7 +156,11 @@ def my_function():
 
 
 # Same as:
-@backoff.on_exception(backoff.expo, Exception, jitter=backoff.full_jitter)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    jitter=backoff.full_jitter,
+)
 def my_function():
     pass
 ```
@@ -161,7 +170,11 @@ Wait time is random between 0 and calculated value.
 ### Random Jitter
 
 ```python
-@backoff.on_exception(backoff.expo, Exception, jitter=backoff.random_jitter)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    jitter=backoff.random_jitter,
+)
 def my_function():
     pass
 ```
@@ -188,7 +201,11 @@ def custom_jitter(value):
     return value * random.uniform(0.8, 1.2)
 
 
-@backoff.on_exception(backoff.expo, Exception, jitter=custom_jitter)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    jitter=custom_jitter,
+)
 def my_function():
     pass
 ```
@@ -202,7 +219,11 @@ def should_giveup(e):
     return isinstance(e, ValueError)
 
 
-@backoff.on_exception(backoff.expo, Exception, giveup=should_giveup)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    giveup=should_giveup,
+)
 def my_function():
     pass
 ```
@@ -219,7 +240,9 @@ def fatal_error(e):
 
 
 @backoff.on_exception(
-    backoff.expo, requests.exceptions.RequestException, giveup=fatal_error
+    backoff.expo,
+    requests.exceptions.RequestException,
+    giveup=fatal_error,
 )
 def api_call():
     pass
@@ -254,7 +277,12 @@ def raises_on_failure():
 
 
 # Returns None instead
-@backoff.on_exception(backoff.expo, Exception, max_tries=3, raise_on_giveup=False)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    max_tries=3,
+    raise_on_giveup=False,
+)
 def returns_none_on_failure():
     pass
 ```
@@ -278,7 +306,11 @@ def needs_retry(result):
     return result.get("status") == "pending"
 
 
-@backoff.on_predicate(backoff.expo, needs_retry, max_time=300)
+@backoff.on_predicate(
+    backoff.expo,
+    needs_retry,
+    max_time=300,
+)
 def poll_status():
     return api.get_status()
 ```
@@ -296,7 +328,11 @@ def should_retry(result):
     return False
 
 
-@backoff.on_predicate(backoff.fibo, should_retry, max_value=60)
+@backoff.on_predicate(
+    backoff.fibo,
+    should_retry,
+    max_value=60,
+)
 def complex_poll():
     return get_resource()
 ```
@@ -321,7 +357,10 @@ def api_request():
 
 ```python
 @backoff.on_exception(
-    backoff.expo, sqlalchemy.exc.OperationalError, max_tries=3, max_time=30
+    backoff.expo,
+    sqlalchemy.exc.OperationalError,
+    max_tries=3,
+    max_time=30,
 )
 def db_query():
     pass

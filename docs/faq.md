@@ -55,7 +55,12 @@ def my_function():
 Yes! The function will stop retrying when either limit is reached:
 
 ```python
-@backoff.on_exception(backoff.expo, Exception, max_tries=10, max_time=300)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    max_tries=10,
+    max_time=300,
+)
 def my_function():
     pass
 ```
@@ -103,7 +108,9 @@ def is_permanent_error(e):
 
 
 @backoff.on_exception(
-    backoff.expo, requests.exceptions.RequestException, giveup=is_permanent_error
+    backoff.expo,
+    requests.exceptions.RequestException,
+    giveup=is_permanent_error,
 )
 def api_call():
     pass
@@ -114,7 +121,12 @@ def api_call():
 By default (`raise_on_giveup=True`), the original exception is re-raised. You can disable this:
 
 ```python
-@backoff.on_exception(backoff.expo, Exception, max_tries=5, raise_on_giveup=False)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    max_tries=5,
+    raise_on_giveup=False,
+)
 def my_function():
     pass
 
@@ -128,7 +140,12 @@ Yes, pass a tuple:
 
 ```python
 @backoff.on_exception(
-    backoff.expo, (TimeoutError, ConnectionError, requests.exceptions.RequestException)
+    backoff.expo,
+    (
+        TimeoutError,
+        ConnectionError,
+        requests.exceptions.RequestException,
+    ),
 )
 def my_function():
     pass
@@ -185,7 +202,11 @@ async def log_retry(details):
     await async_logger.log(f"Retry {details['tries']}")
 
 
-@backoff.on_exception(backoff.expo, Exception, on_backoff=log_retry)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_backoff=log_retry,
+)
 async def my_function():
     pass
 ```
@@ -201,7 +222,11 @@ def log_backoff(details):
     logger.warning(f"Retry {details['tries']} after {details['elapsed']:.1f}s")
 
 
-@backoff.on_exception(backoff.expo, Exception, on_backoff=log_backoff)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_backoff=log_backoff,
+)
 def my_function():
     pass
 ```
@@ -300,7 +325,11 @@ class CircuitBreaker:
 breaker = CircuitBreaker()
 
 
-@backoff.on_exception(backoff.expo, Exception, giveup=breaker.should_giveup)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    giveup=breaker.should_giveup,
+)
 def protected_call():
     pass
 ```
@@ -314,7 +343,11 @@ def get_max_time():
     return app.config["RETRY_MAX_TIME"]
 
 
-@backoff.on_exception(backoff.expo, Exception, max_time=get_max_time)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    max_time=get_max_time,
+)
 def my_function():
     pass
 ```

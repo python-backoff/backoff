@@ -45,7 +45,11 @@ def api_call(url):
     interval=5,
     max_time=600,
 )
-@backoff.on_exception(backoff.expo, requests.exceptions.RequestException, max_time=60)
+@backoff.on_exception(
+    backoff.expo,
+    requests.exceptions.RequestException,
+    max_time=60,
+)
 def poll_until_ready(job_id):
     response = requests.get(f"/api/jobs/{job_id}")
     response.raise_for_status()

@@ -11,7 +11,11 @@ import backoff
 import requests
 
 
-@backoff.on_exception(backoff.expo, requests.exceptions.RequestException, max_time=60)
+@backoff.on_exception(
+    backoff.expo,
+    requests.exceptions.RequestException,
+    max_time=60,
+)
 def fetch_data(url):
     response = requests.get(url)
     response.raise_for_status()
@@ -40,7 +44,11 @@ def should_retry(response):
     return response.status_code >= 500 or response.status_code == 429
 
 
-@backoff.on_predicate(backoff.expo, should_retry, max_time=120)
+@backoff.on_predicate(
+    backoff.expo,
+    should_retry,
+    max_time=120,
+)
 def resilient_api_call(url):
     response = requests.get(url)
     if 400 <= response.status_code < 500 and response.status_code != 429:
@@ -58,7 +66,10 @@ from sqlalchemy.exc import OperationalError, TimeoutError
 
 
 @backoff.on_exception(
-    backoff.expo, (OperationalError, TimeoutError), max_tries=5, max_time=30
+    backoff.expo,
+    (OperationalError, TimeoutError),
+    max_tries=5,
+    max_time=30,
 )
 def connect_to_database(connection_string):
     engine = sqlalchemy.create_engine(connection_string)
@@ -80,7 +91,10 @@ def is_deadlock(e):
 
 
 @backoff.on_exception(
-    backoff.expo, DBAPIError, giveup=lambda e: not is_deadlock(e), max_tries=3
+    backoff.expo,
+    DBAPIError,
+    giveup=lambda e: not is_deadlock(e),
+    max_tries=3,
 )
 def execute_transaction(session, operation):
     try:
@@ -101,7 +115,11 @@ import aiohttp
 import backoff
 
 
-@backoff.on_exception(backoff.expo, aiohttp.ClientError, max_time=60)
+@backoff.on_exception(
+    backoff.expo,
+    aiohttp.ClientError,
+    max_time=60,
+)
 async def fetch_async(url):
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
@@ -114,7 +132,11 @@ async def fetch_async(url):
 import asyncpg
 
 
-@backoff.on_exception(backoff.expo, asyncpg.PostgresError, max_tries=5)
+@backoff.on_exception(
+    backoff.expo,
+    asyncpg.PostgresError,
+    max_tries=5,
+)
 async def query_async(pool, query):
     async with pool.acquire() as conn:
         return await conn.fetch(query)
@@ -123,7 +145,11 @@ async def query_async(pool, query):
 ### Multiple Async Tasks with Individual Retries
 
 ```python
-@backoff.on_exception(backoff.expo, aiohttp.ClientError, max_tries=3)
+@backoff.on_exception(
+    backoff.expo,
+    aiohttp.ClientError,
+    max_tries=3,
+)
 async def fetch_with_retry(session, url):
     async with session.get(url) as response:
         return await response.json()
@@ -141,7 +167,10 @@ async def fetch_all(urls):
 
 ```python
 @backoff.on_predicate(
-    backoff.constant, lambda job: job["status"] != "complete", interval=5, max_time=600
+    backoff.constant,
+    lambda job: job["status"] != "complete",
+    interval=5,
+    max_time=600,
 )
 def wait_for_job(job_id):
     response = requests.get(f"/api/jobs/{job_id}")
@@ -152,7 +181,10 @@ def wait_for_job(job_id):
 
 ```python
 @backoff.on_predicate(
-    backoff.fibo, lambda result: not result, max_value=30, max_time=300
+    backoff.fibo,
+    lambda result: not result,
+    max_value=30,
+    max_time=300,
 )
 def wait_for_resource(resource_id):
     try:
@@ -166,7 +198,10 @@ def wait_for_resource(resource_id):
 
 ```python
 @backoff.on_predicate(
-    backoff.constant, lambda messages: len(messages) == 0, interval=2, jitter=None
+    backoff.constant,
+    lambda messages: len(messages) == 0,
+    interval=2,
+    jitter=None,
 )
 def poll_queue(queue_name):
     return message_queue.receive(queue_name, max_messages=10)
@@ -188,7 +223,10 @@ def is_throttled(e):
 
 
 @backoff.on_exception(
-    backoff.expo, ClientError, giveup=lambda e: not is_throttled(e), max_tries=5
+    backoff.expo,
+    ClientError,
+    giveup=lambda e: not is_throttled(e),
+    max_tries=5,
 )
 def upload_to_s3(bucket, key, data):
     s3 = boto3.client("s3")
@@ -236,7 +274,11 @@ def log_giveup(details):
 
 
 @backoff.on_exception(
-    backoff.expo, Exception, on_backoff=log_retry, on_giveup=log_giveup, max_tries=5
+    backoff.expo,
+    Exception,
+    on_backoff=log_retry,
+    on_giveup=log_giveup,
+    max_tries=5,
 )
 def flaky_function():
     pass
@@ -257,7 +299,11 @@ def count_giveup(details):
 
 
 @backoff.on_exception(
-    backoff.expo, Exception, on_backoff=count_retry, on_giveup=count_giveup, max_tries=3
+    backoff.expo,
+    Exception,
+    on_backoff=count_retry,
+    on_giveup=count_giveup,
+    max_tries=3,
 )
 def monitored_function():
     pass
@@ -269,14 +315,22 @@ def monitored_function():
 
 ```python
 # Separate retry logic for different failure modes
-@backoff.on_predicate(backoff.fibo, lambda result: result is None, max_value=13)
+@backoff.on_predicate(
+    backoff.fibo,
+    lambda result: result is None,
+    max_value=13,
+)
 @backoff.on_exception(
     backoff.expo,
     requests.exceptions.HTTPError,
     giveup=lambda e: 400 <= e.response.status_code < 500,
     max_time=60,
 )
-@backoff.on_exception(backoff.expo, requests.exceptions.Timeout, max_tries=3)
+@backoff.on_exception(
+    backoff.expo,
+    requests.exceptions.Timeout,
+    max_tries=3,
+)
 def comprehensive_retry(url):
     response = requests.get(url)
     response.raise_for_status()

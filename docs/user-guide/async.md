@@ -27,7 +27,11 @@ async def async_log_retry(details):
     await log_service.log(f"Retry {details['tries']} after {details['elapsed']:.1f}s")
 
 
-@backoff.on_exception(backoff.expo, Exception, on_backoff=async_log_retry)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_backoff=async_log_retry,
+)
 async def async_operation():
     pass
 ```
@@ -37,7 +41,11 @@ async def async_operation():
 ### HTTP Client
 
 ```python
-@backoff.on_exception(backoff.expo, aiohttp.ClientError, max_time=60)
+@backoff.on_exception(
+    backoff.expo,
+    aiohttp.ClientError,
+    max_time=60,
+)
 async def get_url(url):
     async with aiohttp.ClientSession(raise_for_status=True) as session:
         async with session.get(url) as response:
@@ -50,7 +58,11 @@ async def get_url(url):
 import asyncpg
 
 
-@backoff.on_exception(backoff.expo, asyncpg.PostgresError, max_tries=5)
+@backoff.on_exception(
+    backoff.expo,
+    asyncpg.PostgresError,
+    max_tries=5,
+)
 async def query_database(pool, query):
     async with pool.acquire() as conn:
         return await conn.fetch(query)
@@ -62,7 +74,11 @@ async def query_database(pool, query):
 import asyncio
 
 
-@backoff.on_exception(backoff.expo, aiohttp.ClientError, max_tries=3)
+@backoff.on_exception(
+    backoff.expo,
+    aiohttp.ClientError,
+    max_tries=3,
+)
 async def fetch_one(session, url):
     async with session.get(url) as response:
         return await response.json()
@@ -144,7 +160,10 @@ async def log_async_retry(details):
 
 @backoff.on_exception(
     backoff.expo,
-    (aiohttp.ClientError, asyncio.TimeoutError),
+    (
+        aiohttp.ClientError,
+        asyncio.TimeoutError,
+    ),
     max_tries=5,
     max_time=60,
     on_backoff=log_async_retry,

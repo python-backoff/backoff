@@ -176,7 +176,11 @@ class RetryableError(Exception):
         self.wait_seconds = wait_seconds
 
 
-@backoff.on_exception(backoff.runtime, RetryableError, value=lambda e: e.wait_seconds)
+@backoff.on_exception(
+    backoff.runtime,
+    RetryableError,
+    value=lambda e: e.wait_seconds,
+)
 def custom_retry():
     raise RetryableError("Try again", wait_seconds=30)
 ```
@@ -202,7 +206,11 @@ def my_function():
 
 
 # Equivalent to:
-@backoff.on_exception(backoff.expo, Exception, jitter=backoff.full_jitter)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    jitter=backoff.full_jitter,
+)
 def my_function():
     pass
 ```
@@ -214,7 +222,11 @@ For exponential backoff: actual wait is random between 0 and 2^n seconds.
 Adds random milliseconds (0-1000ms) to the calculated wait time.
 
 ```python
-@backoff.on_exception(backoff.expo, Exception, jitter=backoff.random_jitter)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    jitter=backoff.random_jitter,
+)
 def my_function():
     pass
 ```
@@ -231,7 +243,11 @@ def custom_jitter(value):
     return value + jitter_amount
 
 
-@backoff.on_exception(backoff.expo, Exception, jitter=custom_jitter)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    jitter=custom_jitter,
+)
 def my_function():
     pass
 ```

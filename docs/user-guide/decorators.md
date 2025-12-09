@@ -13,7 +13,10 @@ import backoff
 import requests
 
 
-@backoff.on_exception(backoff.expo, requests.exceptions.RequestException)
+@backoff.on_exception(
+    backoff.expo,
+    requests.exceptions.RequestException,
+)
 def get_url(url):
     return requests.get(url)
 ```
@@ -62,7 +65,10 @@ def is_fatal(e):
 
 
 @backoff.on_exception(
-    backoff.expo, requests.exceptions.RequestException, giveup=is_fatal, max_time=300
+    backoff.expo,
+    requests.exceptions.RequestException,
+    giveup=is_fatal,
+    max_time=300,
 )
 def api_call(endpoint):
     response = requests.get(endpoint)
@@ -96,7 +102,11 @@ The `on_predicate` decorator retries when a condition is true about the return v
 ### Basic Usage
 
 ```python
-@backoff.on_predicate(backoff.fibo, lambda x: x is None, max_value=13)
+@backoff.on_predicate(
+    backoff.fibo,
+    lambda x: x is None,
+    max_value=13,
+)
 def poll_for_result(job_id):
     result = check_job(job_id)
     return result if result else None
@@ -119,7 +129,11 @@ def poll_for_result(job_id):
 When no predicate is specified, the decorator retries on falsey values:
 
 ```python
-@backoff.on_predicate(backoff.constant, interval=2, max_time=60)
+@backoff.on_predicate(
+    backoff.constant,
+    interval=2,
+    max_time=60,
+)
 def wait_for_resource():
     # Retries until a truthy value is returned
     return resource.get() or None
@@ -131,7 +145,9 @@ Define specific conditions for retry:
 
 ```python
 @backoff.on_predicate(
-    backoff.expo, lambda result: result["status"] == "pending", max_time=600
+    backoff.expo,
+    lambda result: result["status"] == "pending",
+    max_time=600,
 )
 def poll_job_status(job_id):
     return api.get_job(job_id)
@@ -148,7 +164,11 @@ def needs_retry(result):
     )
 
 
-@backoff.on_predicate(backoff.fibo, needs_retry, max_value=60)
+@backoff.on_predicate(
+    backoff.fibo,
+    needs_retry,
+    max_value=60,
+)
 def complex_poll(resource_id):
     return api.get_resource(resource_id)
 ```
@@ -158,9 +178,21 @@ def complex_poll(resource_id):
 Stack multiple decorators for complex retry logic:
 
 ```python
-@backoff.on_predicate(backoff.fibo, lambda x: x is None, max_value=13)
-@backoff.on_exception(backoff.expo, requests.exceptions.HTTPError, max_time=60)
-@backoff.on_exception(backoff.expo, requests.exceptions.Timeout, max_time=300)
+@backoff.on_predicate(
+    backoff.fibo,
+    lambda x: x is None,
+    max_value=13,
+)
+@backoff.on_exception(
+    backoff.expo,
+    requests.exceptions.HTTPError,
+    max_time=60,
+)
+@backoff.on_exception(
+    backoff.expo,
+    requests.exceptions.Timeout,
+    max_time=300,
+)
 def robust_poll(endpoint):
     response = requests.get(endpoint)
     response.raise_for_status()
@@ -202,7 +234,12 @@ def detailed_log(details):
     )
 
 
-@backoff.on_exception(backoff.expo, Exception, on_backoff=detailed_log, max_tries=5)
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_backoff=detailed_log,
+    max_tries=5,
+)
 def my_function():
     pass
 ```
