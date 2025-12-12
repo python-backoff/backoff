@@ -1,6 +1,6 @@
 [project]
 name = "python-backoff"
-version = "2.3.0"
+version = "2.4.0.dev0"
 description = "Function decoration for backoff and retry"
 authors = [{ name = "Bob Green", email = "rgreen@aquent.com" }]
 maintainers = [{ name = "Edgar Ramírez-Mondragón", email = "edgarrm358@gmail.com" }]
