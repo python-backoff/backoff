@@ -8,6 +8,9 @@
     "enabled": true,
     "schedule": ["* 12-18 * * 5"]
   },
+  "pre-commit": {
+    "enabled": true
+  },
   "packageRules": [
     {
       "description": "Group minor and patch updates for GitHub Actions to reduce PR noise",
@@ -17,6 +20,15 @@
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "GitHub Actions",
       "groupSlug": "github-actions"
+    },
+    {
+      "description": "Group pre-commit updates",
+      "matchManagers": [
+        "pre-commit"
+      ],
+      "matchUpdateTypes": ["patch", "minor"],
+      "groupName": "pre-commit hooks",
+      "groupSlug": "pre-commit"
     },
     {
       "description": "Group digest updates for all dependencies to maintain lockfile consistency",
