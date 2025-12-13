@@ -1,6 +1,4 @@
-# coding:utf-8
 import logging
-import sys
 from types import FunctionType
 from typing import (
     Any,
@@ -10,21 +8,10 @@ from typing import (
     Generator,
     Sequence,
     Tuple,
+    TypedDict,
     TypeVar,
     Union,
 )
-
-if sys.version_info >= (3, 8):  # pragma: no cover
-    from typing import TypedDict
-else:  # pragma: no cover
-    # use typing_extensions if installed but don't require it
-    try:
-        from typing_extensions import TypedDict
-    except ImportError:
-
-        class TypedDict(dict):
-            def __init_subclass__(cls, **kwargs: Any) -> None:
-                return super().__init_subclass__()
 
 
 class _Details(TypedDict):

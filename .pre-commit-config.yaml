@@ -30,6 +30,14 @@ repos:
     rev: v2025.12.8.5
     hooks:
     -   id: doccmd
+        name: Ruff format docs
+        alias: ruff-format-docs
         args: ["--language", "python", "--no-pad-file", "--no-pad-groups", "--command", "ruff format", "docs/"]
+        additional_dependencies:
+        - ruff==0.14.8
+    -   id: doccmd
+        name: Ruff check fix docs
+        alias: ruff-check-fix-docs
+        args: ["--language", "python", "--no-pad-file", "--no-pad-groups", "--command", "ruff check --fix", "docs/"]
         additional_dependencies:
         - ruff==0.14.8

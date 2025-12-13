@@ -188,9 +188,8 @@ import aiohttp
     max_time=60,
 )
 async def get_url(url):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            return await response.text()
+    async with aiohttp.ClientSession() as session, session.get(url) as response:
+        return await response.text()
 ```
 
 ## Next Steps

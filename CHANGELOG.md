@@ -16,6 +16,7 @@
 ### Internal
 
 - Use Ruff to give the codebase a consistent format [#66](https://github.com/python-backoff/backoff/pull/66) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- Enable the `UP` (pyupgrade) Ruff rules and use Python 3.8+ code, including in docs [#73](https://github.com/python-backoff/backoff/pull/73) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
 
 ## [v2.3.0] - 2025-11-28
 

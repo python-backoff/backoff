@@ -121,9 +121,8 @@ import backoff
     max_time=60,
 )
 async def fetch_async(url):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            return await response.json()
+    async with aiohttp.ClientSession() as session, session.get(url) as response:
+        return await response.json()
 ```
 
 ### Async Database Operations
