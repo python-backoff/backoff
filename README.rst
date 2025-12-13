@@ -374,7 +374,7 @@ asynchronous HTTP client/server library.
         max_time=60,
     )
     async def get_url(url):
-        async with aiohttp.ClientSession(raise_for_status=True) as session:
+        async with aiohttp.ClientSession(raise_for_status=True) as session:  # noqa: SIM117
             async with session.get(url) as response:
                 return await response.text()
 

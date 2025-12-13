@@ -188,9 +188,8 @@ Yes! Just decorate async functions:
 ```python
 @backoff.on_exception(backoff.expo, aiohttp.ClientError)
 async def fetch_data(url):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            return await response.json()
+    async with aiohttp.ClientSession() as session, session.get(url) as response:
+        return await response.json()
 ```
 
 ### Can event handlers be async?

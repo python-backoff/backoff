@@ -9,6 +9,7 @@ A wait generator is a function that yields wait times in seconds:
 ```python
 def my_wait_gen():
     """Yields: 1, 2, 3, 4, 5, 5, 5, ..."""
+    # Note: Using `yield from` can be unsafe in backoff wait generators.
     for i in range(1, 6):
         yield i
     while True:

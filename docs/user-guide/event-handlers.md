@@ -328,9 +328,8 @@ def conditional_alert(details):
         send_alert(f"High retry count: {details['tries']}")
 
     # Only log errors, not warnings
-    if details.get("exception"):
-        if isinstance(details["exception"], CriticalError):
-            logger.error("Critical error during retry")
+    if details.get("exception") and isinstance(details["exception"], CriticalError):
+        logger.error("Critical error during retry")
 
 
 @backoff.on_exception(
