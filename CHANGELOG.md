@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- Changed the type of the `target` key in the `Details` dictionary to represent an actual function [#72](https://github.com/python-backoff/backoff/pull/72) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+
 ### Documentation
 
 - Switch to [Zensical for building the documentation](https://zensical.org/) [#62](https://github.com/python-backoff/backoff/pull/62) (from [@edgarrmondragon](https://github.com/edgarrmondragon))

@@ -1,6 +1,7 @@
 # coding:utf-8
 import logging
 import sys
+from types import FunctionType
 from typing import (
     Any,
     Callable,
@@ -27,7 +28,7 @@ else:  # pragma: no cover
 
 
 class _Details(TypedDict):
-    target: Callable[..., Any]
+    target: FunctionType
     args: Tuple[Any, ...]
     kwargs: Dict[str, Any]
     tries: int
