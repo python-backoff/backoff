@@ -7,6 +7,7 @@
 ### Fixed
 
 - Changed the type of the `target` key in the `Details` dictionary to represent an actual function [#72](https://github.com/python-backoff/backoff/pull/72) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- Synced `__version__` value in `__init__.py` with package version [#76](https://github.com/python-backoff/backoff/pull/76) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
 
 ### Documentation
 
