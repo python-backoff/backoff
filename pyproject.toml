@@ -1,6 +1,6 @@
 [project]
 name = "python-backoff"
-version = "2.4.0.dev0"
+version = "2.3.1"
 description = "Function decoration for backoff and retry"
 authors = [{ name = "Bob Green", email = "rgreen@aquent.com" }]
 maintainers = [{ name = "Edgar Ramírez-Mondragón", email = "edgarrm358@gmail.com" }]
@@ -53,10 +53,13 @@ lint = [
 ]
 test = [
     "coverage>=7.2.7",
+    "importlib-metadata>=8.5.0",
+    "packaging>=25.0",
     "pytest>=7.1.2",
     "pytest-asyncio>=0.18.3",
     "requests>=2.26.0",
     "responses>=0.20.0",
+    "tomli>=2.3.0",
 ]
 typing = [
     { include-group = "test" },
