@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [v2.3.1] - 2025-12-18
+
 ### Fixed
 
 - Changed the type of the `target` key in the `Details` dictionary to represent an actual function [#72](https://github.com/python-backoff/backoff/pull/72) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
@@ -11,7 +13,6 @@
 - Switch to [Zensical for building the documentation](https://zensical.org/) [#62](https://github.com/python-backoff/backoff/pull/62) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
 - Include changelog in the documentation [#65](https://github.com/python-backoff/backoff/pull/65) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
 - Link to canonical `requests` documentation hosted on "Read the Docs" [#67](https://github.com/python-backoff/backoff/pull/67) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-
 
 ### Internal
 
