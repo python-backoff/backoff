@@ -1,4 +1,4 @@
-name: Deploy Documentation
+name: Documentation
 
 on:
   push:
@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   build-docs:
-    name: Build documentation
+    name: Build
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
@@ -42,7 +42,7 @@ jobs:
           path: site
 
   publish-docs:
-    name: Publish documentation
+    name: Publish
     runs-on: ubuntu-24.04
     needs: [ build-docs ]
     permissions:
