@@ -18,7 +18,7 @@ repos:
     -   id: ruff-check
     -   id: ruff-format
 -   repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.9.18
+    rev: 0.9.22
     hooks:
     -   id: uv-lock
 -   repo: https://github.com/python-jsonschema/check-jsonschema
