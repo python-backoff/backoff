@@ -27,7 +27,7 @@ repos:
     -   id: check-github-workflows
     -   id: check-renovate
 -   repo: https://github.com/adamtheturtle/doccmd-pre-commit
-    rev: v2025.12.13
+    rev: v2026.1.18
     hooks:
     -   id: doccmd
         name: Ruff format docs
