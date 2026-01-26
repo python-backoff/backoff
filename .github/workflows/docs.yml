@@ -30,10 +30,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --group docs
+          uv pip install --system -r requirements/docs.requirements.txt
 
       - name: Build documentation
-        run: uv run zensical build
+        run: zensical build
 
       - name: Upload documentation as artifact
         id: deployment

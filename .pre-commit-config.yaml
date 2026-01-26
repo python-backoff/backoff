@@ -1,6 +1,8 @@
 # See https://pre-commit.ci/ for more information about pre-commit.ci
 ci:
     autoupdate_schedule: quarterly
+    skip:
+    -   pip-compile
 
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
@@ -20,7 +22,17 @@ repos:
 -   repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.9.22
     hooks:
-    -   id: uv-lock
+    -   id: pip-compile
+        files: |
+          (?x)^(
+            pyproject.toml|
+            requirements/docs.requirements.txt
+          )$
+        args:
+        -   pyproject.toml
+        -   "--group=docs"
+        -   "--python-version=3.14"
+        -   "--output-file=requirements/docs.requirements.txt"
 -   repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.36.0
     hooks:
