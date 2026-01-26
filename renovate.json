@@ -29,14 +29,12 @@
       "matchUpdateTypes": ["patch", "minor"],
       "groupName": "pre-commit hooks",
       "groupSlug": "pre-commit"
-    },
-    {
-      "description": "Group digest updates for all dependencies to maintain lockfile consistency",
-      "matchPackagePatterns": ["*"],
-      "matchUpdateTypes": ["digest"],
-      "depTypeList": ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"],
-      "groupName": "lockfile maintenance",
-      "schedule": ["* 12-18 * * 5"]
     }
-  ]
+  ],
+  "pip-compile": {
+    "managerFilePatterns": ["/(^|/)(*\\.)?requirements\\.txt$/"]
+  },
+  "pip_requirements": {
+    "enabled": false
+  }
 }
