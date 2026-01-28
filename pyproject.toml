@@ -146,6 +146,13 @@ commands = [
   ],
 ]
 
+[tool.tox.env.docs]
+description = "build the documentation"
+deps = [ "-r ./requirements/docs.requirements.txt" ]
+commands = [
+    [ "zensical", { replace = "posargs", default = [ "build" ], extend = true } ],
+]
+
 [tool.tox.gh.python]
 "3.15" = ["3.15"]
 "3.14" = ["3.14", "lint", "typing"]
