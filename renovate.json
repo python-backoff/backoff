@@ -36,5 +36,8 @@
   },
   "pip_requirements": {
     "enabled": false
+  },
+  "poetry": {
+    "enabled": false
   }
 }
