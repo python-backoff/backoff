@@ -45,8 +45,8 @@ dev = [
     { include-group = "typing" },
 ]
 docs = [
-    "mkdocstrings[python]>=0.22.0",
-    "zensical>=0.0.2",
+    "mkdocstrings[python]~=0.22.0",
+    "zensical==0.0.20",
 ]
 lint = [
     "ruff>=0.12.9",
@@ -89,6 +89,7 @@ env_list = [
   "coverage",
   "lint",
   "typing",
+  "docs",
 ]
 
 [tool.tox.env_run_base]
