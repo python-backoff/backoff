@@ -70,9 +70,8 @@ def retry_predicate(
 
                 time.sleep(seconds)
                 continue
-            else:
-                _call_handlers(on_success, **details, value=ret)
-                break
+            _call_handlers(on_success, **details, value=ret)
+            break
 
         return ret
 
