@@ -73,8 +73,7 @@ from sqlalchemy.exc import OperationalError, TimeoutError
 )
 def connect_to_database(connection_string):
     engine = sqlalchemy.create_engine(connection_string)
-    connection = engine.connect()
-    return connection
+    return engine.connect()
 ```
 
 ### Transaction Retry with Deadlock Handling

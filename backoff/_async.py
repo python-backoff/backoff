@@ -9,13 +9,12 @@ from backoff._common import _init_wait_gen, _maybe_call, _next_wait
 def _ensure_coroutine(coro_or_func):
     if inspect.iscoroutinefunction(coro_or_func):
         return coro_or_func
-    else:
 
-        @functools.wraps(coro_or_func)
-        async def f(*args, **kwargs):
-            return coro_or_func(*args, **kwargs)
+    @functools.wraps(coro_or_func)
+    async def f(*args, **kwargs):
+        return coro_or_func(*args, **kwargs)
 
-        return f
+    return f
 
 
 def _ensure_coroutines(coros_or_funcs):
@@ -108,9 +107,8 @@ def retry_predicate(
                 #   <https://bugs.python.org/issue28613>
                 await asyncio.sleep(seconds)
                 continue
-            else:
-                await _call_handlers(on_success, **details, value=ret)
-                break
+            await _call_handlers(on_success, **details, value=ret)
+            break
 
         return ret
 

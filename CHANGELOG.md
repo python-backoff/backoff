@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Internal
+
+- Apply the Ruff `RET` rules [#92](https://github.com/python-backoff/backoff/pull/92) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+
 ## [v2.3.1] - 2025-12-18
 
 ### Fixed
