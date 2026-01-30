@@ -111,8 +111,8 @@ logging.getLogger("backoff").addHandler(logging.StreamHandler())
 ### Structured Logging (JSON)
 
 ```python
-import logging
 import json
+import logging
 
 
 class JsonFormatter(logging.Formatter):

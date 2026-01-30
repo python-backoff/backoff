@@ -29,8 +29,9 @@ pip install python-backoff
 Basic retry on exception:
 
 ```python
-import backoff
 import requests
+
+import backoff
 
 
 @backoff.on_exception(

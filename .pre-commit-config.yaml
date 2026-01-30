@@ -38,18 +38,3 @@ repos:
     hooks:
     -   id: check-github-workflows
     -   id: check-renovate
--   repo: https://github.com/adamtheturtle/doccmd-pre-commit
-    rev: v2026.1.18
-    hooks:
-    -   id: doccmd
-        name: Ruff format docs
-        alias: ruff-format-docs
-        args: ["--language", "python", "--no-pad-file", "--no-pad-groups", "--command", "ruff format", "docs/"]
-        additional_dependencies:
-        - ruff==0.14.8
-    -   id: doccmd
-        name: Ruff check fix docs
-        alias: ruff-check-fix-docs
-        args: ["--language", "python", "--no-pad-file", "--no-pad-groups", "--command", "ruff check --fix", "docs/"]
-        additional_dependencies:
-        - ruff==0.14.8
