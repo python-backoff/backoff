@@ -7,53 +7,19 @@ Real-world examples of using backoff in production.
 ### Basic API Retry
 
 ```python
-import backoff
-import requests
-
-
-@backoff.on_exception(
-    backoff.expo,
-    requests.exceptions.RequestException,
-    max_time=60,
-)
-def fetch_data(url):
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.json()
+--8<-- "snippets/examples/001_basic.py"
 ```
 
 ### Rate Limiting with Retry-After
 
 ```python
-@backoff.on_predicate(
-    backoff.runtime,
-    predicate=lambda r: r.status_code == 429,
-    value=lambda r: int(r.headers.get("Retry-After", 1)),
-    jitter=None,
-    max_tries=10,
-)
-def rate_limited_api_call(endpoint):
-    return requests.get(endpoint)
+--8<-- "snippets/examples/002_retry_after.py"
 ```
 
 ### Conditional Retry on Status Codes
 
 ```python
-def should_retry(response):
-    # Retry on 5xx and 429, but not 4xx
-    return response.status_code >= 500 or response.status_code == 429
-
-
-@backoff.on_predicate(
-    backoff.expo,
-    should_retry,
-    max_time=120,
-)
-def resilient_api_call(url):
-    response = requests.get(url)
-    if 400 <= response.status_code < 500 and response.status_code != 429:
-        response.raise_for_status()  # Don't retry client errors
-    return response
+--8<-- "snippets/examples/003_status_code.py:5"
 ```
 
 ## Database Operations
@@ -79,6 +45,7 @@ def connect_to_database(connection_string):
 ### Transaction Retry with Deadlock Handling
 
 ```python
+import backoff
 from sqlalchemy.exc import DBAPIError
 
 
@@ -111,6 +78,7 @@ def execute_transaction(session, operation):
 
 ```python
 import aiohttp
+
 import backoff
 
 
@@ -128,6 +96,7 @@ async def fetch_async(url):
 
 ```python
 import asyncpg
+import backoff
 
 
 @backoff.on_exception(
@@ -143,6 +112,12 @@ async def query_async(pool, query):
 ### Multiple Async Tasks with Individual Retries
 
 ```python
+import asyncio
+
+import aiohttp
+import backoff
+
+
 @backoff.on_exception(
     backoff.expo,
     aiohttp.ClientError,
@@ -164,6 +139,10 @@ async def fetch_all(urls):
 ### Poll for Job Completion
 
 ```python
+import backoff
+import requests
+
+
 @backoff.on_predicate(
     backoff.constant,
     lambda job: job["status"] != "complete",

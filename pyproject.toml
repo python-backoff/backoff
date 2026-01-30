@@ -39,6 +39,8 @@ Repository = "https://github.com/python-backoff/backoff"
 
 [dependency-groups]
 dev = [
+    "requests",
+    "sqlalchemy",
     { include-group = "docs" },
     { include-group = "lint" },
     { include-group = "test" },
@@ -143,6 +145,7 @@ commands = [
     "--show-error-codes",
     { replace = "posargs", default = [
       "backoff",
+      "snippets",
       "tests",
     ], extend = true },
   ],

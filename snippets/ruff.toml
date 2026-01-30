@@ -1,0 +1,2 @@
+[lint.isort]
+detect-same-package = false

@@ -22,8 +22,9 @@ Backoff provides two main decorators:
 Let's start with a simple example - retrying a network request:
 
 ```python
-import backoff
 import requests
+
+import backoff
 
 
 @backoff.on_exception(

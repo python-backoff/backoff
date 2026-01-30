@@ -9,8 +9,9 @@ The `on_exception` decorator retries a function when a specified exception is ra
 ### Basic Usage
 
 ```python
-import backoff
 import requests
+
+import backoff
 
 
 @backoff.on_exception(

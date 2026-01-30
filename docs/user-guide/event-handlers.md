@@ -170,8 +170,8 @@ def my_function():
 ### Structured Logging
 
 ```python
-import logging
 import json
+import logging
 
 logger = logging.getLogger(__name__)
 
