@@ -15,12 +15,12 @@ repos:
     -   id: check-yaml
     -   id: check-added-large-files
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.14
+    rev: v0.15.0
     hooks:
     -   id: ruff-check
     -   id: ruff-format
 -   repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.9.26
+    rev: 0.9.29
     hooks:
     -   id: pip-compile
         files: |
@@ -34,12 +34,12 @@ repos:
         -   "--python-version=3.14"
         -   "--output-file=requirements/docs.requirements.txt"
 -   repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.36.0
+    rev: 0.36.1
     hooks:
     -   id: check-github-workflows
     -   id: check-renovate
 -   repo: https://github.com/adamtheturtle/doccmd-pre-commit
-    rev: v2026.1.18
+    rev: v2026.1.28
     hooks:
     -   id: doccmd
         name: Ruff format docs
