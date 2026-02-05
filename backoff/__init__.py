@@ -14,7 +14,7 @@ https://github.com/python-backoff/backoff
 
 from backoff._decorator import on_exception, on_predicate
 from backoff._jitter import full_jitter, random_jitter
-from backoff._wait_gen import constant, expo, fibo, runtime, decay
+from backoff._wait_gen import constant, decay, expo, fibo, runtime
 
 __all__ = [
     "on_predicate",

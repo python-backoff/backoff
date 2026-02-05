@@ -4,7 +4,6 @@ import sys
 import traceback
 import warnings
 
-
 # Use module-specific logger with a default null handler.
 _logger = logging.getLogger("backoff")
 _logger.addHandler(logging.NullHandler())  # pragma: no cover

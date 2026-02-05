@@ -1,6 +1,5 @@
 import backoff
 
-
 # No pyunit tests are defined here yet, but the following decorator calls will
 # be analyzed by mypy which would have caught a bug the last release.
 

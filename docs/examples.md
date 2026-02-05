@@ -7,8 +7,9 @@ Real-world examples of using backoff in production.
 ### Basic API Retry
 
 ```python
-import backoff
 import requests
+
+import backoff
 
 
 @backoff.on_exception(
@@ -111,6 +112,7 @@ def execute_transaction(session, operation):
 
 ```python
 import aiohttp
+
 import backoff
 
 
