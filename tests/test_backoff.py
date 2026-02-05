@@ -939,7 +939,7 @@ def test_event_log_levels(
 
     backoff_log_count = 0
     giveup_log_count = 0
-    for logger_name, level, message in caplog.record_tuples:
+    for _logger_name, level, message in caplog.record_tuples:
         if level == backoff_log_level and backoff_re.match(message):
             backoff_log_count += 1
         elif level == giveup_log_level and giveup_re.match(message):

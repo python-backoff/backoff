@@ -94,7 +94,7 @@ def test_fibo_max_value():
 def test_constant():
     gen = backoff.constant(interval=3)
     gen.send(None)
-    for i in range(9):
+    for _i in range(9):
         assert next(gen) == 3
 
 
