@@ -1,9 +1,10 @@
 import sys
 from importlib.metadata import version
 
-import backoff
-from packaging.version import Version
 from packaging.specifiers import SpecifierSet
+from packaging.version import Version
+
+import backoff
 
 if sys.version_info >= (3, 11):
     import tomllib

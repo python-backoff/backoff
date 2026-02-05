@@ -7,8 +7,9 @@ Backoff fully supports Python's `async`/`await` syntax for asynchronous code.
 Simply decorate async functions with the same decorators:
 
 ```python
-import backoff
 import aiohttp
+
+import backoff
 
 
 @backoff.on_exception(backoff.expo, aiohttp.ClientError)
@@ -142,9 +143,11 @@ async def async_function():
 
 ```python
 import asyncio
-import aiohttp
-import backoff
 import logging
+
+import aiohttp
+
+import backoff
 
 logger = logging.getLogger(__name__)
 

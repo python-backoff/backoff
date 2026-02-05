@@ -1,5 +1,6 @@
-import backoff
 import math
+
+import backoff
 
 
 def test_decay():

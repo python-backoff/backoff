@@ -4,12 +4,11 @@ Higher-level tests integrating with 3rd party modules using iodiomatic
 backoff patterns.
 """
 
-import backoff
-
-
 import requests
-from requests import HTTPError
 import responses
+from requests import HTTPError
+
+import backoff
 
 
 @responses.activate
