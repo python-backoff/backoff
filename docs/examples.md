@@ -239,8 +239,9 @@ def upload_to_s3(bucket, key, data):
 @backoff.on_exception(
     backoff.expo,
     ClientError,
-    giveup=lambda e: e.response["Error"]["Code"]
-    != "ProvisionedThroughputExceededException",
+    giveup=lambda e: (
+        e.response["Error"]["Code"] != "ProvisionedThroughputExceededException"
+    ),
     max_time=30,
 )
 def write_to_dynamodb(table_name, item):

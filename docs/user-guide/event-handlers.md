@@ -178,15 +178,13 @@ logger = logging.getLogger(__name__)
 
 def structured_log_backoff(details):
     logger.warning(
-        json.dumps(
-            {
-                "event": "retry",
-                "function": details["target"].__name__,
-                "tries": details["tries"],
-                "wait": details["wait"],
-                "elapsed": details["elapsed"],
-            }
-        )
+        json.dumps({
+            "event": "retry",
+            "function": details["target"].__name__,
+            "tries": details["tries"],
+            "wait": details["wait"],
+            "elapsed": details["elapsed"],
+        })
     )
 
 
