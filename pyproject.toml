@@ -123,15 +123,15 @@ commands = [
 description = "format code"
 dependency_groups = [ "lint" ]
 commands = [
-    [ "ruff", "check", "--fix", { replace = "posargs", default = [ "backoff", "tests" ], extend = true } ],
-    [ "ruff", "format", { replace = "posargs", default = [ "backoff", "tests" ], extend = true } ],
+    [ "ruff", "check", "--fix", { replace = "posargs", default = [ "backoff", "tests", "docs" ], extend = true } ],
+    [ "ruff", "format", { replace = "posargs", default = [ "backoff", "tests", "docs" ], extend = true } ],
 ]
 
 [tool.tox.env.lint]
 description = "lint code"
 dependency_groups = [ "lint" ]
 commands = [
-    [ "ruff", "check", { replace = "posargs", default = [ "backoff", "tests" ], extend = true } ],
+    [ "ruff", "check", { replace = "posargs", default = [ "backoff", "tests", "docs" ], extend = true } ],
 ]
 
 [tool.tox.env.typing]
@@ -181,6 +181,7 @@ extend-include = ["docs/**/*.md"]
 line-length = 88
 preview = true
 required-version = ">=0.15"
+target-version = "py38"
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -188,11 +189,25 @@ docstring-code-line-length = 20
 
 [tool.ruff.lint]
 extend-select = [
-  "RET",  # flake8-return
-  "B",    # flake8-bugbear
-  "I",    # isort
-  "SIM",  # flake8-simplify
-  "UP",   # pyupgrade
+  "YTT",   # flake8-2020
+  "ASYNC", # flake8-async
+  "B",     # flake8-bugbear
+  "C4",    # flake8-comprehensions
+  "DTZ",   # flake8-datetimez
+  "ISC",   # flake8-implicit-str-concat
+  "ICN",   # flake8-import-conventions
+  "LOG",   # flake8-logging
+  "G",     # flake8-logging-format
+  "PIE",   # flake8-pie
+  "T20",   # flake8-print
+  "PT",    # flake8-pytest-style
+  "RET",   # flake8-return
+  "SIM",   # flake8-simplify
+  "TC",    # flake8-type-checking
+  "I",     # isort
+  "PERF",  # Perflint
+  "UP",    # pyupgrade
+  "FURB",  # refurb
 ]
 ignore = [
   # converting to a `yield from` expression is not safe because this library sends values via `send`
@@ -204,6 +219,10 @@ ignore = [
 "**/doccmd_*.py" = [
   "F811",  # redefinition of unused
   "F821",  # undefined name
+  "T201",  # print
+]
+"tests/**.py" = [
+  "S101",  # assert
 ]
 
 [tool.coverage.report]

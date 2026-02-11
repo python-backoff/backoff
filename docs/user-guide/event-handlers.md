@@ -301,8 +301,11 @@ def detailed_exception_log(details):
     tb_str = "".join(traceback.format_tb(exc_tb))
 
     logger.error(
-        f"Retry {details['tries']} due to {exc_type.__name__}: {exc_value}\\n"
-        f"Traceback:\\n{tb_str}"
+        "Retry %d due to %s: %s\\nTraceback:\\n%s",
+        details["tries"],
+        exc_type.__name__,
+        exc_value,
+        tb_str,
     )
 
 
@@ -343,38 +346,46 @@ def my_function():
 
 ```python
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
 
 def log_attempt(details):
     logger.info(
-        f"[{datetime.now()}] Attempt {details['tries']} "
-        f"for {details['target'].__name__}"
+        "[%s] Attempt %d for %s",
+        datetime.now(tz=timezone.utc).isoformat(),
+        details["tries"],
+        details["target"].__name__,
     )
 
 
 def log_backoff(details):
     logger.warning(
-        f"Backing off {details['wait']:.1f}s after {details['tries']} tries. "
-        f"Total elapsed: {details['elapsed']:.1f}s. "
-        f"Error: {details.get('exception', 'N/A')}"
+        "Backing off %.1fs after %d tries. Total elapsed: %.1fs. Error: %s",
+        details["wait"],
+        details["tries"],
+        details["elapsed"],
+        details.get("exception", "N/A"),
     )
 
 
 def log_giveup(details):
     logger.error(
-        f"Gave up on {details['target'].__name__} after "
-        f"{details['tries']} tries and {details['elapsed']:.1f}s. "
-        f"Final error: {details.get('exception', 'N/A')}"
+        "Gave up on %s after %d tries and %.1fs. Final error: %s",
+        details["target"].__name__,
+        details["tries"],
+        details["elapsed"],
+        details.get("exception", "N/A"),
     )
 
 
 def log_success(details):
     logger.info(
-        f"Success for {details['target'].__name__} after "
-        f"{details['tries']} tries in {details['elapsed']:.1f}s"
+        "Success for %s after %d tries in %.1fs",
+        details["target"].__name__,
+        details["tries"],
+        details["elapsed"],
     )
 
 

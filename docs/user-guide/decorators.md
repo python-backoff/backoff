@@ -110,7 +110,7 @@ The `on_predicate` decorator retries when a condition is true about the return v
 )
 def poll_for_result(job_id):
     result = check_job(job_id)
-    return result if result else None
+    return result or None
 ```
 
 ### Parameters

@@ -362,7 +362,7 @@ def test_on_exception_giveup(raise_on_giveup):
         raise ValueError("catch me")
 
     if raise_on_giveup:
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match="catch me"):
             exceptor(1, 2, 3, foo=1, bar=2)
     else:
         exceptor(1, 2, 3, foo=1, bar=2)
@@ -397,7 +397,7 @@ def test_on_exception_giveup_predicate(monkeypatch):
     def foo_bar_baz():
         raise ValueError(vals.pop())
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="(baz|bar|foo)"):
         foo_bar_baz()
 
     assert not vals
@@ -646,9 +646,9 @@ def test_on_exception_callable_max_tries(monkeypatch):
     @backoff.on_exception(backoff.constant, ValueError, max_tries=lambda: 3)
     def exceptor():
         log.append(True)
-        raise ValueError()
+        raise ValueError("aah")
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="aah"):
         exceptor()
 
     assert len(log) == 3
@@ -665,12 +665,12 @@ def test_on_exception_callable_max_tries_reads_every_time(monkeypatch):
 
     @backoff.on_exception(backoff.constant, ValueError, max_tries=lookup_max_tries)
     def exceptor():
-        raise ValueError()
+        raise ValueError("aah")
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="aah"):
         exceptor()
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="aah"):
         exceptor()
 
     assert len(lookups) == 2
@@ -691,7 +691,7 @@ def test_on_exception_callable_gen_kwargs():
     def exceptor():
         raise ValueError("aah")
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="aah"):
         exceptor()
 
 
@@ -876,10 +876,10 @@ def _on_exception_factory(
         giveup_log_level=giveup_log_level,
     )
     def value_error():
-        raise ValueError
+        raise ValueError("aah")
 
     def func():
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match="aah"):
             value_error()
 
     return func

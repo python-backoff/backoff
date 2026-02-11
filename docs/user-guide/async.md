@@ -154,9 +154,10 @@ logger = logging.getLogger(__name__)
 
 async def log_async_retry(details):
     logger.warning(
-        f"Async retry {details['tries']}: "
-        f"wait={details['wait']:.1f}s, "
-        f"elapsed={details['elapsed']:.1f}s"
+        "Async retry %d: wait=%.1fs, elapsed=%.1fs",
+        details["tries"],
+        details["wait"],
+        details["elapsed"],
     )
 
 

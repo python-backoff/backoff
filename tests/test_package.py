@@ -22,12 +22,10 @@ def test_python_classifiers():
     with open("pyproject.toml", "rb") as f:
         data = tomllib.load(f)
 
-    versions = map(
-        lambda x: Version(x.split(" :: ")[-1]),
-        filter(
-            lambda x: x.startswith("Programming Language :: Python :: 3."),
-            data["project"]["classifiers"],
-        ),
+    versions = (
+        Version(x.split(" :: ")[-1])
+        for x in data["project"]["classifiers"]
+        if x.startswith("Programming Language :: Python :: 3.")
     )
     requires_python = SpecifierSet(data["project"]["requires-python"])
     assert all(v in requires_python for v in versions)

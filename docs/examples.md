@@ -180,9 +180,12 @@ def wait_for_job(job_id):
 ### Wait for Resource Availability
 
 ```python
+import operator
+
+
 @backoff.on_predicate(
     backoff.fibo,
-    lambda result: not result,
+    operator.not_,  # Retry on falsey values
     max_value=30,
     max_time=300,
 )
@@ -263,14 +266,18 @@ logger = logging.getLogger(__name__)
 
 def log_retry(details):
     logger.warning(
-        f"Backing off {details['wait']:.1f}s after {details['tries']} tries "
-        f"calling {details['target'].__name__}"
+        "Backing off %s:%.1fs after %d tries calling %s",
+        details["wait"],
+        details["tries"],
+        details["target"].__name__,
     )
 
 
 def log_giveup(details):
     logger.error(
-        f"Giving up after {details['tries']} tries and {details['elapsed']:.1f}s"
+        "Giving up after %d tries and %.1fs",
+        details["tries"],
+        details["elapsed"],
     )
 
 
@@ -445,7 +452,7 @@ class RetryExhaustedError(Exception):
 
 
 def raise_custom_error(details):
-    raise RetryExhaustedError(f"Failed after {details['tries']} attempts")
+    raise RetryExhaustedError("Failed after %d attempts", details["tries"])
 
 
 @backoff.on_exception(
