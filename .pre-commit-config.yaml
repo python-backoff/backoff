@@ -20,7 +20,7 @@ repos:
     -   id: ruff-check
     -   id: ruff-format
 -   repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.9.29
+    rev: 0.10.2
     hooks:
     -   id: pip-compile
         files: |
