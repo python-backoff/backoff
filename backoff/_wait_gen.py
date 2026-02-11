@@ -1,12 +1,14 @@
+from __future__ import annotations
+
 import itertools
 import math
-from typing import Any, Callable, Generator, Iterable, Optional, Union
+from typing import Any, Callable, Generator, Iterable
 
 
 def expo(
     base: float = 2,
     factor: float = 1,
-    max_value: Optional[float] = None,
+    max_value: float | None = None,
 ) -> Generator[float, Any, None]:
     """Generator for exponential decay.
 
@@ -32,7 +34,7 @@ def expo(
 def decay(
     initial_value: float = 1,
     decay_factor: float = 1,
-    min_value: Optional[float] = None,
+    min_value: float | None = None,
 ) -> Generator[float, Any, None]:
     """Generator for exponential decay[1]:
 
@@ -57,7 +59,7 @@ def decay(
             yield min_value
 
 
-def fibo(max_value: Optional[int] = None) -> Generator[int, None, None]:
+def fibo(max_value: int | None = None) -> Generator[int, None, None]:
     """Generator for fibonaccial decay.
 
     Args:
@@ -79,7 +81,7 @@ def fibo(max_value: Optional[int] = None) -> Generator[int, None, None]:
 
 
 def constant(
-    interval: Union[int, Iterable[float]] = 1,
+    interval: int | Iterable[float] = 1,
 ) -> Generator[float, None, None]:
     """Generator for constant intervals.
 

@@ -1,23 +1,26 @@
+from __future__ import annotations
+
 import logging
-from types import FunctionType
 from typing import (
+    TYPE_CHECKING,
     Any,
     Callable,
     Coroutine,
-    Dict,
     Generator,
     Sequence,
-    Tuple,
     TypedDict,
     TypeVar,
     Union,
 )
 
+if TYPE_CHECKING:
+    from types import FunctionType
+
 
 class _Details(TypedDict):
     target: FunctionType
-    args: Tuple[Any, ...]
-    kwargs: Dict[str, Any]
+    args: tuple[Any, ...]
+    kwargs: dict[str, Any]
     tries: int
     elapsed: float
 

@@ -10,6 +10,8 @@
 
 - Apply the Ruff `B` rules [#100](https://github.com/python-backoff/backoff/pull/100) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
 
+- Apply the Ruff `FA` rules [#104](https://github.com/python-backoff/backoff/pull/104) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+
 ## [v2.3.1] - 2025-12-18
 
 ### Fixed
