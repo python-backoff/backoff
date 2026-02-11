@@ -194,6 +194,7 @@ extend-select = [
   "B",     # flake8-bugbear
   "C4",    # flake8-comprehensions
   "DTZ",   # flake8-datetimez
+  "FA",    # flake8-future-annotations
   "ISC",   # flake8-implicit-str-concat
   "ICN",   # flake8-import-conventions
   "LOG",   # flake8-logging
