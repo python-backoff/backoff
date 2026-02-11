@@ -301,7 +301,7 @@ async def test_on_exception_giveup(raise_on_giveup):
         raise ValueError("catch me")
 
     if raise_on_giveup:
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match="catch me"):
             await exceptor(1, 2, 3, foo=1, bar=2)
     else:
         await exceptor(1, 2, 3, foo=1, bar=2)
@@ -337,7 +337,7 @@ async def test_on_exception_giveup_predicate(monkeypatch):
     async def foo_bar_baz():
         raise ValueError(vals.pop())
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="(baz|bar|foo)"):
         await foo_bar_baz()
 
     assert not vals
@@ -356,7 +356,7 @@ async def test_on_exception_giveup_coro(monkeypatch):
     async def foo_bar_baz():
         raise ValueError(vals.pop())
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="(baz|bar|foo)"):
         await foo_bar_baz()
 
     assert not vals
@@ -637,9 +637,9 @@ async def test_on_exception_callable_max_tries(monkeypatch):
     @backoff.on_exception(backoff.constant, ValueError, max_tries=lookup_max_tries)
     async def exceptor():
         log.append(True)
-        raise ValueError()
+        raise ValueError("aah")
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="aah"):
         await exceptor()
 
     assert len(log) == 3
@@ -657,12 +657,12 @@ async def test_on_exception_callable_max_tries_reads_every_time(monkeypatch):
 
     @backoff.on_exception(backoff.constant, ValueError, max_tries=lookup_max_tries)
     async def exceptor():
-        raise ValueError()
+        raise ValueError("aah")
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="aah"):
         await exceptor()
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="aah"):
         await exceptor()
 
     assert len(lookups) == 2
@@ -684,7 +684,7 @@ async def test_on_exception_callable_gen_kwargs():
     async def exceptor():
         raise ValueError("aah")
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="aah"):
         await exceptor()
 
 

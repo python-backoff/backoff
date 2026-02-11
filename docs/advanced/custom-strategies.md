@@ -125,13 +125,13 @@ def my_function():
 ### Time-of-Day Aware
 
 ```python
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def business_hours_backoff():
     """Shorter waits during business hours"""
     while True:
-        hour = datetime.now().hour
+        hour = datetime.now(tz=timezone.utc).hour
         if 9 <= hour < 17:
             yield 5  # 5 seconds during business hours
         else:

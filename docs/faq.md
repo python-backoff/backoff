@@ -218,7 +218,7 @@ Use event handlers:
 
 ```python
 def log_backoff(details):
-    logger.warning(f"Retry {details['tries']} after {details['elapsed']:.1f}s")
+    logger.warning("Retry %d after %.1fs", details["tries"], details["elapsed"])
 
 
 @backoff.on_exception(

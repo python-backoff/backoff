@@ -1,6 +1,8 @@
 # See https://pre-commit.ci/ for more information about pre-commit.ci
 ci:
+    autofix_commit_msg: "style: pre-commit fixes"
     autoupdate_schedule: quarterly
+    autoupdate_commit_msg: 'chore(deps): update pre-commit hooks'
     skip:
     -   pip-compile
 
