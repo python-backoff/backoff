@@ -1,5 +1,6 @@
 [project]
-site_url = "https://backoff.readthedocs.io/"
+# site_url = "https://backoff.readthedocs.io/"
+site_url = "http://localhost:8000"
 site_description = "Python library providing function decorators for configurable backoff and retry"
 site_name = "backoff"
 repo_url = "https://github.com/python-backoff/backoff"
@@ -42,6 +43,17 @@ show_source = true
 
 [project.plugins.offline]
 enabled = true
+
+[project.plugins.llmstxt]
+markdown_description = "Python library providing function decorators for configurable backoff and retry."
+full_output = "llms-full.txt"
+
+[project.plugins.llmstxt.sections]
+"Usage documentation" = [
+    { "getting-started.md" = "Getting Started" },
+    "user-guide/*.md"
+]
+"API reference" = ["api/reference.md"]
 
 [project.theme]
 name = "material"

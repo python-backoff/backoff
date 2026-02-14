@@ -44,6 +44,7 @@ dev = [
 ]
 docs = [
     "mkdocstrings[python]~=1.0.2",
+    "mkdocs-llmstxt==0.5.0",
     "zensical==0.0.53",
 ]
 lint = [
