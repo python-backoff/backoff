@@ -1,4 +1,5 @@
-
+site_url: https://backoff.readthedocs.io/
+site_description: Python library providing function decorators for configurable backoff and retry
 site_name: backoff
 repo_url: https://github.com/python-backoff/backoff
 repo_name: python-backoff/backoff
