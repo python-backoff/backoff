@@ -76,5 +76,5 @@ six==1.17.0
     # via python-dateutil
 watchdog==6.0.0
     # via mkdocs
-zensical==0.0.20
+zensical==0.0.23
     # via python-backoff (pyproject.toml:docs)
