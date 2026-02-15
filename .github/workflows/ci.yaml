@@ -5,8 +5,6 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
   workflow_dispatch:
   schedule:
     # Daily at 12:00 UTC
@@ -20,6 +18,15 @@ env:
   FORCE_COLOR: 1
 
 jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Run actionlint
+        uses: reviewdog/action-actionlint@e58ee9d111489c31395fbe4857b0be6e7635dbda # v1.70.0
+
   test:
     name: Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
