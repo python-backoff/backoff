@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Documentation
+
+- Expose an `llms.txt` file in the documentation [#111](https://github.com/python-backoff/backoff/pull/111)
+
 ### Internal
 
 - Apply the Ruff `RET` rules [#92](https://github.com/python-backoff/backoff/pull/92) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
