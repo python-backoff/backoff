@@ -59,7 +59,7 @@ packaging==26.0
     # via mkdocs
 pathspec==1.0.4
     # via mkdocs
-platformdirs==4.6.0
+platformdirs==4.9.0
     # via mkdocs-get-deps
 pygments==2.19.2
     # via zensical
