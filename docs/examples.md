@@ -100,10 +100,11 @@ def execute_transaction(session, operation):
     try:
         result = operation(session)
         session.commit()
-        return result
     except Exception:
         session.rollback()
         raise
+    else:
+        return result
 ```
 
 ## Async/Await
@@ -266,7 +267,7 @@ logger = logging.getLogger(__name__)
 
 def log_retry(details):
     logger.warning(
-        "Backing off %s:%.1fs after %d tries calling %s",
+        "Backing off %.1fs after %d tries calling %s",
         details["wait"],
         details["tries"],
         details["target"].__name__,
@@ -387,7 +388,7 @@ def check_circuit(e):
 )
 def protected_api_call(url):
     if not circuit_breaker.should_attempt():
-        raise Exception("Circuit breaker is open")
+        raise RuntimeError("Circuit breaker is open")
     return requests.get(url)
 ```
 
