@@ -15,7 +15,6 @@ keywords = [
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
@@ -74,18 +73,13 @@ include = ["backoff", "tests"]
 include = ["backoff"]
 
 [tool.tox]
-min_version = "4.22"
-requires = [ "tox", "tox-gh", "tox-uv" ]
+min_version = "4.43"
+requires = [ "tox>=4.43", "tox-uv" ]
 env_list = [
   "format",
-  "3.8",
-  "3.9",
-  "3.10",
-  "3.11",
-  "3.12",
-  "3.13",
-  "3.14",
-  "3.15",
+  { product = [
+    { prefix = "3.", start = 8 },
+  ] },
   "coverage",
   "lint",
   "typing",
@@ -102,16 +96,7 @@ commands = [
 
 [tool.tox.env.coverage]
 description = "generate coverage report"
-depends = [
-  "3.8",
-  "3.9",
-  "3.10",
-  "3.11",
-  "3.12",
-  "3.13",
-  "3.14",
-  "3.15",
-]
+depends = ["3.*"]
 dependency_groups = [ "test" ]
 commands = [
   [ "coverage", "combine" ],
@@ -131,7 +116,12 @@ commands = [
 description = "lint code"
 dependency_groups = [ "lint" ]
 commands = [
-    [ "ruff", "check", { replace = "posargs", default = [ "backoff", "tests", "docs" ], extend = true } ],
+    [
+      "ruff",
+      "check",
+      { replace = "if", condition = "env.GITHUB_ACTIONS == 'true'", then = ["--output-format=github"], extend = true },
+      { replace = "posargs", default = [ "backoff", "tests", "docs" ], extend = true },
+    ],
 ]
 
 [tool.tox.env.typing]
@@ -155,16 +145,6 @@ commands = [
     [ "zensical", { replace = "posargs", default = [ "build" ], extend = true } ],
 ]
 
-[tool.tox.gh.python]
-"3.15" = ["3.15"]
-"3.14" = ["3.14", "lint", "typing"]
-"3.13" = ["3.13"]
-"3.12" = ["3.12"]
-"3.11" = ["3.11"]
-"3.10" = ["3.10"]
-"3.9" = ["3.9"]
-"3.8" = ["3.8"]
-
 [tool.pytest.ini_options]
 filterwarnings = [
     "error",
@@ -181,7 +161,6 @@ extend-include = ["docs/**/*.md"]
 line-length = 88
 preview = true
 required-version = ">=0.15.2"
-target-version = "py38"
 
 [tool.ruff.format]
 docstring-code-format = true
