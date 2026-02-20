@@ -17,15 +17,15 @@ from backoff._jitter import full_jitter, random_jitter
 from backoff._wait_gen import constant, decay, expo, fibo, runtime
 
 __all__ = [
-    "on_predicate",
-    "on_exception",
     "constant",
-    "expo",
     "decay",
+    "expo",
     "fibo",
-    "runtime",
     "full_jitter",
+    "on_exception",
+    "on_predicate",
     "random_jitter",
+    "runtime",
 ]
 
 __version__ = "2.3.1"

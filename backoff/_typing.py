@@ -33,7 +33,7 @@ class Details(_Details, total=False):
 
 T = TypeVar("T")
 
-_CallableT = TypeVar("_CallableT", bound=Callable[..., Any])
+_CallableT = TypeVar("_CallableT", bound=Callable[..., Any])  # noqa: PYI018
 _Handler = Union[
     Callable[[Details], None],
     Callable[[Details], Coroutine[Any, Any, None]],

@@ -498,9 +498,9 @@ def test_on_predicate_iterable_handlers():
 
     @backoff.on_predicate(
         backoff.constant,
-        on_backoff=(l.backoffs.append for l in loggers),  # noqa: E741
-        on_giveup=(l.giveups.append for l in loggers),  # noqa: E741
-        on_success=(l.successes.append for l in loggers),  # noqa: E741
+        on_backoff=(l.backoffs.append for l in loggers),
+        on_giveup=(l.giveups.append for l in loggers),
+        on_success=(l.successes.append for l in loggers),
         max_tries=3,
         jitter=None,
         interval=0,
@@ -714,7 +714,7 @@ def test_on_predicate_in_thread(monkeypatch):
             assert ret is True
             assert len(log) == 3
 
-        except Exception as ex:
+        except Exception as ex:  # noqa: BLE001
             result.append(ex)
         else:
             result.append("success")
@@ -776,7 +776,7 @@ def test_on_exception_in_thread(monkeypatch):
             assert keyerror_then_true(log, 3) is True
             assert len(log) == 3
 
-        except Exception as ex:
+        except Exception as ex:  # noqa: BLE001
             result.append(ex)
         else:
             result.append("success")
