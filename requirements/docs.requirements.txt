@@ -4,20 +4,12 @@ click==8.3.1
     # via
     #   mkdocs
     #   zensical
-colorama==0.4.6
-    # via griffecli
 deepmerge==2.0
     # via zensical
 ghp-import==2.1.0
     # via mkdocs
-griffe==2.0.0
-    # via mkdocstrings-python
-griffecli==2.0.0
-    # via griffe
 griffelib==2.0.0
-    # via
-    #   griffe
-    #   griffecli
+    # via mkdocstrings-python
 jinja2==3.1.6
     # via
     #   mkdocs
@@ -47,23 +39,23 @@ mkdocs-autorefs==1.4.4
     # via
     #   mkdocstrings
     #   mkdocstrings-python
-mkdocs-get-deps==0.2.0
+mkdocs-get-deps==0.2.2
     # via mkdocs
 mkdocstrings==1.0.3
     # via
     #   python-backoff (pyproject.toml:docs)
     #   mkdocstrings-python
-mkdocstrings-python==2.0.2
+mkdocstrings-python==2.0.3
     # via mkdocstrings
 packaging==26.0
     # via mkdocs
 pathspec==1.0.4
     # via mkdocs
-platformdirs==4.6.0
+platformdirs==4.9.4
     # via mkdocs-get-deps
 pygments==2.19.2
     # via zensical
-pymdown-extensions==10.20.1
+pymdown-extensions==10.21
     # via
     #   mkdocstrings
     #   zensical
