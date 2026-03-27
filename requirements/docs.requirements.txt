@@ -8,7 +8,7 @@ deepmerge==2.0
     # via zensical
 ghp-import==2.1.0
     # via mkdocs
-griffelib==2.0.0
+griffelib==2.0.2
     # via mkdocstrings-python
 jinja2==3.1.6
     # via
