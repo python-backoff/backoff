@@ -45,7 +45,7 @@ dev = [
 ]
 docs = [
     "mkdocstrings[python]~=1.0.2",
-    "zensical==0.0.29",
+    "zensical==0.0.30",
 ]
 lint = [
     "ruff>=0.15.0",
