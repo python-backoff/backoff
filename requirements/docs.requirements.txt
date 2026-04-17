@@ -41,13 +41,13 @@ mkdocs-autorefs==1.4.4
     #   mkdocstrings-python
 mkdocs-get-deps==0.2.2
     # via mkdocs
-mkdocstrings==1.0.3
+mkdocstrings==1.0.4
     # via
     #   python-backoff (pyproject.toml:docs)
     #   mkdocstrings-python
 mkdocstrings-python==2.0.3
     # via mkdocstrings
-packaging==26.0
+packaging==26.1
     # via mkdocs
 pathspec==1.0.4
     # via mkdocs
