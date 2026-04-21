@@ -72,7 +72,9 @@ pyyaml-env-tag==1.1
     # via mkdocs
 six==1.17.0
     # via python-dateutil
+tomli==2.4.1
+    # via zensical
 watchdog==6.0.0
     # via mkdocs
-zensical==0.0.33
+zensical==0.0.34
     # via python-backoff (pyproject.toml:docs)
