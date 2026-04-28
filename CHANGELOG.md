@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Python 3.9+ is required [#152](https://github.com/python-backoff/backoff/pull/152)
+
 ### Documentation
 
 - Fixed some examples [#116](https://github.com/python-backoff/backoff/pull/116) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
