@@ -928,9 +928,12 @@ def test_event_log_levels(
     max_tries = 3
     func = func_factory(backoff_log_level, giveup_log_level, max_tries)
 
-    with unittest.mock.patch("time.sleep", return_value=None), caplog.at_level(
-        min(backoff_log_level, giveup_log_level),
-        logger="backoff",
+    with (
+        unittest.mock.patch("time.sleep", return_value=None),
+        caplog.at_level(
+            min(backoff_log_level, giveup_log_level),
+            logger="backoff",
+        ),
     ):
         func()
 

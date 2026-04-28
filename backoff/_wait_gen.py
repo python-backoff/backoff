@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import itertools
 import math
-from typing import Any, Callable, Generator, Iterable
+from typing import TYPE_CHECKING, Any, Callable
+
+if TYPE_CHECKING:
+    from collections.abc import Generator, Iterable
 
 
 def expo(

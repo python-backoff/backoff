@@ -3,7 +3,7 @@ from __future__ import annotations
 import inspect
 import logging
 import operator
-from typing import TYPE_CHECKING, Any, Callable, Iterable
+from typing import TYPE_CHECKING, Any, Callable
 
 from backoff import _async, _sync
 from backoff._common import (
@@ -15,6 +15,8 @@ from backoff._common import (
 from backoff._jitter import full_jitter
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from backoff._typing import (
         _CallableT,
         _Handler,

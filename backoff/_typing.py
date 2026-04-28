@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Coroutine, Generator, Sequence
 from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
-    Coroutine,
-    Generator,
-    Sequence,
     TypedDict,
     TypeVar,
     Union,
