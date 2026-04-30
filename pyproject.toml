@@ -140,7 +140,7 @@ commands = [
 description = "build the documentation"
 deps = [ "-r ./requirements/docs.requirements.txt" ]
 commands = [
-    [ "zensical", { replace = "posargs", default = [ "build" ], extend = true } ],
+    [ "zensical", { replace = "posargs", default = [ "build", "--strict" ], extend = true } ],
 ]
 
 [tool.pytest.ini_options]
