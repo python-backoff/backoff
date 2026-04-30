@@ -38,6 +38,9 @@ docstring_style = "google"
 inherited_members = true
 show_source = true
 
+[project.plugins.offline]
+enabled = true
+
 [project.theme]
 name = "material"
 features = [
