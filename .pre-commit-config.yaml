@@ -40,7 +40,7 @@ repos:
         -   "--python-version=3.14"
         -   "--output-file=requirements/docs.requirements.txt"
 -   repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.37.1
+    rev: 0.37.2
     hooks:
     -   id: check-github-workflows
     -   id: check-renovate
