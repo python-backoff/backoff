@@ -1,4 +1,3 @@
-import itertools
 import logging
 import random
 import re
@@ -902,22 +901,26 @@ def _on_predicate_factory(
     return func
 
 
+@pytest.mark.parametrize("func_factory", [_on_predicate_factory, _on_exception_factory])
 @pytest.mark.parametrize(
-    ("func_factory", "backoff_log_level", "giveup_log_level"),
-    (
-        (factory, backoff_log_level, giveup_log_level)
-        for backoff_log_level, giveup_log_level in itertools.product(
-            (
-                logging.DEBUG,
-                logging.INFO,
-                logging.WARNING,
-                logging.ERROR,
-                logging.CRITICAL,
-            ),
-            repeat=2,
-        )
-        for factory in (_on_predicate_factory, _on_exception_factory)
-    ),
+    "backoff_log_level",
+    [
+        logging.DEBUG,
+        logging.INFO,
+        logging.WARNING,
+        logging.ERROR,
+        logging.CRITICAL,
+    ],
+)
+@pytest.mark.parametrize(
+    "giveup_log_level",
+    [
+        logging.DEBUG,
+        logging.INFO,
+        logging.WARNING,
+        logging.ERROR,
+        logging.CRITICAL,
+    ],
 )
 def test_event_log_levels(
     caplog,
