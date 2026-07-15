@@ -12,13 +12,13 @@ else:
     import tomli as tomllib
 
 
-def test_version():
+def test_version() -> None:
     assert version("python-backoff") == backoff.__version__, (
         f"Version in __init__.py ({backoff.__version__}) does not match version in pyproject.toml ({version('python-backoff')})"
     )
 
 
-def test_python_classifiers():
+def test_python_classifiers() -> None:
     with open("pyproject.toml", "rb") as f:
         data = tomllib.load(f)
 

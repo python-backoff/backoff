@@ -51,6 +51,7 @@ lint = [
 ]
 test = [
     "coverage>=7.2.7",
+    "dirty-equals>=0.11",
     "importlib-metadata>=8.5.0",
     "packaging>=25.0",
     "pytest>=7.1.2",
@@ -62,7 +63,9 @@ test = [
 typing = [
     { include-group = "test" },
     "mypy>=0.942",
+    "pyrefly>=1.1.1",
     "ty>=0.0.59",
+    "typing-extensions>=4.1; python_version < '3.10'"
 ]
 
 [tool.hatch.build.targets.sdist]
@@ -120,6 +123,13 @@ commands = [
       { replace = "if", condition = "env.GITHUB_ACTIONS == 'true'", then = ["--output-format=github"], extend = true },
       { replace = "posargs", default = [ "backoff", "tests", "docs" ], extend = true },
     ],
+    [
+      "ruff",
+      "format",
+      "--check",
+      { replace = "if", condition = "env.GITHUB_ACTIONS == 'true'", then = ["--output-format=github"], extend = true },
+      { replace = "posargs", default = [ "backoff", "tests", "docs" ], extend = true },
+    ],
 ]
 
 [tool.tox.env.typing]
@@ -136,6 +146,15 @@ commands = [
   ],
   [
     "ty",
+    "check",
+    { replace = "if", condition = "env.GITHUB_ACTIONS == 'true'", then = [ "--output-format=github" ], else = [], extend = true },
+    { replace = "posargs", default = [
+      "backoff",
+      "tests",
+    ], extend = true },
+  ],
+  [
+    "pyrefly",
     "check",
     { replace = "if", condition = "env.GITHUB_ACTIONS == 'true'", then = [ "--output-format=github" ], else = [], extend = true },
     { replace = "posargs", default = [
@@ -203,6 +222,7 @@ ignore = [
 ]
 
 [tool.mypy]
+check_untyped_defs = true
 follow_untyped_imports = true
 warn_unreachable = true
 warn_unused_configs = true
@@ -231,6 +251,9 @@ relative_files = true
 source = [
   "backoff",
 ]
+
+[tool.pyrefly]
+preset = "legacy"
 
 [build-system]
 requires = ["hatchling"]

@@ -3,7 +3,7 @@ from __future__ import annotations
 import inspect
 import logging
 import operator
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 from backoff import _async, _sync
 from backoff._common import (
@@ -15,10 +15,10 @@ from backoff._common import (
 from backoff._jitter import full_jitter
 
 if TYPE_CHECKING:
+    import sys
     from collections.abc import Iterable
 
     from backoff._typing import (
-        _CallableT,
         _Handler,
         _Jitterer,
         _MaybeCallable,
@@ -27,6 +27,14 @@ if TYPE_CHECKING:
         _Predicate,
         _WaitGenerator,
     )
+
+    if sys.version_info >= (3, 10):
+        from typing import ParamSpec
+    else:
+        from typing_extensions import ParamSpec
+
+    T = TypeVar("T")
+    P = ParamSpec("P")
 
 
 def on_predicate(
@@ -43,7 +51,7 @@ def on_predicate(
     backoff_log_level: int = logging.INFO,
     giveup_log_level: int = logging.ERROR,
     **wait_gen_kwargs: Any,
-) -> Callable[[_CallableT], _CallableT]:
+) -> Callable[[Callable[P, T]], Callable[P, T]]:
     """Returns decorator for backoff and retry triggered by predicate.
 
     Args:
@@ -88,7 +96,7 @@ def on_predicate(
             This is useful for runtime configuration.
     """
 
-    def decorate(target):
+    def decorate(target: Callable[P, T]) -> Callable[P, T]:
         nonlocal logger, on_success, on_backoff, on_giveup
 
         logger = _prepare_logger(logger)
@@ -144,7 +152,7 @@ def on_exception(
     backoff_log_level: int = logging.INFO,
     giveup_log_level: int = logging.ERROR,
     **wait_gen_kwargs: Any,
-) -> Callable[[_CallableT], _CallableT]:
+) -> Callable[[Callable[P, T]], Callable[P, T]]:
     """Returns decorator for backoff and retry triggered by exception.
 
     Args:
@@ -191,7 +199,7 @@ def on_exception(
             This is useful for runtime configuration.
     """
 
-    def decorate(target):
+    def decorate(target: Callable[P, T]) -> Callable[P, T]:
         nonlocal logger, on_success, on_backoff, on_giveup
 
         logger = _prepare_logger(logger)

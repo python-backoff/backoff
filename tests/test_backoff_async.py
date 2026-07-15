@@ -1,9 +1,14 @@
-import asyncio  # Python 3.5 code and syntax is allowed in this file
+import asyncio
+from typing import TYPE_CHECKING
 
 import pytest
+from dirty_equals import IsFloat, IsInstance
 
 import backoff
 from tests.common import _log_hdlrs, _save_target
+
+if TYPE_CHECKING:
+    from backoff._typing import Details
 
 
 async def _await_none(x):
@@ -11,7 +16,7 @@ async def _await_none(x):
 
 
 @pytest.mark.asyncio
-async def test_on_predicate(monkeypatch):
+async def test_on_predicate(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     @backoff.on_predicate(backoff.expo)
@@ -20,14 +25,14 @@ async def test_on_predicate(monkeypatch):
         log.append(val)
         return val
 
-    log = []
+    log: list[bool] = []
     ret = await return_true(log, 3)
     assert ret is True
     assert len(log) == 3
 
 
 @pytest.mark.asyncio
-async def test_on_predicate_max_tries(monkeypatch):
+async def test_on_predicate_max_tries(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     @backoff.on_predicate(backoff.expo, jitter=None, max_tries=3)
@@ -36,14 +41,14 @@ async def test_on_predicate_max_tries(monkeypatch):
         log.append(val)
         return val
 
-    log = []
+    log: list[bool] = []
     ret = await return_true(log, 10)
     assert ret is False
     assert len(log) == 3
 
 
 @pytest.mark.asyncio
-async def test_on_predicate_max_tries_callable(monkeypatch):
+async def test_on_predicate_max_tries_callable(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     @backoff.on_predicate(backoff.expo, jitter=None, max_tries=lambda: 3)
@@ -52,14 +57,14 @@ async def test_on_predicate_max_tries_callable(monkeypatch):
         log.append(val)
         return val
 
-    log = []
+    log: list[bool] = []
     ret = await return_true(log, 10)
     assert ret is False
     assert len(log) == 3
 
 
 @pytest.mark.asyncio
-async def test_on_exception(monkeypatch):
+async def test_on_exception(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     @backoff.on_exception(backoff.expo, KeyError)
@@ -70,17 +75,18 @@ async def test_on_exception(monkeypatch):
         log.append(e)
         raise e
 
-    log = []
+    log: list[Exception] = []
     assert (await keyerror_then_true(log, 3)) is True
     assert len(log) == 3
 
 
 @pytest.mark.asyncio
-async def test_on_exception_tuple(monkeypatch):
+async def test_on_exception_tuple(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     @backoff.on_exception(backoff.expo, (KeyError, ValueError))
-    async def keyerror_valueerror_then_true(log):
+    async def keyerror_valueerror_then_true(log: list[Exception]):
+        e: Exception
         if len(log) == 2:
             return True
         if len(log) == 0:
@@ -90,7 +96,7 @@ async def test_on_exception_tuple(monkeypatch):
         log.append(e)
         raise e
 
-    log = []
+    log: list[Exception] = []
     assert (await keyerror_valueerror_then_true(log)) is True
     assert len(log) == 2
     assert isinstance(log[0], KeyError)
@@ -98,7 +104,7 @@ async def test_on_exception_tuple(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_on_exception_max_tries(monkeypatch):
+async def test_on_exception_max_tries(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     @backoff.on_exception(backoff.expo, KeyError, jitter=None, max_tries=3)
@@ -109,7 +115,7 @@ async def test_on_exception_max_tries(monkeypatch):
         log.append(e)
         raise e
 
-    log = []
+    log: list[Exception] = []
     with pytest.raises(KeyError):
         await keyerror_then_true(log, 10, foo="bar")
 
@@ -117,7 +123,7 @@ async def test_on_exception_max_tries(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_on_exception_max_tries_callable(monkeypatch):
+async def test_on_exception_max_tries_callable(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     @backoff.on_exception(backoff.expo, KeyError, jitter=None, max_tries=lambda: 3)
@@ -128,7 +134,7 @@ async def test_on_exception_max_tries_callable(monkeypatch):
         log.append(e)
         raise e
 
-    log = []
+    log: list[Exception] = []
     with pytest.raises(KeyError):
         await keyerror_then_true(log, 10, foo="bar")
 
@@ -136,12 +142,12 @@ async def test_on_exception_max_tries_callable(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_on_exception_constant_iterable(monkeypatch):
+async def test_on_exception_constant_iterable(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
-    backoffs = []
-    giveups = []
-    successes = []
+    backoffs: list[Details] = []
+    giveups: list[Details] = []
+    successes: list[Details] = []
 
     @backoff.on_exception(
         backoff.constant,
@@ -163,7 +169,9 @@ async def test_on_exception_constant_iterable(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_on_exception_success_random_jitter(monkeypatch):
+async def test_on_exception_success_random_jitter(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     log, log_success, log_backoff, log_giveup = _log_hdlrs()
@@ -196,7 +204,9 @@ async def test_on_exception_success_random_jitter(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_on_exception_success_full_jitter(monkeypatch):
+async def test_on_exception_success_full_jitter(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     log, log_success, log_backoff, log_giveup = _log_hdlrs()
@@ -229,7 +239,7 @@ async def test_on_exception_success_full_jitter(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_on_exception_success():
+async def test_on_exception_success() -> None:
     log, log_success, log_backoff, log_giveup = _log_hdlrs()
 
     @backoff.on_exception(
@@ -256,32 +266,29 @@ async def test_on_exception_success():
 
     for i in range(2):
         details = log["backoff"][i]
-        elapsed = details.pop("elapsed")
-        exception = details.pop("exception")
-        assert isinstance(elapsed, float)
-        assert isinstance(exception, ValueError)
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": succeeder._target,
+            "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "wait": 0,
+            "elapsed": IsFloat(),
+            "exception": IsInstance(ValueError),
         }
 
     details = log["success"][0]
-    elapsed = details.pop("elapsed")
-    assert isinstance(elapsed, float)
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": succeeder._target,
+        "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
+        "elapsed": IsFloat(),
     }
 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("raise_on_giveup", [True, False])
-async def test_on_exception_giveup(raise_on_giveup):
+async def test_on_exception_giveup(raise_on_giveup: bool) -> None:
     log, log_success, log_backoff, log_giveup = _log_hdlrs()
 
     @backoff.on_exception(
@@ -311,20 +318,18 @@ async def test_on_exception_giveup(raise_on_giveup):
     assert len(log["giveup"]) == 1
 
     details = log["giveup"][0]
-    elapsed = details.pop("elapsed")
-    exception = details.pop("exception")
-    assert isinstance(elapsed, float)
-    assert isinstance(exception, ValueError)
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": exceptor._target,
+        "target": exceptor._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
+        "elapsed": IsFloat(),
+        "exception": IsInstance(ValueError),
     }
 
 
 @pytest.mark.asyncio
-async def test_on_exception_giveup_predicate(monkeypatch):
+async def test_on_exception_giveup_predicate(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     def on_baz(e):
@@ -343,7 +348,7 @@ async def test_on_exception_giveup_predicate(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_on_exception_giveup_coro(monkeypatch):
+async def test_on_exception_giveup_coro(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     async def on_baz(e: Exception) -> bool:
@@ -362,7 +367,7 @@ async def test_on_exception_giveup_coro(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_on_predicate_success():
+async def test_on_predicate_success() -> None:
     log, log_success, log_backoff, log_giveup = _log_hdlrs()
 
     @backoff.on_predicate(
@@ -387,31 +392,29 @@ async def test_on_predicate_success():
 
     for i in range(2):
         details = log["backoff"][i]
-        elapsed = details.pop("elapsed")
-        assert isinstance(elapsed, float)
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": success._target,
+            "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "value": False,
             "wait": 0,
+            "elapsed": IsFloat(),
         }
 
     details = log["success"][0]
-    elapsed = details.pop("elapsed")
-    assert isinstance(elapsed, float)
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": success._target,
+        "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": True,
+        "elapsed": IsFloat(),
     }
 
 
 @pytest.mark.asyncio
-async def test_on_predicate_giveup():
+async def test_on_predicate_giveup() -> None:
     log, log_success, log_backoff, log_giveup = _log_hdlrs()
 
     @backoff.on_predicate(
@@ -435,19 +438,18 @@ async def test_on_predicate_giveup():
     assert len(log["giveup"]) == 1
 
     details = log["giveup"][0]
-    elapsed = details.pop("elapsed")
-    assert isinstance(elapsed, float)
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": emptiness._target,
+        "target": emptiness._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": None,
+        "elapsed": IsFloat(),
     }
 
 
 @pytest.mark.asyncio
-async def test_on_predicate_iterable_handlers():
+async def test_on_predicate_iterable_handlers() -> None:
     hdlrs = [_log_hdlrs() for _ in range(3)]
 
     @backoff.on_predicate(
@@ -470,26 +472,25 @@ async def test_on_predicate_iterable_handlers():
         assert len(hdlrs[i][0]["backoff"]) == 2
         assert len(hdlrs[i][0]["giveup"]) == 1
 
-        details = dict(hdlrs[i][0]["giveup"][0])
-        elapsed = details.pop("elapsed")
-        assert isinstance(elapsed, float)
+        details = hdlrs[i][0]["giveup"][0]
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": emptiness._target,
+            "target": emptiness._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": 3,
             "value": None,
+            "elapsed": IsFloat(),
         }
 
 
 @pytest.mark.asyncio
-async def test_on_predicate_constant_iterable(monkeypatch):
+async def test_on_predicate_constant_iterable(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     waits = [1, 2, 3, 6, 9]
-    backoffs = []
-    giveups = []
-    successes = []
+    backoffs: list[Details] = []
+    giveups: list[Details] = []
+    successes: list[Details] = []
 
     @backoff.on_predicate(
         backoff.constant,
@@ -515,7 +516,9 @@ async def test_on_predicate_constant_iterable(monkeypatch):
 # To maintain backward compatibility,
 # on_predicate should support 0-argument jitter function.
 @pytest.mark.asyncio
-async def test_on_exception_success_0_arg_jitter(monkeypatch):
+async def test_on_exception_success_0_arg_jitter(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     log, log_success, log_backoff, log_giveup = _log_hdlrs()
@@ -526,7 +529,7 @@ async def test_on_exception_success_0_arg_jitter(monkeypatch):
         on_success=log_success,
         on_backoff=log_backoff,
         on_giveup=log_giveup,
-        jitter=lambda: 0.0,  # ty:ignore[invalid-argument-type]
+        jitter=lambda: 0.0,  # type:ignore[arg-type,misc] # ty:ignore[invalid-argument-type]
         interval=0,
     )
     @_save_target
@@ -547,33 +550,32 @@ async def test_on_exception_success_0_arg_jitter(monkeypatch):
 
     for i in range(2):
         details = log["backoff"][i]
-        elapsed = details.pop("elapsed")
-        exception = details.pop("exception")
-        assert isinstance(elapsed, float)
-        assert isinstance(exception, ValueError)
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": succeeder._target,
+            "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "wait": 0,
+            "elapsed": IsFloat(),
+            "exception": IsInstance(ValueError),
         }
 
     details = log["success"][0]
-    elapsed = details.pop("elapsed")
-    assert isinstance(elapsed, float)
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": succeeder._target,
+        "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
+        "elapsed": IsFloat(),
     }
 
 
 # To maintain backward compatibility,
 # on_predicate should support 0-argument jitter function.
 @pytest.mark.asyncio
-async def test_on_predicate_success_0_arg_jitter(monkeypatch):
+async def test_on_predicate_success_0_arg_jitter(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     log, log_success, log_backoff, log_giveup = _log_hdlrs()
@@ -583,7 +585,7 @@ async def test_on_predicate_success_0_arg_jitter(monkeypatch):
         on_success=log_success,
         on_backoff=log_backoff,
         on_giveup=log_giveup,
-        jitter=lambda: 0.0,  # ty:ignore[invalid-argument-type]
+        jitter=lambda: 0.0,  # type:ignore[arg-type,misc] # ty:ignore[invalid-argument-type]
         interval=0,
     )
     @_save_target
@@ -603,31 +605,29 @@ async def test_on_predicate_success_0_arg_jitter(monkeypatch):
 
     for i in range(2):
         details = log["backoff"][i]
-        elapsed = details.pop("elapsed")
-        assert isinstance(elapsed, float)
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": success._target,
+            "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "value": False,
             "wait": 0,
+            "elapsed": IsFloat(),
         }
 
     details = log["success"][0]
-    elapsed = details.pop("elapsed")
-    assert isinstance(elapsed, float)
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": success._target,
+        "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": True,
+        "elapsed": IsFloat(),
     }
 
 
 @pytest.mark.asyncio
-async def test_on_exception_callable_max_tries(monkeypatch):
+async def test_on_exception_callable_max_tries(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     def lookup_max_tries():
@@ -647,7 +647,9 @@ async def test_on_exception_callable_max_tries(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_on_exception_callable_max_tries_reads_every_time(monkeypatch):
+async def test_on_exception_callable_max_tries_reads_every_time(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
     lookups = []
@@ -670,7 +672,7 @@ async def test_on_exception_callable_max_tries_reads_every_time(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_on_exception_callable_gen_kwargs():
+async def test_on_exception_callable_gen_kwargs() -> None:
     def lookup_foo():
         return "foo"
 
@@ -690,7 +692,7 @@ async def test_on_exception_callable_gen_kwargs():
 
 
 @pytest.mark.asyncio
-async def test_on_exception_coro_cancelling():
+async def test_on_exception_coro_cancelling() -> None:
     sleep_started_event = asyncio.Event()
 
     @backoff.on_predicate(backoff.expo)
