@@ -20,6 +20,8 @@
 
 - Apply the Ruff `FA` rules [#104](https://github.com/python-backoff/backoff/pull/104) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
 
+- Check types with [`ty`](https://docs.astral.sh/ty/) and update some type annotations [#179](https://github.com/python-backoff/backoff/pull/179)
+
 ## [v2.3.1] - 2025-12-18
 
 ### Fixed

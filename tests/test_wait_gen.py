@@ -102,4 +102,4 @@ def test_runtime():
     gen = backoff.runtime(value=lambda x: x)
     gen.send(None)
     for i in range(20):
-        assert i == gen.send(i)
+        assert i == gen.send(i)  # ty:ignore[invalid-argument-type]

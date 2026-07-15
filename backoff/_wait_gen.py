@@ -12,7 +12,7 @@ def expo(
     base: float = 2,
     factor: float = 1,
     max_value: float | None = None,
-) -> Generator[float, Any, None]:
+) -> Generator[float | None, Any, None]:
     """Generator for exponential decay.
 
     Args:
@@ -38,7 +38,7 @@ def decay(
     initial_value: float = 1,
     decay_factor: float = 1,
     min_value: float | None = None,
-) -> Generator[float, Any, None]:
+) -> Generator[float | None, Any, None]:
     """Generator for exponential decay[1]:
 
     Args:
@@ -62,7 +62,7 @@ def decay(
             yield min_value
 
 
-def fibo(max_value: int | None = None) -> Generator[int, None, None]:
+def fibo(max_value: int | None = None) -> Generator[int | None, None, None]:
     """Generator for fibonaccial decay.
 
     Args:
@@ -85,7 +85,7 @@ def fibo(max_value: int | None = None) -> Generator[int, None, None]:
 
 def constant(
     interval: int | Iterable[float] = 1,
-) -> Generator[float, None, None]:
+) -> Generator[int | float | None, None, None]:
     """Generator for constant intervals.
 
     Args:
@@ -97,16 +97,16 @@ def constant(
     try:
         itr = iter(interval)  # type: ignore
     except TypeError:
-        itr = itertools.repeat(interval)  # type: ignore
+        itr = itertools.repeat(interval)  # type: ignore[arg-type]
 
     for val in itr:
-        yield val
+        yield val  # ty:ignore[invalid-yield]
 
 
 def runtime(
     *,
     value: Callable[[Any], float],
-) -> Generator[float, None, None]:
+) -> Generator[float | None, None, None]:
     """Generator that is based on parsing the return value or thrown
         exception of the decorated method
 
