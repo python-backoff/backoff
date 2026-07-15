@@ -62,6 +62,7 @@ test = [
 typing = [
     { include-group = "test" },
     "mypy>=0.942",
+    "ty>=0.0.59",
     "types-requests>=2.27.20",
 ]
 
@@ -129,6 +130,15 @@ commands = [
   [
     "mypy",
     "--show-error-codes",
+    { replace = "posargs", default = [
+      "backoff",
+      "tests",
+    ], extend = true },
+  ],
+  [
+    "ty",
+    "check",
+    { replace = "if", condition = "env.GITHUB_ACTIONS == 'true'", then = [ "--output-format=github" ], else = [], extend = true },
     { replace = "posargs", default = [
       "backoff",
       "tests",

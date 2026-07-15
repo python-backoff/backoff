@@ -1,5 +1,4 @@
 import asyncio  # Python 3.5 code and syntax is allowed in this file
-import random
 
 import pytest
 
@@ -347,7 +346,7 @@ async def test_on_exception_giveup_predicate(monkeypatch):
 async def test_on_exception_giveup_coro(monkeypatch):
     monkeypatch.setattr("asyncio.sleep", _await_none)
 
-    async def on_baz(e):
+    async def on_baz(e: Exception) -> bool:
         return str(e) == "baz"
 
     vals = ["baz", "bar", "foo"]
@@ -518,7 +517,6 @@ async def test_on_predicate_constant_iterable(monkeypatch):
 @pytest.mark.asyncio
 async def test_on_exception_success_0_arg_jitter(monkeypatch):
     monkeypatch.setattr("asyncio.sleep", _await_none)
-    monkeypatch.setattr("random.random", lambda: 0)
 
     log, log_success, log_backoff, log_giveup = _log_hdlrs()
 
@@ -528,7 +526,7 @@ async def test_on_exception_success_0_arg_jitter(monkeypatch):
         on_success=log_success,
         on_backoff=log_backoff,
         on_giveup=log_giveup,
-        jitter=random.random,
+        jitter=lambda: 0.0,  # ty:ignore[invalid-argument-type]
         interval=0,
     )
     @_save_target
@@ -537,7 +535,9 @@ async def test_on_exception_success_0_arg_jitter(monkeypatch):
         if len(log["backoff"]) < 2:
             raise ValueError("catch me")
 
-    with pytest.deprecated_call():
+    with pytest.deprecated_call(
+        match="Nullary jitter function signature is deprecated",
+    ):
         await succeeder(1, 2, 3, foo=1, bar=2)
 
     # we try 3 times, backing off twice before succeeding
@@ -575,7 +575,6 @@ async def test_on_exception_success_0_arg_jitter(monkeypatch):
 @pytest.mark.asyncio
 async def test_on_predicate_success_0_arg_jitter(monkeypatch):
     monkeypatch.setattr("asyncio.sleep", _await_none)
-    monkeypatch.setattr("random.random", lambda: 0)
 
     log, log_success, log_backoff, log_giveup = _log_hdlrs()
 
@@ -584,7 +583,7 @@ async def test_on_predicate_success_0_arg_jitter(monkeypatch):
         on_success=log_success,
         on_backoff=log_backoff,
         on_giveup=log_giveup,
-        jitter=random.random,
+        jitter=lambda: 0.0,  # ty:ignore[invalid-argument-type]
         interval=0,
     )
     @_save_target
@@ -592,7 +591,9 @@ async def test_on_predicate_success_0_arg_jitter(monkeypatch):
         # succeed after we've backed off twice
         return len(log["backoff"]) == 2
 
-    with pytest.deprecated_call():
+    with pytest.deprecated_call(
+        match="Nullary jitter function signature is deprecated",
+    ):
         await success(1, 2, 3, foo=1, bar=2)
 
     # we try 3 times, backing off twice before succeeding

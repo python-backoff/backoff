@@ -70,7 +70,7 @@ def _config_handlers(
         assert log_level is not None, "Log level is not specified"
         # bind the specified logger to the default log handler
         log_handler = functools.partial(
-            default_handler,
+            default_handler,  # ty:ignore[invalid-argument-type]
             logger=logger,
             log_level=log_level,
         )

@@ -1,5 +1,4 @@
 import logging
-import random
 import re
 import sys
 import threading
@@ -531,7 +530,6 @@ def test_on_predicate_iterable_handlers():
 # on_predicate should support 0-argument jitter function.
 def test_on_exception_success_0_arg_jitter(monkeypatch):
     monkeypatch.setattr("time.sleep", lambda x: None)
-    monkeypatch.setattr("random.random", lambda: 0)
 
     backoffs, giveups, successes = [], [], []
 
@@ -541,7 +539,7 @@ def test_on_exception_success_0_arg_jitter(monkeypatch):
         on_success=successes.append,
         on_backoff=backoffs.append,
         on_giveup=giveups.append,
-        jitter=random.random,
+        jitter=lambda: 0.0,  # ty:ignore[invalid-argument-type]
         interval=0,
     )
     @_save_target
@@ -550,7 +548,9 @@ def test_on_exception_success_0_arg_jitter(monkeypatch):
         if len(backoffs) < 2:
             raise ValueError("catch me")
 
-    with pytest.deprecated_call():
+    with pytest.deprecated_call(
+        match="Nullary jitter function signature is deprecated",
+    ):
         succeeder(1, 2, 3, foo=1, bar=2)
 
     # we try 3 times, backing off twice before succeeding
@@ -587,7 +587,6 @@ def test_on_exception_success_0_arg_jitter(monkeypatch):
 # on_predicate should support 0-argument jitter function.
 def test_on_predicate_success_0_arg_jitter(monkeypatch):
     monkeypatch.setattr("time.sleep", lambda x: None)
-    monkeypatch.setattr("random.random", lambda: 0)
 
     backoffs, giveups, successes = [], [], []
 
@@ -596,7 +595,7 @@ def test_on_predicate_success_0_arg_jitter(monkeypatch):
         on_success=successes.append,
         on_backoff=backoffs.append,
         on_giveup=giveups.append,
-        jitter=random.random,
+        jitter=lambda: 0.0,  # ty:ignore[invalid-argument-type]
         interval=0,
     )
     @_save_target
@@ -604,7 +603,9 @@ def test_on_predicate_success_0_arg_jitter(monkeypatch):
         # succeed after we've backed off twice
         return len(backoffs) == 2
 
-    with pytest.deprecated_call():
+    with pytest.deprecated_call(
+        match="Nullary jitter function signature is deprecated",
+    ):
         success(1, 2, 3, foo=1, bar=2)
 
     # we try 3 times, backing off twice before succeeding
