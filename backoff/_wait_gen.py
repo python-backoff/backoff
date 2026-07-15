@@ -12,7 +12,7 @@ def expo(
     base: float = 2,
     factor: float = 1,
     max_value: float | None = None,
-) -> Generator[float | None, Any, None]:
+) -> Generator[float, Any, None]:
     """Generator for exponential decay.
 
     Args:
@@ -23,7 +23,7 @@ def expo(
              of max_value will forever after be yielded.
     """
     # Advance past initial .send() call
-    yield  # type: ignore[misc]
+    yield 0
     base_n: float = 1
     while True:
         a = factor * base_n
@@ -38,7 +38,7 @@ def decay(
     initial_value: float = 1,
     decay_factor: float = 1,
     min_value: float | None = None,
-) -> Generator[float | None, Any, None]:
+) -> Generator[float, Any, None]:
     """Generator for exponential decay[1]:
 
     Args:
@@ -51,7 +51,7 @@ def decay(
     [1] https://en.wikipedia.org/wiki/Exponential_decay
     """
     # Advance past initial .send() call
-    yield  # type: ignore[misc]
+    yield 0
     t = 0
     while True:
         a = initial_value * math.e ** (-t * decay_factor)
@@ -62,7 +62,7 @@ def decay(
             yield min_value
 
 
-def fibo(max_value: int | None = None) -> Generator[int | None, None, None]:
+def fibo(max_value: int | None = None) -> Generator[int, Any, None]:
     """Generator for fibonaccial decay.
 
     Args:
@@ -71,7 +71,7 @@ def fibo(max_value: int | None = None) -> Generator[int | None, None, None]:
              of max_value will forever after be yielded.
     """
     # Advance past initial .send() call
-    yield  # type: ignore[misc]
+    yield 0
 
     a = 1
     b = 1
@@ -85,14 +85,14 @@ def fibo(max_value: int | None = None) -> Generator[int | None, None, None]:
 
 def constant(
     interval: float | Iterable[float] = 1,
-) -> Generator[int | float | None, int | None, None]:
+) -> Generator[int | float, Any, None]:
     """Generator for constant intervals.
 
     Args:
         interval: A constant value to yield or an iterable of such values.
     """
     # Advance past initial .send() call
-    yield  # type: ignore[misc]
+    yield 0
 
     itr = (
         itertools.repeat(interval)
@@ -107,7 +107,7 @@ def constant(
 def runtime(
     *,
     value: Callable[[Any], float],
-) -> Generator[float | None, int | None, None]:
+) -> Generator[float, Any, None]:
     """Generator that is based on parsing the return value or thrown
         exception of the decorated method
 
@@ -116,6 +116,6 @@ def runtime(
             function's return value or thrown exception and
             determines how long to wait
     """
-    ret_or_exc = yield  # type: ignore[misc]
+    ret_or_exc = yield 0
     while True:
         ret_or_exc = yield value(ret_or_exc)

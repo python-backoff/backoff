@@ -326,7 +326,7 @@ def test_on_exception_success():
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": succeeder._target,
+            "target": succeeder._target,  # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "wait": 0,
         }
@@ -337,7 +337,7 @@ def test_on_exception_success():
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": succeeder._target,
+        "target": succeeder._target,  # ty:ignore[unresolved-attribute]
         "tries": 3,
     }
 
@@ -380,7 +380,7 @@ def test_on_exception_giveup(raise_on_giveup):
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": exceptor._target,
+        "target": exceptor._target,  # ty:ignore[unresolved-attribute]
         "tries": 3,
     }
 
@@ -434,7 +434,7 @@ def test_on_predicate_success():
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": success._target,
+            "target": success._target,  # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "value": False,
             "wait": 0,
@@ -446,7 +446,7 @@ def test_on_predicate_success():
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": success._target,
+        "target": success._target,  # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": True,
     }
@@ -481,7 +481,7 @@ def test_on_predicate_giveup():
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": emptiness._target,
+        "target": emptiness._target,  # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": None,
     }
@@ -522,7 +522,7 @@ def test_on_predicate_iterable_handlers():
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": emptiness._target,
+            "target": emptiness._target,  # ty:ignore[unresolved-attribute]
             "tries": 3,
             "value": None,
         }
@@ -569,7 +569,7 @@ def test_on_exception_success_0_arg_jitter(monkeypatch):
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": succeeder._target,
+            "target": succeeder._target,  # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "wait": 0,
         }
@@ -580,7 +580,7 @@ def test_on_exception_success_0_arg_jitter(monkeypatch):
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": succeeder._target,
+        "target": succeeder._target,  # ty:ignore[unresolved-attribute]
         "tries": 3,
     }
 
@@ -622,7 +622,7 @@ def test_on_predicate_success_0_arg_jitter(monkeypatch):
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": success._target,
+            "target": success._target,  # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "value": False,
             "wait": 0,
@@ -634,7 +634,7 @@ def test_on_predicate_success_0_arg_jitter(monkeypatch):
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": success._target,
+        "target": success._target,  # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": True,
     }
