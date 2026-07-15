@@ -1,8 +1,16 @@
+from __future__ import annotations
+
 import functools
 import logging
 import sys
 import traceback
 import warnings
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+
+    from backoff._typing import _Jitterer
 
 # Use module-specific logger with a default null handler.
 _logger = logging.getLogger("backoff")
@@ -28,7 +36,13 @@ def _init_wait_gen(wait_gen, wait_gen_kwargs):
     return initialized
 
 
-def _next_wait(wait, send_value, jitter, elapsed, max_time):
+def _next_wait(
+    wait: Generator[float, int | None, None],
+    send_value: int | None,
+    jitter: _Jitterer,
+    elapsed: float,
+    max_time: float,
+) -> float:
     value = wait.send(send_value)
     try:
         seconds = jitter(value) if jitter is not None else value
@@ -41,7 +55,7 @@ def _next_wait(wait, send_value, jitter, elapsed, max_time):
             stacklevel=2,
         )
 
-        seconds = value + jitter()
+        seconds = value + jitter()  # type: ignore[call-arg] # ty:ignore[missing-argument]
 
     # don't sleep longer than remaining allotted max_time
     if max_time is not None:

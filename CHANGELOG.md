@@ -22,7 +22,7 @@
 
 - Check types with [`ty`](https://docs.astral.sh/ty/) and update some type annotations [#179](https://github.com/python-backoff/backoff/pull/179)
 
-- Simplify `backoff.constant` wait generator implementation [#180](https://github.com/python-backoff/backoff/pull/180)
+- Simplify `backoff.constant` wait generator implementation [#181](https://github.com/python-backoff/backoff/pull/181)
 
 ## [v2.3.1] - 2025-12-18
 
