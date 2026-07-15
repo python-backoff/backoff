@@ -84,8 +84,8 @@ def fibo(max_value: int | None = None) -> Generator[int | None, None, None]:
 
 
 def constant(
-    interval: int | Iterable[float] = 1,
-) -> Generator[int | float | None, None, None]:
+    interval: float | Iterable[float] = 1,
+) -> Generator[int | float | None, int | None, None]:
     """Generator for constant intervals.
 
     Args:
@@ -94,19 +94,20 @@ def constant(
     # Advance past initial .send() call
     yield  # type: ignore[misc]
 
-    try:
-        itr = iter(interval)  # type: ignore
-    except TypeError:
-        itr = itertools.repeat(interval)  # type: ignore[arg-type]
+    itr = (
+        itertools.repeat(interval)
+        if isinstance(interval, (int, float))
+        else iter(interval)
+    )
 
     for val in itr:
-        yield val  # ty:ignore[invalid-yield]
+        yield val
 
 
 def runtime(
     *,
     value: Callable[[Any], float],
-) -> Generator[float | None, None, None]:
+) -> Generator[float | None, int | None, None]:
     """Generator that is based on parsing the return value or thrown
         exception of the decorated method
 

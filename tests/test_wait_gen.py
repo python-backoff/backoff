@@ -97,9 +97,16 @@ def test_constant():
     for _i in range(9):
         assert next(gen) == 3
 
+    gen = backoff.constant(interval=[1, 2.0, 3.25])
+    gen.send(None)
+    assert next(gen) == 1
+    assert next(gen) == 2.0
+    assert next(gen) == 3.25
+    assert next(gen, None) is None
+
 
 def test_runtime():
     gen = backoff.runtime(value=lambda x: x)
     gen.send(None)
     for i in range(20):
-        assert i == gen.send(i)  # ty:ignore[invalid-argument-type]
+        assert i == gen.send(i)
