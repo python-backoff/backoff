@@ -63,7 +63,6 @@ typing = [
     { include-group = "test" },
     "mypy>=0.942",
     "ty>=0.0.59",
-    "types-requests>=2.27.20",
 ]
 
 [tool.hatch.build.targets.sdist]
@@ -201,6 +200,12 @@ ignore = [
   # https://docs.astral.sh/ruff/rules/yield-in-for-loop/#fix-safety
   "UP028",
 ]
+
+[tool.mypy]
+follow_untyped_imports = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
 
 [tool.ruff.lint.per-file-ignores]
 "**/doccmd_*.py" = [
