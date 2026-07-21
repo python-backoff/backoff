@@ -336,7 +336,7 @@ async def test_on_exception_giveup_predicate(monkeypatch):
     async def foo_bar_baz():
         raise ValueError(vals.pop())
 
-    with pytest.raises(ValueError, match="(baz|bar|foo)"):
+    with pytest.raises(ValueError, match=r"(baz|bar|foo)"):
         await foo_bar_baz()
 
     assert not vals
@@ -355,7 +355,7 @@ async def test_on_exception_giveup_coro(monkeypatch):
     async def foo_bar_baz():
         raise ValueError(vals.pop())
 
-    with pytest.raises(ValueError, match="(baz|bar|foo)"):
+    with pytest.raises(ValueError, match=r"(baz|bar|foo)"):
         await foo_bar_baz()
 
     assert not vals

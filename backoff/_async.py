@@ -11,7 +11,7 @@ def _ensure_coroutine(coro_or_func):
         return coro_or_func
 
     @functools.wraps(coro_or_func)
-    async def f(*args, **kwargs):
+    async def f(*args, **kwargs):  # ruff:ignore[unused-async]
         return coro_or_func(*args, **kwargs)
 
     return f

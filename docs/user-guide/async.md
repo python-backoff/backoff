@@ -47,9 +47,11 @@ async def async_operation():
     max_time=60,
 )
 async def get_url(url):
-    async with aiohttp.ClientSession(raise_for_status=True) as session:  # noqa: SIM117
-        async with session.get(url) as response:
-            return await response.text()
+    async with (
+        aiohttp.ClientSession(raise_for_status=True) as session,
+        session.get(url) as response,
+    ):
+        return await response.text()
 ```
 
 ### Database Operations
@@ -100,9 +102,11 @@ async def fetch_all(urls):
     max_time=300,
 )
 async def poll_job_status(job_id):
-    async with aiohttp.ClientSession() as session:  # noqa: SIM117
-        async with session.get(f"/api/jobs/{job_id}") as response:
-            return await response.json()
+    async with (
+        aiohttp.ClientSession() as session,
+        session.get(f"/api/jobs/{job_id}") as response,
+    ):
+        return await response.json()
 ```
 
 ## Mixing Sync and Async
@@ -172,10 +176,12 @@ async def log_async_retry(details):
     on_backoff=log_async_retry,
 )
 async def robust_fetch(url, timeout=10):
-    async with aiohttp.ClientSession() as session:  # noqa: SIM117
-        async with session.get(url, timeout=timeout) as response:
-            response.raise_for_status()
-            return await response.json()
+    async with (
+        aiohttp.ClientSession() as session,
+        session.get(url, timeout=timeout) as response,
+    ):
+        response.raise_for_status()
+        return await response.json()
 
 
 # Usage

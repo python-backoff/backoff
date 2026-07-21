@@ -1,3 +1,5 @@
+# ruff: file-ignore[float-equality-comparison]
+
 import logging
 import re
 import sys
@@ -395,7 +397,7 @@ def test_on_exception_giveup_predicate(monkeypatch):
     def foo_bar_baz():
         raise ValueError(vals.pop())
 
-    with pytest.raises(ValueError, match="(baz|bar|foo)"):
+    with pytest.raises(ValueError, match=r"(baz|bar|foo)"):
         foo_bar_baz()
 
     assert not vals
@@ -714,7 +716,7 @@ def test_on_predicate_in_thread(monkeypatch):
             assert ret is True
             assert len(log) == 3
 
-        except Exception as ex:  # noqa: BLE001
+        except Exception as ex:  # ruff:ignore[blind-except]
             result.append(ex)
         else:
             result.append("success")
@@ -776,7 +778,7 @@ def test_on_exception_in_thread(monkeypatch):
             assert keyerror_then_true(log, 3) is True
             assert len(log) == 3
 
-        except Exception as ex:  # noqa: BLE001
+        except Exception as ex:  # ruff:ignore[blind-except]
             result.append(ex)
         else:
             result.append("success")
@@ -941,8 +943,8 @@ def test_event_log_levels(
     ):
         func()
 
-    backoff_re = re.compile("backing off", re.IGNORECASE)
-    giveup_re = re.compile("giving up", re.IGNORECASE)
+    backoff_re = re.compile(r"backing off", re.IGNORECASE)
+    giveup_re = re.compile(r"giving up", re.IGNORECASE)
 
     backoff_log_count = 0
     giveup_log_count = 0
