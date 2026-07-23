@@ -1,3 +1,5 @@
+# ruff: file-ignore[float-equality-comparison]
+
 import math
 
 import backoff

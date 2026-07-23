@@ -323,9 +323,7 @@ def should_retry(result):
         return True
     if not result.get("ready"):
         return True
-    if result.get("status") == "processing":  # noqa: SIM103
-        return True
-    return False
+    return result.get("status") == "processing"
 
 
 @backoff.on_predicate(
