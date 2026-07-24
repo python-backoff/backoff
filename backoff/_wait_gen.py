@@ -24,14 +24,13 @@ def expo(
     """
     # Advance past initial .send() call
     yield 0
-    base_n: float = 1
+
+    a = factor
+    while max_value is None or a < max_value:
+        yield a
+        a *= base
     while True:
-        a = factor * base_n
-        if max_value is None or a < max_value:
-            yield a
-            base_n *= base
-        else:
-            yield max_value
+        yield max_value
 
 
 def decay(
@@ -52,14 +51,13 @@ def decay(
     """
     # Advance past initial .send() call
     yield 0
-    t = 0
+    a = initial_value
+    min_value = min_value or 0.0
+    while a > min_value:
+        yield a
+        a *= math.exp(-decay_factor)
     while True:
-        a = initial_value * math.e ** (-t * decay_factor)
-        if min_value is None or a > min_value:
-            yield a
-            t += 1
-        else:
-            yield min_value
+        yield min_value
 
 
 def fibo(max_value: int | None = None) -> Generator[int, Any, None]:
@@ -75,17 +73,14 @@ def fibo(max_value: int | None = None) -> Generator[int, Any, None]:
 
     a = 1
     b = 1
+    while max_value is None or a < max_value:
+        yield a
+        a, b = b, a + b
     while True:
-        if max_value is None or a < max_value:
-            yield a
-            a, b = b, a + b
-        else:
-            yield max_value
+        yield max_value
 
 
-def constant(
-    interval: float | Iterable[float] = 1,
-) -> Generator[int | float, Any, None]:
+def constant(interval: float | Iterable[float] = 1) -> Generator[float, Any, None]:
     """Generator for constant intervals.
 
     Args:
@@ -104,10 +99,7 @@ def constant(
         yield val
 
 
-def runtime(
-    *,
-    value: Callable[[Any], float],
-) -> Generator[float, Any, None]:
+def runtime(*, value: Callable[[Any], float]) -> Generator[float, Any, None]:
     """Generator that is based on parsing the return value or thrown
         exception of the decorated method
 
