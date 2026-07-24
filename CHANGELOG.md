@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Add type annotations to decorator functions [#182](https://github.com/python-backoff/backoff/pull/182)
+
 ### Changed
 
 - Python 3.9+ is required [#152](https://github.com/python-backoff/backoff/pull/152)

@@ -1,49 +1,55 @@
 # ruff: file-ignore[float-equality-comparison]
 
+from __future__ import annotations
+
 import logging
 import re
 import sys
 import threading
 import unittest.mock
+from typing import TYPE_CHECKING
 
 import pytest
+from dirty_equals import IsFloat, IsInstance
 
 import backoff
-from backoff._typing import Details
 from tests.common import _save_target
 
+if TYPE_CHECKING:
+    from backoff._typing import Details
 
-def test_on_predicate(monkeypatch):
+
+def test_on_predicate(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
     @backoff.on_predicate(backoff.expo)
-    def return_true(log, n):
+    def return_true(log: list[bool], n):
         val = len(log) == n - 1
         log.append(val)
         return val
 
-    log = []
+    log: list[bool] = []
     ret = return_true(log, 3)
     assert ret is True
     assert len(log) == 3
 
 
-def test_on_predicate_max_tries(monkeypatch):
+def test_on_predicate_max_tries(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
     @backoff.on_predicate(backoff.expo, jitter=None, max_tries=3)
-    def return_true(log, n):
+    def return_true(log: list[bool], n):
         val = len(log) == n
         log.append(val)
         return val
 
-    log = []
+    log: list[bool] = []
     ret = return_true(log, 10)
     assert ret is False
     assert len(log) == 3
 
 
-def test_on_predicate_max_time(monkeypatch):
+def test_on_predicate_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
     nows = [
         10.000005,
         9,
@@ -62,18 +68,18 @@ def test_on_predicate_max_time(monkeypatch):
         assert details["elapsed"] == 10.000005
 
     @backoff.on_predicate(backoff.expo, jitter=None, max_time=10, on_giveup=giveup)
-    def return_true(log, n):
+    def return_true(log: list[bool], n):
         val = len(log) == n
         log.append(val)
         return val
 
-    log = []
+    log: list[bool] = []
     ret = return_true(log, 10)
     assert ret is False
     assert len(log) == 3
 
 
-def test_on_predicate_max_time_callable(monkeypatch):
+def test_on_predicate_max_time_callable(monkeypatch: pytest.MonkeyPatch) -> None:
     nows = [
         10.000005,
         9,
@@ -97,38 +103,39 @@ def test_on_predicate_max_time_callable(monkeypatch):
     @backoff.on_predicate(
         backoff.expo, jitter=None, max_time=lookup_max_time, on_giveup=giveup
     )
-    def return_true(log, n):
+    def return_true(log: list[bool], n):
         val = len(log) == n
         log.append(val)
         return val
 
-    log = []
+    log: list[bool] = []
     ret = return_true(log, 10)
     assert ret is False
     assert len(log) == 3
 
 
-def test_on_exception(monkeypatch):
+def test_on_exception(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
     @backoff.on_exception(backoff.expo, KeyError)
-    def keyerror_then_true(log, n):
+    def keyerror_then_true(log: list[Exception], n):
         if len(log) == n:
             return True
         e = KeyError()
         log.append(e)
         raise e
 
-    log = []
+    log: list[Exception] = []
     assert keyerror_then_true(log, 3) is True
     assert len(log) == 3
 
 
-def test_on_exception_tuple(monkeypatch):
+def test_on_exception_tuple(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
     @backoff.on_exception(backoff.expo, (KeyError, ValueError))
-    def keyerror_valueerror_then_true(log):
+    def keyerror_valueerror_then_true(log: list[Exception]):
+        e: Exception
         if len(log) == 2:
             return True
         if len(log) == 0:
@@ -138,55 +145,55 @@ def test_on_exception_tuple(monkeypatch):
         log.append(e)
         raise e
 
-    log = []
+    log: list[Exception] = []
     assert keyerror_valueerror_then_true(log) is True
     assert len(log) == 2
     assert isinstance(log[0], KeyError)
     assert isinstance(log[1], ValueError)
 
 
-def test_on_exception_max_tries(monkeypatch):
+def test_on_exception_max_tries(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
     @backoff.on_exception(backoff.expo, KeyError, jitter=None, max_tries=3)
-    def keyerror_then_true(log, n, foo=None):
+    def keyerror_then_true(log: list[Exception], n, foo=None):
         if len(log) == n:
             return True
         e = KeyError()
         log.append(e)
         raise e
 
-    log = []
+    log: list[Exception] = []
     with pytest.raises(KeyError):
         keyerror_then_true(log, 10, foo="bar")
 
     assert len(log) == 3
 
 
-def test_on_exception_max_tries_callable(monkeypatch):
+def test_on_exception_max_tries_callable(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
     @backoff.on_exception(backoff.expo, KeyError, jitter=None, max_tries=lambda: 3)
-    def keyerror_then_true(log, n, foo=None):
+    def keyerror_then_true(log: list[Exception], n, foo=None):
         if len(log) == n:
             return True
         e = KeyError()
         log.append(e)
         raise e
 
-    log = []
+    log: list[Exception] = []
     with pytest.raises(KeyError):
         keyerror_then_true(log, 10, foo="bar")
 
     assert len(log) == 3
 
 
-def test_on_exception_constant_iterable(monkeypatch):
+def test_on_exception_constant_iterable(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
-    backoffs = []
-    giveups = []
-    successes = []
+    backoffs: list[Details] = []
+    giveups: list[Details] = []
+    successes: list[Details] = []
 
     def on_backoff(details: Details):
         nonlocal backoffs
@@ -228,10 +235,12 @@ def test_on_exception_constant_iterable(monkeypatch):
     assert len(successes) == 0
 
 
-def test_on_exception_success_random_jitter(monkeypatch):
+def test_on_exception_success_random_jitter(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
-    backoffs, giveups, successes = [], [], []
+    backoffs: list[Details] = []
+    giveups: list[Details] = []
+    successes: list[Details] = []
 
     @backoff.on_exception(
         backoff.expo,
@@ -260,10 +269,12 @@ def test_on_exception_success_random_jitter(monkeypatch):
         assert details["wait"] >= 0.5 * 2**i
 
 
-def test_on_exception_success_full_jitter(monkeypatch):
+def test_on_exception_success_full_jitter(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
-    backoffs, giveups, successes = [], [], []
+    backoffs: list[Details] = []
+    giveups: list[Details] = []
+    successes: list[Details] = []
 
     @backoff.on_exception(
         backoff.expo,
@@ -292,8 +303,10 @@ def test_on_exception_success_full_jitter(monkeypatch):
         assert details["wait"] <= 0.5 * 2**i
 
 
-def test_on_exception_success():
-    backoffs, giveups, successes = [], [], []
+def test_on_exception_success() -> None:
+    backoffs: list[Details] = []
+    giveups: list[Details] = []
+    successes: list[Details] = []
 
     @backoff.on_exception(
         backoff.constant,
@@ -319,32 +332,31 @@ def test_on_exception_success():
 
     for i in range(2):
         details = backoffs[i]
-        elapsed = details.pop("elapsed")
-        exception = details.pop("exception")
-        assert isinstance(elapsed, float)
-        assert isinstance(exception, ValueError)
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": succeeder._target,
+            "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "wait": 0,
+            "elapsed": IsFloat(),
+            "exception": IsInstance(ValueError),
         }
 
     details = successes[0]
-    elapsed = details.pop("elapsed")
-    assert isinstance(elapsed, float)
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": succeeder._target,
+        "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
+        "elapsed": IsFloat(),
     }
 
 
 @pytest.mark.parametrize("raise_on_giveup", [True, False])
-def test_on_exception_giveup(raise_on_giveup):
-    backoffs, giveups, successes = [], [], []
+def test_on_exception_giveup(raise_on_giveup: bool) -> None:
+    backoffs: list[Details] = []
+    giveups: list[Details] = []
+    successes: list[Details] = []
 
     @backoff.on_exception(
         backoff.constant,
@@ -373,19 +385,17 @@ def test_on_exception_giveup(raise_on_giveup):
     assert len(giveups) == 1
 
     details = giveups[0]
-    elapsed = details.pop("elapsed")
-    exception = details.pop("exception")
-    assert isinstance(elapsed, float)
-    assert isinstance(exception, ValueError)
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": exceptor._target,
+        "target": exceptor._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
+        "elapsed": IsFloat(),
+        "exception": IsInstance(ValueError),
     }
 
 
-def test_on_exception_giveup_predicate(monkeypatch):
+def test_on_exception_giveup_predicate(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
     def on_baz(e):
@@ -403,8 +413,10 @@ def test_on_exception_giveup_predicate(monkeypatch):
     assert not vals
 
 
-def test_on_predicate_success():
-    backoffs, giveups, successes = [], [], []
+def test_on_predicate_success() -> None:
+    backoffs: list[Details] = []
+    giveups: list[Details] = []
+    successes: list[Details] = []
 
     @backoff.on_predicate(
         backoff.constant,
@@ -429,31 +441,31 @@ def test_on_predicate_success():
     for i in range(2):
         details = backoffs[i]
 
-        elapsed = details.pop("elapsed")
-        assert isinstance(elapsed, float)
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": success._target,
+            "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "value": False,
             "wait": 0,
+            "elapsed": IsFloat(),
         }
 
     details = successes[0]
-    elapsed = details.pop("elapsed")
-    assert isinstance(elapsed, float)
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": success._target,
+        "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": True,
+        "elapsed": IsFloat(),
     }
 
 
-def test_on_predicate_giveup():
-    backoffs, giveups, successes = [], [], []
+def test_on_predicate_giveup() -> None:
+    backoffs: list[Details] = []
+    giveups: list[Details] = []
+    successes: list[Details] = []
 
     @backoff.on_predicate(
         backoff.constant,
@@ -476,23 +488,22 @@ def test_on_predicate_giveup():
     assert len(giveups) == 1
 
     details = giveups[0]
-    elapsed = details.pop("elapsed")
-    assert isinstance(elapsed, float)
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": emptiness._target,
+        "target": emptiness._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": None,
+        "elapsed": IsFloat(),
     }
 
 
-def test_on_predicate_iterable_handlers():
+def test_on_predicate_iterable_handlers() -> None:
     class Logger:
         def __init__(self):
-            self.backoffs = []
-            self.giveups = []
-            self.successes = []
+            self.backoffs: list[Details] = []
+            self.giveups: list[Details] = []
+            self.successes: list[Details] = []
 
     loggers = [Logger() for _ in range(3)]
 
@@ -516,24 +527,25 @@ def test_on_predicate_iterable_handlers():
         assert len(logger.backoffs) == 2
         assert len(logger.giveups) == 1
 
-        details = dict(logger.giveups[0])
-        elapsed = details.pop("elapsed")
-        assert isinstance(elapsed, float)
+        details = logger.giveups[0]
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": emptiness._target,
+            "target": emptiness._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": 3,
             "value": None,
+            "elapsed": IsFloat(),
         }
 
 
 # To maintain backward compatibility,
 # on_predicate should support 0-argument jitter function.
-def test_on_exception_success_0_arg_jitter(monkeypatch):
+def test_on_exception_success_0_arg_jitter(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
-    backoffs, giveups, successes = [], [], []
+    backoffs: list[Details] = []
+    giveups: list[Details] = []
+    successes: list[Details] = []
 
     @backoff.on_exception(
         backoff.constant,
@@ -541,7 +553,7 @@ def test_on_exception_success_0_arg_jitter(monkeypatch):
         on_success=successes.append,
         on_backoff=backoffs.append,
         on_giveup=giveups.append,
-        jitter=lambda: 0.0,  # ty:ignore[invalid-argument-type]
+        jitter=lambda: 0.0,  # type:ignore[arg-type,misc] # ty:ignore[invalid-argument-type]
         interval=0,
     )
     @_save_target
@@ -562,42 +574,41 @@ def test_on_exception_success_0_arg_jitter(monkeypatch):
 
     for i in range(2):
         details = backoffs[i]
-        elapsed = details.pop("elapsed")
-        exception = details.pop("exception")
-        assert isinstance(elapsed, float)
-        assert isinstance(exception, ValueError)
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": succeeder._target,
+            "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "wait": 0,
+            "elapsed": IsFloat(),
+            "exception": IsInstance(ValueError),
         }
 
     details = successes[0]
-    elapsed = details.pop("elapsed")
-    assert isinstance(elapsed, float)
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": succeeder._target,
+        "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
+        "elapsed": IsFloat(),
     }
 
 
 # To maintain backward compatibility,
 # on_predicate should support 0-argument jitter function.
-def test_on_predicate_success_0_arg_jitter(monkeypatch):
+def test_on_predicate_success_0_arg_jitter(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
-    backoffs, giveups, successes = [], [], []
+    backoffs: list[Details] = []
+    giveups: list[Details] = []
+    successes: list[Details] = []
 
     @backoff.on_predicate(
         backoff.constant,
         on_success=successes.append,
         on_backoff=backoffs.append,
         on_giveup=giveups.append,
-        jitter=lambda: 0.0,  # ty:ignore[invalid-argument-type]
+        jitter=lambda: 0.0,  # type:ignore[arg-type,misc] # ty:ignore[invalid-argument-type]
         interval=0,
     )
     @_save_target
@@ -617,33 +628,31 @@ def test_on_predicate_success_0_arg_jitter(monkeypatch):
 
     for i in range(2):
         details = backoffs[i]
-        elapsed = details.pop("elapsed")
-        assert isinstance(elapsed, float)
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": success._target,
+            "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "value": False,
             "wait": 0,
+            "elapsed": IsFloat(),
         }
 
     details = successes[0]
-    elapsed = details.pop("elapsed")
-    assert isinstance(elapsed, float)
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": success._target,
+        "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": True,
+        "elapsed": IsFloat(),
     }
 
 
-def test_on_exception_callable_max_tries(monkeypatch):
+def test_on_exception_callable_max_tries(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
-    log = []
+    log: list[bool] = []
 
     @backoff.on_exception(backoff.constant, ValueError, max_tries=lambda: 3)
     def exceptor():
@@ -656,7 +665,9 @@ def test_on_exception_callable_max_tries(monkeypatch):
     assert len(log) == 3
 
 
-def test_on_exception_callable_max_tries_reads_every_time(monkeypatch):
+def test_on_exception_callable_max_tries_reads_every_time(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
     lookups = []
@@ -697,21 +708,21 @@ def test_on_exception_callable_gen_kwargs():
         exceptor()
 
 
-def test_on_predicate_in_thread(monkeypatch):
+def test_on_predicate_in_thread(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
-    result = []
+    result: list[Exception | str] = []
 
     def check():
         try:
 
             @backoff.on_predicate(backoff.expo)
-            def return_true(log, n):
+            def return_true(log: list[bool], n):
                 val = len(log) == n - 1
                 log.append(val)
                 return val
 
-            log = []
+            log: list[bool] = []
             ret = return_true(log, 3)
             assert ret is True
             assert len(log) == 3
@@ -729,13 +740,13 @@ def test_on_predicate_in_thread(monkeypatch):
     assert result[0] == "success"
 
 
-def test_on_predicate_constant_iterable(monkeypatch):
+def test_on_predicate_constant_iterable(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
     waits = [1, 2, 3, 6, 9]
-    backoffs = []
-    giveups = []
-    successes = []
+    backoffs: list[Details] = []
+    giveups: list[Details] = []
+    successes: list[Details] = []
 
     @backoff.on_predicate(
         backoff.constant,
@@ -758,23 +769,23 @@ def test_on_predicate_constant_iterable(monkeypatch):
     assert len(successes) == 0
 
 
-def test_on_exception_in_thread(monkeypatch):
+def test_on_exception_in_thread(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
-    result = []
+    result: list[Exception | str] = []
 
     def check():
         try:
 
             @backoff.on_exception(backoff.expo, KeyError)
-            def keyerror_then_true(log, n):
+            def keyerror_then_true(log: list[Exception], n):
                 if len(log) == n:
                     return True
                 e = KeyError()
                 log.append(e)
                 raise e
 
-            log = []
+            log: list[Exception] = []
             assert keyerror_then_true(log, 3) is True
             assert len(log) == 3
 
