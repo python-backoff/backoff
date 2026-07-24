@@ -1,4 +1,9 @@
+from __future__ import annotations
+
 import asyncio
+import contextlib
+import itertools
+import time
 from typing import TYPE_CHECKING
 
 import pytest
@@ -272,7 +277,7 @@ async def test_on_exception_success() -> None:
             "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "wait": 0,
-            "elapsed": IsFloat(),
+            "elapsed": IsFloat(gt=0),
             "exception": IsInstance(ValueError),
         }
 
@@ -282,7 +287,7 @@ async def test_on_exception_success() -> None:
         "kwargs": {"foo": 1, "bar": 2},
         "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
-        "elapsed": IsFloat(),
+        "elapsed": IsFloat(gt=0),
     }
 
 
@@ -323,7 +328,7 @@ async def test_on_exception_giveup(raise_on_giveup: bool) -> None:
         "kwargs": {"foo": 1, "bar": 2},
         "target": exceptor._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
-        "elapsed": IsFloat(),
+        "elapsed": IsFloat(gt=0),
         "exception": IsInstance(ValueError),
     }
 
@@ -399,7 +404,7 @@ async def test_on_predicate_success() -> None:
             "tries": i + 1,
             "value": False,
             "wait": 0,
-            "elapsed": IsFloat(),
+            "elapsed": IsFloat(gt=0),
         }
 
     details = log["success"][0]
@@ -409,7 +414,7 @@ async def test_on_predicate_success() -> None:
         "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": True,
-        "elapsed": IsFloat(),
+        "elapsed": IsFloat(gt=0),
     }
 
 
@@ -444,7 +449,7 @@ async def test_on_predicate_giveup() -> None:
         "target": emptiness._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": None,
-        "elapsed": IsFloat(),
+        "elapsed": IsFloat(gt=0),
     }
 
 
@@ -479,7 +484,7 @@ async def test_on_predicate_iterable_handlers() -> None:
             "target": emptiness._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": 3,
             "value": None,
-            "elapsed": IsFloat(),
+            "elapsed": IsFloat(gt=0),
         }
 
 
@@ -556,7 +561,7 @@ async def test_on_exception_success_0_arg_jitter(
             "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "wait": 0,
-            "elapsed": IsFloat(),
+            "elapsed": IsFloat(gt=0),
             "exception": IsInstance(ValueError),
         }
 
@@ -566,7 +571,7 @@ async def test_on_exception_success_0_arg_jitter(
         "kwargs": {"foo": 1, "bar": 2},
         "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
-        "elapsed": IsFloat(),
+        "elapsed": IsFloat(gt=0),
     }
 
 
@@ -612,7 +617,7 @@ async def test_on_predicate_success_0_arg_jitter(
             "tries": i + 1,
             "value": False,
             "wait": 0,
-            "elapsed": IsFloat(),
+            "elapsed": IsFloat(gt=0),
         }
 
     details = log["success"][0]
@@ -622,7 +627,7 @@ async def test_on_predicate_success_0_arg_jitter(
         "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": True,
-        "elapsed": IsFloat(),
+        "elapsed": IsFloat(gt=0),
     }
 
 
@@ -713,3 +718,56 @@ async def test_on_exception_coro_cancelling() -> None:
     task.cancel()
 
     assert await task
+
+
+@pytest.mark.asyncio
+async def test_max_time(monkeypatch):
+    start = time.monotonic()
+    elapsed: float = 0
+
+    async def patch_sleep(n: float):
+        nonlocal elapsed
+        elapsed += n
+
+    def monotonic():
+        nonlocal start, elapsed
+        return start + elapsed
+
+    monkeypatch.setattr("asyncio.sleep", patch_sleep)
+    monkeypatch.setattr("time.monotonic", monotonic)
+
+    # A good place for property-based testing
+    for function_runtime, max_time in itertools.product(range(10), repeat=2):
+        elapsed = 0
+
+        @backoff.on_exception(
+            backoff.constant,
+            RuntimeError,
+            max_time=max_time,
+            jitter=None,
+        )
+        async def on_exception():
+            await patch_sleep(function_runtime)  # ruff: ignore[function-uses-loop-variable]
+            raise RuntimeError
+
+        with contextlib.suppress(BaseException):
+            await on_exception()
+
+        # backoff never sleeps past max_time, but the time spent in the
+        # target's own call isn't capped, so the total can run up to one
+        # more function call past max_time before giving up.
+        assert elapsed <= max_time + function_runtime + 1e-9
+
+        elapsed = 0
+
+        @backoff.on_predicate(
+            backoff.constant,
+            lambda x: False,
+            max_time=max_time,
+            jitter=None,
+        )
+        async def on_predicate():
+            await patch_sleep(function_runtime)  # ruff: ignore[function-uses-loop-variable]
+
+        await on_predicate()
+        assert elapsed <= max_time + function_runtime + 1e-9

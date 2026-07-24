@@ -81,6 +81,7 @@ def retry_predicate(
         wait = _init_wait_gen(wait_gen, wait_gen_kwargs)
         while True:
             tries += 1
+            ret = target(*args, **kwargs)
             elapsed = time.monotonic() - start
             details: _BaseDetails = {
                 "target": target,
@@ -90,7 +91,6 @@ def retry_predicate(
                 "elapsed": elapsed,
             }
 
-            ret = target(*args, **kwargs)
             if predicate(ret):
                 max_tries_exceeded = tries == max_tries_value
                 max_time_exceeded = (
@@ -144,18 +144,19 @@ def retry_exception(
         wait = _init_wait_gen(wait_gen, wait_gen_kwargs)
         while True:
             tries += 1
-            elapsed = time.monotonic() - start
             details: _BaseDetails = {
                 "target": target,
                 "args": args,
                 "kwargs": kwargs,
                 "tries": tries,
-                "elapsed": elapsed,
+                "elapsed": 0,
             }
 
             try:
                 ret = target(*args, **kwargs)
             except exception as e:  # type: ignore[misc] # ty:ignore[invalid-exception-caught]
+                elapsed = time.monotonic() - start
+                details["elapsed"] = elapsed
                 max_tries_exceeded = tries == max_tries_value
                 max_time_exceeded = (
                     max_time_value is not None and elapsed >= max_time_value
@@ -177,6 +178,7 @@ def retry_exception(
 
                 time.sleep(seconds)
             else:
+                details["elapsed"] = time.monotonic() - start
                 _call_handlers(on_success, **details)
 
                 return ret
