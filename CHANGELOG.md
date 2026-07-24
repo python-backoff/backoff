@@ -9,7 +9,7 @@
 ### Changed
 
 - Python 3.9+ is required [#152](https://github.com/python-backoff/backoff/pull/152)
-- Simplify `expo`, `decay` and `fibo` wait generators [#183](https://github.com/python-backoff/backoff/pull/183)
+- Simplify `expo`, `decay` and `fibo` wait generators [#188](https://github.com/python-backoff/backoff/pull/188)
 
 ### Fixed
 
