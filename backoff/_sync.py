@@ -1,39 +1,80 @@
+from __future__ import annotations
+
 import functools
 import time
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 from backoff._common import _init_wait_gen, _maybe_call, _next_wait
 
+if TYPE_CHECKING:
+    import sys
+    from collections.abc import Iterable
 
-def _call_handlers(hdlrs, target, args, kwargs, tries, elapsed, **extra):
-    details = {
+    from backoff._typing import (
+        Details,
+        _BaseDetails,
+        _CallDetails,
+        _Handler,
+        _Jitterer,
+        _MaybeCallable,
+        _MaybeSequence,
+        _Predicate,
+        _WaitGenerator,
+    )
+
+    if sys.version_info >= (3, 10):
+        from typing import ParamSpec
+    else:
+        from typing_extensions import ParamSpec
+
+    if sys.version_info >= (3, 11):
+        from typing import Unpack
+    else:
+        from typing_extensions import Unpack
+
+    T = TypeVar("T")
+    P = ParamSpec("P")
+
+
+def _call_handlers(
+    hdlrs: Iterable[_Handler],
+    target: Callable[..., Any],
+    args: tuple[Any, ...],
+    kwargs: dict[str, Any],
+    tries: int,
+    elapsed: float,
+    **extra: Unpack[_CallDetails],
+) -> None:
+    details: Details = {
         "target": target,
         "args": args,
         "kwargs": kwargs,
         "tries": tries,
         "elapsed": elapsed,
     }
+    # pyrefly: ignore [no-matching-overload]
     details.update(extra)
     for hdlr in hdlrs:
         hdlr(details)
 
 
 def retry_predicate(
-    target,
-    wait_gen,
-    predicate,
+    target: Callable[P, T],
+    wait_gen: _WaitGenerator,
+    predicate: _Predicate[T],
     *,
-    max_tries,
-    max_time,
-    jitter,
-    on_success,
-    on_backoff,
-    on_giveup,
-    wait_gen_kwargs,
-):
+    max_tries: _MaybeCallable[int] | None,
+    max_time: _MaybeCallable[float] | None,
+    jitter: _Jitterer | None,
+    on_success: Iterable[_Handler],
+    on_backoff: Iterable[_Handler],
+    on_giveup: Iterable[_Handler],
+    wait_gen_kwargs: dict[str, Any],
+) -> Callable[P, T]:
     @functools.wraps(target)
-    def retry(*args, **kwargs):
-        max_tries_value = _maybe_call(max_tries)
-        max_time_value = _maybe_call(max_time)
+    def retry(*args: P.args, **kwargs: P.kwargs) -> T:
+        max_tries_value: int | None = _maybe_call(max_tries)
+        max_time_value: float | None = _maybe_call(max_time)
 
         tries = 0
         start = time.monotonic()
@@ -41,7 +82,7 @@ def retry_predicate(
         while True:
             tries += 1
             elapsed = time.monotonic() - start
-            details = {
+            details: _BaseDetails = {
                 "target": target,
                 "args": args,
                 "kwargs": kwargs,
@@ -79,24 +120,24 @@ def retry_predicate(
 
 
 def retry_exception(
-    target,
-    wait_gen,
-    exception,
+    target: Callable[P, T],
+    wait_gen: _WaitGenerator,
+    exception: _MaybeSequence[type[Exception]],
     *,
-    max_tries,
-    max_time,
-    jitter,
-    giveup,
-    on_success,
-    on_backoff,
-    on_giveup,
-    raise_on_giveup,
-    wait_gen_kwargs,
-):
+    max_tries: _MaybeCallable[int] | None,
+    max_time: _MaybeCallable[float] | None,
+    jitter: _Jitterer | None,
+    giveup: _Predicate[Exception],
+    on_success: Iterable[_Handler],
+    on_backoff: Iterable[_Handler],
+    on_giveup: Iterable[_Handler],
+    raise_on_giveup: bool,
+    wait_gen_kwargs: dict[str, Any],
+) -> Callable[P, T]:
     @functools.wraps(target)
-    def retry(*args, **kwargs):
-        max_tries_value = _maybe_call(max_tries)
-        max_time_value = _maybe_call(max_time)
+    def retry(*args: P.args, **kwargs: P.kwargs) -> T:  # type: ignore[return]  # ty:ignore[invalid-return-type]
+        max_tries_value: int | None = _maybe_call(max_tries)
+        max_time_value: float | None = _maybe_call(max_time)
 
         tries = 0
         start = time.monotonic()
@@ -104,7 +145,7 @@ def retry_exception(
         while True:
             tries += 1
             elapsed = time.monotonic() - start
-            details = {
+            details: _BaseDetails = {
                 "target": target,
                 "args": args,
                 "kwargs": kwargs,
@@ -114,7 +155,7 @@ def retry_exception(
 
             try:
                 ret = target(*args, **kwargs)
-            except exception as e:
+            except exception as e:  # type: ignore[misc] # ty:ignore[invalid-exception-caught]
                 max_tries_exceeded = tries == max_tries_value
                 max_time_exceeded = (
                     max_time_value is not None and elapsed >= max_time_value
@@ -124,7 +165,7 @@ def retry_exception(
                     _call_handlers(on_giveup, **details, exception=e)
                     if raise_on_giveup:
                         raise
-                    return None
+                    break
 
                 try:
                     seconds = _next_wait(wait, e, jitter, elapsed, max_time_value)

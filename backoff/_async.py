@@ -1,52 +1,100 @@
+from __future__ import annotations
+
 import asyncio
 import functools
 import inspect
 import time
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 from backoff._common import _init_wait_gen, _maybe_call, _next_wait
 
+if TYPE_CHECKING:
+    import sys
+    from collections.abc import Coroutine, Iterable
 
-def _ensure_coroutine(coro_or_func):
+    from backoff._typing import (
+        Details,
+        _BaseDetails,
+        _CallDetails,
+        _Handler,
+        _Jitterer,
+        _MaybeCallable,
+        _MaybeSequence,
+        _Predicate,
+        _WaitGenerator,
+    )
+
+    if sys.version_info >= (3, 10):
+        from typing import ParamSpec
+    else:
+        from typing_extensions import ParamSpec
+
+    if sys.version_info >= (3, 11):
+        from typing import Unpack
+    else:
+        from typing_extensions import Unpack
+
+    T = TypeVar("T")
+    P = ParamSpec("P")
+
+_AsyncHandler = Callable[["Details"], "Coroutine[Any, Any, None]"]
+
+
+def _ensure_coroutine(
+    coro_or_func: Callable[..., Any],
+) -> Callable[..., Coroutine[Any, Any, Any]]:
     if inspect.iscoroutinefunction(coro_or_func):
         return coro_or_func
 
     @functools.wraps(coro_or_func)
-    async def f(*args, **kwargs):  # ruff:ignore[unused-async]
+    async def f(*args: Any, **kwargs: Any) -> Any:  # ruff:ignore[unused-async]
         return coro_or_func(*args, **kwargs)
 
     return f
 
 
-def _ensure_coroutines(coros_or_funcs):
+def _ensure_coroutines(
+    coros_or_funcs: Iterable[Callable[..., Any]],
+) -> list[Callable[..., Coroutine[Any, Any, Any]]]:
     return [_ensure_coroutine(f) for f in coros_or_funcs]
 
 
-async def _call_handlers(handlers, *, target, args, kwargs, tries, elapsed, **extra):
-    details = {
+async def _call_handlers(
+    handlers: Iterable[_AsyncHandler],
+    *,
+    target: Callable[..., Any],
+    args: tuple[Any, ...],
+    kwargs: dict[str, Any],
+    tries: int,
+    elapsed: float,
+    **extra: Unpack[_CallDetails],
+) -> None:
+    details: Details = {
         "target": target,
         "args": args,
         "kwargs": kwargs,
         "tries": tries,
         "elapsed": elapsed,
     }
+    # pyrefly: ignore [no-matching-overload]
     details.update(extra)
     for handler in handlers:
         await handler(details)
 
 
 def retry_predicate(
-    target,
-    wait_gen,
-    predicate,
+    target: Callable[P, T],
+    wait_gen: _WaitGenerator,
+    predicate: _Predicate[T],
     *,
-    max_tries,
-    max_time,
-    jitter,
-    on_success,
-    on_backoff,
-    on_giveup,
-    wait_gen_kwargs,
-):
+    max_tries: _MaybeCallable[int] | None,
+    max_time: _MaybeCallable[float] | None,
+    jitter: _Jitterer | None,
+    on_success: Iterable[_Handler],
+    on_backoff: Iterable[_Handler],
+    on_giveup: Iterable[_Handler],
+    wait_gen_kwargs: dict[str, Any],
+) -> Callable[P, T]:
     on_success = _ensure_coroutines(on_success)
     on_backoff = _ensure_coroutines(on_backoff)
     on_giveup = _ensure_coroutines(on_giveup)
@@ -58,10 +106,10 @@ def retry_predicate(
     assert inspect.iscoroutinefunction(target)
 
     @functools.wraps(target)
-    async def retry(*args, **kwargs):
+    async def retry(*args: P.args, **kwargs: P.kwargs) -> T:
         # update variables from outer function args
-        max_tries_value = _maybe_call(max_tries)
-        max_time_value = _maybe_call(max_time)
+        max_tries_value: int | None = _maybe_call(max_tries)
+        max_time_value: float | None = _maybe_call(max_time)
 
         tries = 0
         start = time.monotonic()
@@ -69,7 +117,7 @@ def retry_predicate(
         while True:
             tries += 1
             elapsed = time.monotonic() - start
-            details = {
+            details: _BaseDetails = {
                 "target": target,
                 "args": args,
                 "kwargs": kwargs,
@@ -112,24 +160,24 @@ def retry_predicate(
 
         return ret
 
-    return retry
+    return retry  # type: ignore[return-value] # ty:ignore[invalid-return-type]
 
 
 def retry_exception(
-    target,
-    wait_gen,
-    exception,
+    target: Callable[P, T],
+    wait_gen: _WaitGenerator,
+    exception: _MaybeSequence[type[Exception]],
     *,
-    max_tries,
-    max_time,
-    jitter,
-    giveup,
-    on_success,
-    on_backoff,
-    on_giveup,
-    raise_on_giveup,
-    wait_gen_kwargs,
-):
+    max_tries: _MaybeCallable[int] | None,
+    max_time: _MaybeCallable[float] | None,
+    jitter: _Jitterer | None,
+    giveup: _Predicate[Exception],
+    on_success: Iterable[_Handler],
+    on_backoff: Iterable[_Handler],
+    on_giveup: Iterable[_Handler],
+    raise_on_giveup: bool,
+    wait_gen_kwargs: dict[str, Any],
+) -> Callable[P, T]:
     on_success = _ensure_coroutines(on_success)
     on_backoff = _ensure_coroutines(on_backoff)
     on_giveup = _ensure_coroutines(on_giveup)
@@ -140,9 +188,12 @@ def retry_exception(
     assert not inspect.iscoroutinefunction(jitter)
 
     @functools.wraps(target)
-    async def retry(*args, **kwargs):
-        max_tries_value = _maybe_call(max_tries)
-        max_time_value = _maybe_call(max_time)
+    async def retry(
+        *args: P.args,
+        **kwargs: P.kwargs,
+    ) -> T:
+        max_tries_value: int | None = _maybe_call(max_tries)
+        max_time_value: float | None = _maybe_call(max_time)
 
         tries = 0
         start = time.monotonic()
@@ -150,7 +201,7 @@ def retry_exception(
         while True:
             tries += 1
             elapsed = time.monotonic() - start
-            details = {
+            details: _BaseDetails = {
                 "target": target,
                 "args": args,
                 "kwargs": kwargs,
@@ -159,8 +210,8 @@ def retry_exception(
             }
 
             try:
-                ret = await target(*args, **kwargs)
-            except exception as e:
+                ret = await target(*args, **kwargs)  # type: ignore[misc] # ty:ignore[invalid-await]
+            except exception as e:  # type: ignore[misc] # ty:ignore[invalid-exception-caught]
                 giveup_result = await giveup(e)
                 max_tries_exceeded = tries == max_tries_value
                 max_time_exceeded = (
@@ -171,7 +222,7 @@ def retry_exception(
                     await _call_handlers(on_giveup, **details, exception=e)
                     if raise_on_giveup:
                         raise
-                    return None
+                    return None  # type: ignore[return-value] # ty:ignore[invalid-return-type]
 
                 try:
                     seconds = _next_wait(wait, e, jitter, elapsed, max_time_value)
@@ -196,4 +247,4 @@ def retry_exception(
 
                 return ret
 
-    return retry
+    return retry  # type: ignore[return-value] # ty:ignore[invalid-return-type]
