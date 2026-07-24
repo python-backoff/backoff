@@ -13,6 +13,8 @@ import backoff
 from tests.common import _log_hdlrs, _save_target
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from backoff._typing import Details
 
 
@@ -681,7 +683,7 @@ async def test_on_exception_callable_gen_kwargs() -> None:
     def lookup_foo():
         return "foo"
 
-    def wait_gen(foo=None, bar=None):
+    def wait_gen(foo=None, bar=None) -> Generator[float, None, None]:
         assert foo == "foo"
         assert bar == "bar"
 

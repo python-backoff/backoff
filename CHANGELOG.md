@@ -35,6 +35,8 @@
 
 - Simplify `backoff.constant` wait generator implementation [#181](https://github.com/python-backoff/backoff/pull/181)
 
+- Move retry loop logic into a dedicated object [#189](https://github.com/python-backoff/backoff/pull/189)
+
 ## [v2.3.1] - 2025-12-18
 
 ### Fixed

@@ -44,4 +44,4 @@ _Predicate = Union[
     Callable[[T], bool],
     Callable[[T], Coroutine[Any, Any, bool]],
 ]
-_WaitGenerator = Callable[..., Generator[Union[float, None], None, None]]
+_WaitGenerator = Callable[..., Generator[float, Any, None]]

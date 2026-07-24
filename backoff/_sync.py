@@ -4,7 +4,7 @@ import functools
 import time
 from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
-from backoff._common import _init_wait_gen, _maybe_call, _next_wait
+from backoff._common import _RetryState
 
 if TYPE_CHECKING:
     import sys
@@ -73,36 +73,30 @@ def retry_predicate(
 ) -> Callable[P, T]:
     @functools.wraps(target)
     def retry(*args: P.args, **kwargs: P.kwargs) -> T:
-        max_tries_value: int | None = _maybe_call(max_tries)
-        max_time_value: float | None = _maybe_call(max_time)
-
-        tries = 0
-        start = time.monotonic()
-        wait = _init_wait_gen(wait_gen, wait_gen_kwargs)
+        state = _RetryState(
+            wait_gen,
+            wait_gen_kwargs,
+            max_tries=max_tries,
+            max_time=max_time,
+        )
         while True:
-            tries += 1
+            state.start_attempt()
             ret = target(*args, **kwargs)
-            elapsed = time.monotonic() - start
             details: _BaseDetails = {
                 "target": target,
                 "args": args,
                 "kwargs": kwargs,
-                "tries": tries,
-                "elapsed": elapsed,
+                "tries": state.tries,
+                "elapsed": state.record_elapsed(),
             }
 
             if predicate(ret):
-                max_tries_exceeded = tries == max_tries_value
-                max_time_exceeded = (
-                    max_time_value is not None and elapsed >= max_time_value
-                )
-
-                if max_tries_exceeded or max_time_exceeded:
+                if state.exhausted():
                     _call_handlers(on_giveup, **details, value=ret)
                     break
 
                 try:
-                    seconds = _next_wait(wait, ret, jitter, elapsed, max_time_value)
+                    seconds = state.next_wait(ret, jitter)
                 except StopIteration:
                     _call_handlers(on_giveup, **details)
                     break
@@ -136,40 +130,35 @@ def retry_exception(
 ) -> Callable[P, T]:
     @functools.wraps(target)
     def retry(*args: P.args, **kwargs: P.kwargs) -> T:  # type: ignore[return]  # ty:ignore[invalid-return-type]
-        max_tries_value: int | None = _maybe_call(max_tries)
-        max_time_value: float | None = _maybe_call(max_time)
-
-        tries = 0
-        start = time.monotonic()
-        wait = _init_wait_gen(wait_gen, wait_gen_kwargs)
+        state = _RetryState(
+            wait_gen,
+            wait_gen_kwargs,
+            max_tries=max_tries,
+            max_time=max_time,
+        )
         while True:
-            tries += 1
+            state.start_attempt()
             details: _BaseDetails = {
                 "target": target,
                 "args": args,
                 "kwargs": kwargs,
-                "tries": tries,
+                "tries": state.tries,
                 "elapsed": 0,
             }
 
             try:
                 ret = target(*args, **kwargs)
             except exception as e:  # type: ignore[misc] # ty:ignore[invalid-exception-caught]
-                elapsed = time.monotonic() - start
-                details["elapsed"] = elapsed
-                max_tries_exceeded = tries == max_tries_value
-                max_time_exceeded = (
-                    max_time_value is not None and elapsed >= max_time_value
-                )
+                details["elapsed"] = state.record_elapsed()
 
-                if giveup(e) or max_tries_exceeded or max_time_exceeded:
+                if giveup(e) or state.exhausted():
                     _call_handlers(on_giveup, **details, exception=e)
                     if raise_on_giveup:
                         raise
                     break
 
                 try:
-                    seconds = _next_wait(wait, e, jitter, elapsed, max_time_value)
+                    seconds = state.next_wait(e, jitter)
                 except StopIteration:
                     _call_handlers(on_giveup, **details, exception=e)
                     raise e from None
@@ -178,7 +167,7 @@ def retry_exception(
 
                 time.sleep(seconds)
             else:
-                details["elapsed"] = time.monotonic() - start
+                details["elapsed"] = state.record_elapsed()
                 _call_handlers(on_success, **details)
 
                 return ret

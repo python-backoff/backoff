@@ -3,6 +3,7 @@ from __future__ import annotations
 import functools
 import logging
 import sys
+import time
 import traceback
 import warnings
 from typing import TYPE_CHECKING, Any, TypeVar
@@ -51,7 +52,7 @@ def _maybe_call(f: _MaybeCallable[T] | None, *args: Any, **kwargs: Any) -> T | N
 def _init_wait_gen(
     wait_gen: _WaitGenerator,
     wait_gen_kwargs: dict[str, Any],
-) -> Generator[Any, Any, None]:
+) -> Generator[float, Any, None]:
     kwargs = {k: _maybe_call(v) for k, v in wait_gen_kwargs.items()}
     initialized = wait_gen(**kwargs)
     initialized.send(None)  # Initialize with an empty send
@@ -59,7 +60,7 @@ def _init_wait_gen(
 
 
 def _next_wait(
-    wait: Generator[float, int | None, None],
+    wait: Generator[float, None, None],
     send_value: Any,
     jitter: _Jitterer | None,
     elapsed: float,
@@ -84,6 +85,54 @@ def _next_wait(
         seconds = min(seconds, max_time - elapsed)
 
     return seconds
+
+
+class _RetryState:
+    """Bookkeeping shared by the sync and async retry loops.
+
+    Tracks try count and elapsed time, and owns the initialized wait
+    generator, so `retry_predicate`/`retry_exception` only need to drive
+    the call/check/sleep sequence around it.
+    """
+
+    __slots__ = (
+        "elapsed",
+        "max_time",
+        "max_tries",
+        "start",
+        "tries",
+        "wait",
+    )
+
+    def __init__(
+        self,
+        wait_gen: _WaitGenerator,
+        wait_gen_kwargs: dict[str, Any],
+        *,
+        max_tries: _MaybeCallable[int] | None = None,
+        max_time: _MaybeCallable[float] | None = None,
+    ) -> None:
+        self.tries = 0
+        self.elapsed: float = 0
+        self.start = time.monotonic()
+        self.max_tries = _maybe_call(max_tries)
+        self.max_time = _maybe_call(max_time)
+        self.wait = _init_wait_gen(wait_gen, wait_gen_kwargs)
+
+    def start_attempt(self) -> None:
+        self.tries += 1
+
+    def record_elapsed(self) -> float:
+        self.elapsed = time.monotonic() - self.start
+        return self.elapsed
+
+    def exhausted(self) -> bool:
+        max_tries_exceeded = self.tries == self.max_tries
+        max_time_exceeded = self.max_time is not None and self.elapsed >= self.max_time
+        return max_tries_exceeded or max_time_exceeded
+
+    def next_wait(self, send_value: Any, jitter: _Jitterer | None) -> float:
+        return _next_wait(self.wait, send_value, jitter, self.elapsed, self.max_time)
 
 
 def _prepare_logger(
