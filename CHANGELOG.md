@@ -13,11 +13,13 @@
 
 ### Fixed
 
-- Measure elapsed time after function call [187](https://github.com/python-backoff/backoff/pull/187)
+- Measure elapsed time after function call [#187](https://github.com/python-backoff/backoff/pull/187)
 
 ### Documentation
 
 - Fixed some examples [#116](https://github.com/python-backoff/backoff/pull/116) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+
+- Split function name and signature in API reference docs
 
 ### Internal
 

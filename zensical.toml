@@ -36,6 +36,7 @@ pygments_lang_class = true
 [project.plugins.mkdocstrings.handlers.python.options]
 docstring_style = "google"
 inherited_members = true
+separate_signature = true
 show_source = true
 
 [project.plugins.offline]
