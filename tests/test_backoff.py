@@ -1,7 +1,7 @@
-# ruff: file-ignore[float-equality-comparison]
-
 from __future__ import annotations
 
+import contextlib
+import itertools
 import logging
 import re
 import sys
@@ -65,7 +65,7 @@ def test_on_predicate_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
 
     def giveup(details):
         assert details["tries"] == 3
-        assert details["elapsed"] == 10.000005
+        assert details["elapsed"] == pytest.approx(10.000005)
 
     @backoff.on_predicate(backoff.expo, jitter=None, max_time=10, on_giveup=giveup)
     def return_true(log: list[bool], n):
@@ -95,7 +95,7 @@ def test_on_predicate_max_time_callable(monkeypatch: pytest.MonkeyPatch) -> None
 
     def giveup(details):
         assert details["tries"] == 3
-        assert details["elapsed"] == 10.000005
+        assert details["elapsed"] == pytest.approx(10.000005)
 
     def lookup_max_time():
         return 10
@@ -338,7 +338,7 @@ def test_on_exception_success() -> None:
             "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "wait": 0,
-            "elapsed": IsFloat(),
+            "elapsed": IsFloat(gt=0),
             "exception": IsInstance(ValueError),
         }
 
@@ -348,7 +348,7 @@ def test_on_exception_success() -> None:
         "kwargs": {"foo": 1, "bar": 2},
         "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
-        "elapsed": IsFloat(),
+        "elapsed": IsFloat(gt=0),
     }
 
 
@@ -390,7 +390,7 @@ def test_on_exception_giveup(raise_on_giveup: bool) -> None:
         "kwargs": {"foo": 1, "bar": 2},
         "target": exceptor._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
-        "elapsed": IsFloat(),
+        "elapsed": IsFloat(gt=0),
         "exception": IsInstance(ValueError),
     }
 
@@ -448,7 +448,7 @@ def test_on_predicate_success() -> None:
             "tries": i + 1,
             "value": False,
             "wait": 0,
-            "elapsed": IsFloat(),
+            "elapsed": IsFloat(gt=0),
         }
 
     details = successes[0]
@@ -458,7 +458,7 @@ def test_on_predicate_success() -> None:
         "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": True,
-        "elapsed": IsFloat(),
+        "elapsed": IsFloat(gt=0),
     }
 
 
@@ -494,7 +494,7 @@ def test_on_predicate_giveup() -> None:
         "target": emptiness._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": None,
-        "elapsed": IsFloat(),
+        "elapsed": IsFloat(gt=0),
     }
 
 
@@ -534,7 +534,7 @@ def test_on_predicate_iterable_handlers() -> None:
             "target": emptiness._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": 3,
             "value": None,
-            "elapsed": IsFloat(),
+            "elapsed": IsFloat(gt=0),
         }
 
 
@@ -580,7 +580,7 @@ def test_on_exception_success_0_arg_jitter(monkeypatch: pytest.MonkeyPatch) -> N
             "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
             "tries": i + 1,
             "wait": 0,
-            "elapsed": IsFloat(),
+            "elapsed": IsFloat(gt=0),
             "exception": IsInstance(ValueError),
         }
 
@@ -590,7 +590,7 @@ def test_on_exception_success_0_arg_jitter(monkeypatch: pytest.MonkeyPatch) -> N
         "kwargs": {"foo": 1, "bar": 2},
         "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
-        "elapsed": IsFloat(),
+        "elapsed": IsFloat(gt=0),
     }
 
 
@@ -635,7 +635,7 @@ def test_on_predicate_success_0_arg_jitter(monkeypatch: pytest.MonkeyPatch) -> N
             "tries": i + 1,
             "value": False,
             "wait": 0,
-            "elapsed": IsFloat(),
+            "elapsed": IsFloat(gt=0),
         }
 
     details = successes[0]
@@ -645,7 +645,7 @@ def test_on_predicate_success_0_arg_jitter(monkeypatch: pytest.MonkeyPatch) -> N
         "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
         "tries": 3,
         "value": True,
-        "elapsed": IsFloat(),
+        "elapsed": IsFloat(gt=0),
     }
 
 
@@ -967,3 +967,53 @@ def test_event_log_levels(
 
     assert backoff_log_count == max_tries - 1
     assert giveup_log_count == 1
+
+
+def test_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
+    elapsed: float = 0
+
+    def patch_sleep(n: float) -> None:
+        nonlocal elapsed
+        elapsed += n
+
+    def monotonic() -> float:
+        return elapsed
+
+    monkeypatch.setattr("time.sleep", patch_sleep)
+    monkeypatch.setattr("time.monotonic", monotonic)
+
+    # A good place for property-based testing
+    for function_runtime, max_time in itertools.product(range(10), repeat=2):
+        elapsed = 0
+
+        @backoff.on_exception(
+            backoff.constant,
+            RuntimeError,
+            max_time=max_time,
+            jitter=None,
+        )
+        def on_exception():
+            patch_sleep(function_runtime)  # ruff: ignore[function-uses-loop-variable]
+            raise RuntimeError
+
+        with contextlib.suppress(BaseException):
+            on_exception()
+
+        # backoff never sleeps past max_time, but the time spent in the
+        # target's own call isn't capped, so the total can run up to one
+        # more function call past max_time before giving up.
+        assert elapsed <= max_time + function_runtime + 1e-9
+
+        elapsed = 0
+
+        @backoff.on_predicate(
+            backoff.constant,
+            lambda x: False,
+            max_time=max_time,
+            jitter=None,
+        )
+        def on_predicate():
+            patch_sleep(function_runtime)  # ruff: ignore[function-uses-loop-variable]
+
+        on_predicate()
+        assert elapsed <= max_time + function_runtime + 1e-9

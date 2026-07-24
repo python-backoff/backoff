@@ -116,6 +116,7 @@ def retry_predicate(
         wait = _init_wait_gen(wait_gen, wait_gen_kwargs)
         while True:
             tries += 1
+            ret = await target(*args, **kwargs)
             elapsed = time.monotonic() - start
             details: _BaseDetails = {
                 "target": target,
@@ -125,7 +126,6 @@ def retry_predicate(
                 "elapsed": elapsed,
             }
 
-            ret = await target(*args, **kwargs)
             if predicate(ret):
                 max_tries_exceeded = tries == max_tries_value
                 max_time_exceeded = (
@@ -200,18 +200,19 @@ def retry_exception(
         wait = _init_wait_gen(wait_gen, wait_gen_kwargs)
         while True:
             tries += 1
-            elapsed = time.monotonic() - start
             details: _BaseDetails = {
                 "target": target,
                 "args": args,
                 "kwargs": kwargs,
                 "tries": tries,
-                "elapsed": elapsed,
+                "elapsed": 0,
             }
 
             try:
                 ret = await target(*args, **kwargs)  # type: ignore[misc] # ty:ignore[invalid-await]
             except exception as e:  # type: ignore[misc] # ty:ignore[invalid-exception-caught]
+                elapsed = time.monotonic() - start
+                details["elapsed"] = elapsed
                 giveup_result = await giveup(e)
                 max_tries_exceeded = tries == max_tries_value
                 max_time_exceeded = (
@@ -243,6 +244,7 @@ def retry_exception(
                 #   <https://bugs.python.org/issue28613>
                 await asyncio.sleep(seconds)
             else:
+                details["elapsed"] = time.monotonic() - start
                 await _call_handlers(on_success, **details)
 
                 return ret

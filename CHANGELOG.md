@@ -10,6 +10,10 @@
 
 - Python 3.9+ is required [#152](https://github.com/python-backoff/backoff/pull/152)
 
+### Fixed
+
+- Measure elapsed time after function call [187](https://github.com/python-backoff/backoff/pull/187)
+
 ### Documentation
 
 - Fixed some examples [#116](https://github.com/python-backoff/backoff/pull/116) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
