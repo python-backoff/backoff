@@ -28,7 +28,7 @@ if TYPE_CHECKING:
         _Jitterer,
         _MaybeCallable,
         _MaybeLogger,
-        _MaybeSequence,
+        _MaybeTuple,
         _Predicate,
         _WaitGenerator,
     )
@@ -143,7 +143,7 @@ def on_predicate(
 
 def on_exception(
     wait_gen: _WaitGenerator,
-    exception: _MaybeSequence[type[Exception]],
+    exception: _MaybeTuple[type[Exception]],
     *,
     max_tries: _MaybeCallable[int] | None = None,
     max_time: _MaybeCallable[float] | None = None,
@@ -247,7 +247,7 @@ def on_exception(
 
 
 def retry_context(
-    exception: _MaybeSequence[type[Exception]] = Exception,
+    exception: _MaybeTuple[type[Exception]] = Exception,
     wait_gen: _WaitGenerator = expo,
     *,
     max_tries: _MaybeCallable[int] | None = None,
@@ -343,7 +343,7 @@ def retry_context(
 
 
 def aretry_context(
-    exception: _MaybeSequence[type[Exception]] = Exception,
+    exception: _MaybeTuple[type[Exception]] = Exception,
     wait_gen: _WaitGenerator = expo,
     *,
     max_tries: _MaybeCallable[int] | None = None,

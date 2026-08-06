@@ -18,7 +18,7 @@ if TYPE_CHECKING:
         _Handler,
         _Jitterer,
         _MaybeCallable,
-        _MaybeSequence,
+        _MaybeTuple,
         _Predicate,
         _WaitGenerator,
     )
@@ -117,7 +117,7 @@ def retry_predicate(
 def retry_exception(
     target: Callable[P, T],
     wait_gen: _WaitGenerator,
-    exception: _MaybeSequence[type[Exception]],
+    exception: _MaybeTuple[type[Exception]],
     *,
     max_tries: _MaybeCallable[int] | None,
     max_time: _MaybeCallable[float] | None,
@@ -149,7 +149,7 @@ def retry_exception(
 
             try:
                 ret = target(*args, **kwargs)
-            except exception as e:  # type: ignore[misc] # ty:ignore[invalid-exception-caught]
+            except exception as e:
                 details["elapsed"] = state.record_elapsed()
 
                 if giveup(e) or state.exhausted():
@@ -177,7 +177,7 @@ def retry_exception(
 
 
 def retry_context(
-    exception: _MaybeSequence[type[Exception]],
+    exception: _MaybeTuple[type[Exception]],
     wait_gen: _WaitGenerator,
     *,
     max_tries: _MaybeCallable[int] | None,
@@ -198,7 +198,7 @@ def retry_context(
     )
     while True:
         state.start_attempt()
-        attempt = _Attempt(exception)  # type: ignore[arg-type] # ty:ignore[invalid-argument-type]
+        attempt = _Attempt(exception)
         yield attempt
         elapsed = state.record_elapsed()
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Coroutine, Generator, Sequence
+from collections.abc import Coroutine, Generator
 from typing import (
     Any,
     Callable,
@@ -60,7 +60,7 @@ _ContextHandler = Union[
 _Jitterer = Callable[[float], float]
 _MaybeCallable = Union[T, Callable[[], T]]
 _MaybeLogger = Union[str, logging.Logger, logging.LoggerAdapter, None]
-_MaybeSequence = Union[T, Sequence[T]]
+_MaybeTuple = Union[T, tuple[T, ...]]
 _Predicate = Union[
     Callable[[T], bool],
     Callable[[T], Coroutine[Any, Any, bool]],
