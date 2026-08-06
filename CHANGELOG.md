@@ -15,6 +15,7 @@
 ### Fixed
 
 - Measure elapsed time after function call [#187](https://github.com/python-backoff/backoff/pull/187)
+- Updated the type annotation of the `exception` argument in `on_exception`, `on_predicate`, `retry_context` and `aretry_context` to correctly expect an exception type or a tuple of exception types [#192](https://github.com/python-backoff/backoff/pull/192)
 
 ### Documentation
 
