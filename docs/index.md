@@ -47,43 +47,9 @@ This will retry the function with exponential backoff whenever a `RequestExcepti
 
 ## Common Use Cases
 
-### API Rate Limiting
-
-```python
-@backoff.on_predicate(
-    backoff.runtime,
-    predicate=lambda r: r.status_code == 429,
-    value=lambda r: int(r.headers.get("Retry-After", 1)),
-    jitter=None,
-)
-def call_api():
-    return requests.get(api_url)
-```
-
-### Database Retries
-
-```python
-@backoff.on_exception(
-    backoff.expo,
-    sqlalchemy.exc.OperationalError,
-    max_tries=5,
-)
-def query_database():
-    return session.query(Model).all()
-```
-
-### Polling for Results
-
-```python
-@backoff.on_predicate(
-    backoff.constant,
-    lambda result: result is None,
-    interval=2,
-    max_time=300,
-)
-def poll_for_result(job_id):
-    return check_job_status(job_id)
-```
+- [HTTP/API Calls](examples.md#httpapi-calls)
+- [Database Operations](examples.md#database-operations)
+- [Polling for Results](examples.md#polling-and-resource-waiting)
 
 ## Next Steps
 

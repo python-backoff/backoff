@@ -14,6 +14,18 @@ Complete API documentation for the backoff module.
       show_root_heading: true
       show_source: true
 
+## Context Managers
+
+::: backoff.retry_context
+    options:
+      show_root_heading: true
+      show_source: true
+
+::: backoff.aretry_context
+    options:
+      show_root_heading: true
+      show_source: true
+
 ## Wait Generators
 
 ::: backoff.expo

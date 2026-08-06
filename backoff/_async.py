@@ -5,16 +5,17 @@ import functools
 import inspect
 from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
-from backoff._common import _RetryState
+from backoff._common import _Attempt, _RetryState
 
 if TYPE_CHECKING:
     import sys
-    from collections.abc import Coroutine, Iterable
+    from collections.abc import AsyncGenerator, Coroutine, Iterable
 
     from backoff._typing import (
         Details,
         _BaseDetails,
         _CallDetails,
+        _ContextHandler,
         _Handler,
         _Jitterer,
         _MaybeCallable,
@@ -237,3 +238,76 @@ def retry_exception(
                 return ret
 
     return retry  # type: ignore[return-value] # ty:ignore[invalid-return-type]
+
+
+async def _dispatch_handlers(
+    handlers: Iterable[_ContextHandler], **details: Any
+) -> None:
+    for hdlr in _ensure_coroutines(handlers):
+        await hdlr(details)
+
+
+async def aretry_context(
+    exception: _MaybeSequence[type[Exception]],
+    wait_gen: _WaitGenerator,
+    *,
+    max_tries: _MaybeCallable[int] | None,
+    max_time: _MaybeCallable[float] | None,
+    jitter: _Jitterer | None,
+    giveup: _Predicate[BaseException],
+    on_success: Iterable[_ContextHandler],
+    on_backoff: Iterable[_ContextHandler],
+    on_giveup: Iterable[_ContextHandler],
+    raise_on_giveup: bool,
+    wait_gen_kwargs: dict[str, Any],
+) -> AsyncGenerator[_Attempt, None]:
+    giveup = _ensure_coroutine(giveup)
+
+    state = _RetryState(
+        wait_gen,
+        wait_gen_kwargs,
+        max_tries=max_tries,
+        max_time=max_time,
+    )
+    while True:
+        state.start_attempt()
+        attempt = _Attempt(exception)  # type: ignore[arg-type] # ty:ignore[invalid-argument-type]
+        yield attempt
+        elapsed = state.record_elapsed()
+
+        exc = attempt.exception
+        if exc is None:
+            await _dispatch_handlers(on_success, tries=state.tries, elapsed=elapsed)
+            return
+
+        if await giveup(exc) or state.exhausted():
+            await _dispatch_handlers(
+                on_giveup,
+                tries=state.tries,
+                elapsed=elapsed,
+                exception=exc,
+            )
+            if raise_on_giveup:
+                raise exc
+            return
+
+        try:
+            seconds = state.next_wait(exc, jitter)
+        except StopIteration:
+            await _dispatch_handlers(
+                on_giveup,
+                tries=state.tries,
+                elapsed=elapsed,
+                exception=exc,
+            )
+            raise exc from None
+
+        await _dispatch_handlers(
+            on_backoff,
+            tries=state.tries,
+            elapsed=elapsed,
+            wait=seconds,
+            exception=exc,
+        )
+
+        await asyncio.sleep(seconds)
