@@ -6,28 +6,24 @@ import sys
 import time
 import traceback
 import warnings
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 if TYPE_CHECKING:
     from collections.abc import Generator, Iterable
-    from typing import Protocol
 
     from backoff._typing import (
+        ContextDetails,
         Details,
-        _Handler,
+        _ContextHandler,
         _Jitterer,
         _MaybeCallable,
         _WaitGenerator,
     )
 
-    class _DefaultHandler(Protocol):
-        def __call__(
-            self,
-            details: Details,
-            *,
-            logger: logging.Logger | logging.LoggerAdapter,
-            log_level: int,
-        ) -> None: ...
+    if sys.version_info >= (3, 11):
+        from typing import Self
+    else:
+        from typing_extensions import Self
 
 
 # Use module-specific logger with a default null handler.
@@ -36,6 +32,7 @@ _logger.addHandler(logging.NullHandler())  # pragma: no cover
 _logger.setLevel(logging.INFO)
 
 T = TypeVar("T")
+_HandlerT = TypeVar("_HandlerT")
 
 
 # Evaluate arg that can be either a fixed value or a callable.
@@ -135,6 +132,52 @@ class _RetryState:
         return _next_wait(self.wait, send_value, jitter, self.elapsed, self.max_time)
 
 
+class _Attempt:
+    """A single attempt yielded by `retry_context`/`aretry_context`.
+
+    Used as `with attempt: ...`. Exceptions matching `exception_types` are
+    caught here so the driving generator (not this object) decides whether
+    to retry, sleep, or let the exception propagate; anything else, or no
+    exception at all, is left for the `with` block's normal exit behavior.
+    """
+
+    __slots__ = (
+        "exception",
+        "exception_types",
+    )
+
+    def __init__(
+        self,
+        exception_types: type[Exception] | tuple[type[Exception], ...],
+    ) -> None:
+        self.exception_types = exception_types
+        self.exception: BaseException | None = None
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc: BaseException | None,
+        tb: object,
+    ) -> bool:
+        if exc_type is None:
+            # self.outcome = _Success()
+            return False
+
+        if not issubclass(exc_type, self.exception_types):
+            return False  # not ours; propagate immediately
+
+        self.exception = exc
+        return True  # suppress for now; the driving generator decides next
+
+
+def _dispatch_handlers(handlers: Iterable[_ContextHandler], **details: Any) -> None:
+    for hdlr in handlers:
+        hdlr(details)  # type: ignore[arg-type] # ty:ignore[invalid-argument-type]
+
+
 def _prepare_logger(
     logger: str | logging.Logger | logging.LoggerAdapter | None,
 ) -> logging.Logger | logging.LoggerAdapter | None:
@@ -146,13 +189,13 @@ def _prepare_logger(
 # Configure handler list with user specified handler and optionally
 # with a default handler bound to the specified logger.
 def _config_handlers(
-    user_handlers: _Handler | Iterable[_Handler] | None,
+    user_handlers: _HandlerT | Iterable[_HandlerT] | None,
     *,
-    default_handler: _DefaultHandler | None = None,
+    default_handler: Callable[..., None] | None = None,
     logger: logging.Logger | logging.LoggerAdapter | None = None,
     log_level: int | None = None,
-) -> list[_Handler]:
-    handlers: list[_Handler] = []
+) -> list[_HandlerT]:
+    handlers: list[_HandlerT] = []
     if logger is not None:
         assert log_level is not None, "Log level is not specified"
         assert default_handler is not None, "Default handler is not specified"
@@ -162,7 +205,7 @@ def _config_handlers(
             logger=logger,
             log_level=log_level,
         )
-        handlers.append(log_handler)
+        handlers.append(log_handler)  # type: ignore[arg-type] # ty:ignore[invalid-argument-type]
 
     if user_handlers is None:
         return handlers
@@ -216,3 +259,33 @@ def _log_giveup(
         log_args.append(details["value"])
 
     logger.log(log_level, msg, *log_args)
+
+
+# Default backoff handler for retry_context/aretry_context (no wrapped
+# callable, so no name to log; the exception is read from `details`
+# directly since it's no longer the active exception by this point).
+def _log_backoff_context(
+    details: ContextDetails,
+    logger: logging.Logger | logging.LoggerAdapter,
+    log_level: int,
+) -> None:
+    logger.log(
+        log_level,
+        "Backing off retry_context(...) for %.1fs (%s)",
+        details["wait"],
+        details.get("exception"),
+    )
+
+
+# Default giveup handler for retry_context/aretry_context.
+def _log_giveup_context(
+    details: ContextDetails,
+    logger: logging.Logger | logging.LoggerAdapter,
+    log_level: int,
+) -> None:
+    logger.log(
+        log_level,
+        "Giving up retry_context(...) after %d tries (%s)",
+        details["tries"],
+        details.get("exception"),
+    )

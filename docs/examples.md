@@ -162,6 +162,30 @@ async def fetch_all(urls):
         return await asyncio.gather(*tasks, return_exceptions=True)
 ```
 
+## Context Manager
+
+```python
+import requests
+import requests.exceptions
+
+import backoff
+
+status = [500, 500, 200]
+
+for i, attempt in enumerate(
+    backoff.retry_context(
+        requests.exceptions.RequestException,
+        backoff.constant,
+    )
+):
+    print(f"Attempt {i + 1}")
+    with attempt:
+        response = requests.get(f"https://httpbin.org/status/{status[i]}")
+        response.raise_for_status()
+
+print(f"Response: {response.status_code}")
+```
+
 ## Polling and Resource Waiting
 
 ### Poll for Job Completion

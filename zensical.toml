@@ -9,6 +9,7 @@ nav = [
     { "Getting Started" = "getting-started.md" },
     { "User Guide" = [
         { "Decorators" = "user-guide/decorators.md" },
+        { "Context Manager" = "user-guide/context-manager.md" },
         { "Wait Strategies" = "user-guide/wait-strategies.md" },
         { "Configuration" = "user-guide/configuration.md" },
         { "Event Handlers" = "user-guide/event-handlers.md" },

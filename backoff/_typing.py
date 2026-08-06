@@ -29,12 +29,33 @@ class Details(_BaseDetails, _CallDetails, total=False):
     pass
 
 
+class _BaseContextDetails(TypedDict):
+    tries: int
+    elapsed: float
+
+
+class _ContextCallDetails(TypedDict, total=False):
+    wait: float  # present in the on_backoff handler case
+    exception: Exception  # present in the on_giveup handler case
+
+
+class ContextDetails(_BaseContextDetails, _ContextCallDetails, total=False):
+    """Details passed to handlers registered with `retry_context`/`aretry_context`.
+
+    Unlike `Details`, there's no wrapped callable, so no `target`/`args`/`kwargs`.
+    """
+
+
 T = TypeVar("T")
 
 _CallableT = TypeVar("_CallableT", bound=Callable[..., Any])  # ruff:ignore[unused-private-type-var]
 _Handler = Union[
     Callable[[Details], None],
     Callable[[Details], Coroutine[Any, Any, None]],
+]
+_ContextHandler = Union[
+    Callable[[ContextDetails], None],
+    Callable[[ContextDetails], Coroutine[Any, Any, None]],
 ]
 _Jitterer = Callable[[float], float]
 _MaybeCallable = Union[T, Callable[[], T]]
