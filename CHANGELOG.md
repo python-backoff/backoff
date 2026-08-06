@@ -5,6 +5,7 @@
 ### Added
 
 - Add type annotations to decorator functions [#182](https://github.com/python-backoff/backoff/pull/182)
+- Add a retry context manager [#191](https://github.com/python-backoff/backoff/pull/191)
 
 ### Changed
 
