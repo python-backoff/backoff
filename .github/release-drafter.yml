@@ -30,6 +30,10 @@ categories:
     when:
       labels:
         - 'internal'
+
+  - title: '🛠️ Maintenance'
+    when:
+      labels:
         - 'chore'
         - 'dependencies'
 
@@ -64,16 +68,19 @@ autolabeler:
   - label: 'fix'
     title:
       - '/^fix(\(.+\))?!?:/i'
-  - label: 'changed'
+  - label: 'internal'
     title:
       - '/^refactor(\(.+\))?!?:/i'
+  - label: 'changed'
+    title:
+      - '/^perf(\(.+\))?!?:/i'
   - label: 'documentation'
     title:
       - '/^docs(\(.+\))?!?:/i'
   - label: 'dependencies'
     title:
       - '/^chore\(deps\)(\(.+\))?!?:/i'
-  - label: 'internal'
+  - label: 'chore'
     title:
       - '/^(chore|ci|test|build)(\(.+\))?!?:/i'
 
