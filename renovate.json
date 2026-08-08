@@ -3,6 +3,7 @@
   "extends": [
     "config:recommended"
   ],
+  "labels": ["skip-changelog"],
   "timezone": "America/Mexico_City",
   "schedule": [
     "* * 1 */1 *"

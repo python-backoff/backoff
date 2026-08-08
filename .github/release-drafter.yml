@@ -12,9 +12,9 @@ categories:
         - 'feature'
         - 'enhancement'
 
-  - title: '🔄 Changed'
+  - title: '🏎️ Performance'
     when:
-      label: 'changed'
+      label: 'performance'
 
   - title: '🐛 Fixed'
     when:
@@ -55,11 +55,11 @@ categories:
       labels:
         - 'fix'
         - 'bug'
-        - 'changed'
         - 'chore'
         - 'internal'
         - 'dependencies'
         - 'documentation'
+        - 'performance'
 
 autolabeler:
   - label: 'feature'
@@ -68,12 +68,12 @@ autolabeler:
   - label: 'fix'
     title:
       - '/^fix(\(.+\))?!?:/i'
+  - label: 'performance'
+    title:
+      - '/^perf(\(.+\))?!?:/i'
   - label: 'internal'
     title:
       - '/^refactor(\(.+\))?!?:/i'
-  - label: 'changed'
-    title:
-      - '/^perf(\(.+\))?!?:/i'
   - label: 'documentation'
     title:
       - '/^docs(\(.+\))?!?:/i'
