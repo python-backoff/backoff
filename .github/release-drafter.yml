@@ -16,6 +16,10 @@ categories:
     when:
       label: 'performance'
 
+  - title: '🔄 Changed'
+    when:
+      label: 'changed'
+
   - title: '🐛 Fixed'
     when:
       labels:
@@ -48,6 +52,7 @@ categories:
       labels:
         - 'feature'
         - 'enhancement'
+        - 'changed'
 
   - type: 'version-resolver'
     semver-increment: 'patch'
