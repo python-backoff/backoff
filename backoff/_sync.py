@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from collections.abc import Generator, Iterable
 
     from backoff._typing import (
+        ContextDetails,
         Details,
         _BaseDetails,
         _CallDetails,
@@ -99,7 +100,7 @@ def retry_predicate(
                 try:
                     seconds = state.next_wait(ret, jitter)
                 except StopIteration:
-                    _call_handlers(on_giveup, **details)
+                    _call_handlers(on_giveup, **details, value=ret)
                     break
 
                 _call_handlers(on_backoff, **details, value=ret, wait=seconds)
@@ -112,6 +113,25 @@ def retry_predicate(
         return ret
 
     return retry
+
+
+def _adapt_context_handlers(
+    handlers: Iterable[_Handler],
+    target: Callable[..., Any],
+    args: tuple[Any, ...],
+    kwargs: dict[str, Any],
+) -> list[_ContextHandler]:
+    def adapted(details: ContextDetails) -> None:
+        full_details: Details = {
+            "target": target,
+            "args": args,
+            "kwargs": kwargs,
+            **details,
+        }
+        for hdlr in handlers:
+            hdlr(full_details)
+
+    return [adapted]
 
 
 def retry_exception(
@@ -130,48 +150,26 @@ def retry_exception(
     wait_gen_kwargs: dict[str, Any],
 ) -> Callable[P, T]:
     @functools.wraps(target)
-    def retry(*args: P.args, **kwargs: P.kwargs) -> T:  # type: ignore[return]  # ty:ignore[invalid-return-type]
-        state = _RetryState(
+    def retry(*args: P.args, **kwargs: P.kwargs) -> T:
+        ret: T = None  # type: ignore[assignment] # ty:ignore[invalid-assignment]
+
+        for attempt in retry_context(
+            exception,
             wait_gen,
-            wait_gen_kwargs,
             max_tries=max_tries,
             max_time=max_time,
-        )
-        while True:
-            state.start_attempt()
-            details: _BaseDetails = {
-                "target": target,
-                "args": args,
-                "kwargs": kwargs,
-                "tries": state.tries,
-                "elapsed": 0,
-            }
-
-            try:
+            jitter=jitter,
+            giveup=giveup,  # type: ignore[arg-type] # ty:ignore[invalid-argument-type]
+            on_success=_adapt_context_handlers(on_success, target, args, kwargs),
+            on_backoff=_adapt_context_handlers(on_backoff, target, args, kwargs),
+            on_giveup=_adapt_context_handlers(on_giveup, target, args, kwargs),
+            raise_on_giveup=raise_on_giveup,
+            wait_gen_kwargs=wait_gen_kwargs,
+        ):
+            with attempt:
                 ret = target(*args, **kwargs)
-            except exception as e:
-                details["elapsed"] = state.record_elapsed()
 
-                if giveup(e) or state.exhausted():
-                    _call_handlers(on_giveup, **details, exception=e)
-                    if raise_on_giveup:
-                        raise
-                    break
-
-                try:
-                    seconds = state.next_wait(e, jitter)
-                except StopIteration:
-                    _call_handlers(on_giveup, **details, exception=e)
-                    raise e from None
-
-                _call_handlers(on_backoff, **details, wait=seconds, exception=e)
-
-                time.sleep(seconds)
-            else:
-                details["elapsed"] = state.record_elapsed()
-                _call_handlers(on_success, **details)
-
-                return ret
+        return ret
 
     return retry
 

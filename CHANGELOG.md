@@ -39,6 +39,8 @@
 
 - Move retry loop logic into a dedicated object [#189](https://github.com/python-backoff/backoff/pull/189)
 
+- Use retry context internally inside our public decorators [#193]((https://github.com/python-backoff/backoff/pull/193)
+
 ## [v2.3.1] - 2025-12-18
 
 ### Fixed
