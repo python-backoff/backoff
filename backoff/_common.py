@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import functools
 import logging
-import sys
 import time
 import traceback
 import warnings
 from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 if TYPE_CHECKING:
+    import sys
     from collections.abc import Generator, Iterable
 
     from backoff._typing import (
@@ -233,9 +233,9 @@ def _log_backoff(
     msg = "Backing off %s(...) for %.1fs (%s)"
     log_args = [details["target"].__name__, details["wait"]]  # ty:ignore[unresolved-attribute]
 
-    exc_typ, exc, _ = sys.exc_info()
+    exc = details.get("exception")
     if exc is not None:
-        exc_fmt = traceback.format_exception_only(exc_typ, exc)[-1]
+        exc_fmt = traceback.format_exception_only(type(exc), exc)[-1]
         log_args.append(exc_fmt.rstrip("\n"))
     else:
         log_args.append(details["value"])
@@ -251,9 +251,9 @@ def _log_giveup(
     msg = "Giving up %s(...) after %d tries (%s)"
     log_args = [details["target"].__name__, details["tries"]]  # ty:ignore[unresolved-attribute]
 
-    exc_typ, exc, _ = sys.exc_info()
+    exc = details.get("exception")
     if exc is not None:
-        exc_fmt = traceback.format_exception_only(exc_typ, exc)[-1]
+        exc_fmt = traceback.format_exception_only(type(exc), exc)[-1]
         log_args.append(exc_fmt.rstrip("\n"))
     else:
         log_args.append(details["value"])

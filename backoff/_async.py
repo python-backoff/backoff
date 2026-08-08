@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from collections.abc import AsyncGenerator, Coroutine, Iterable
 
     from backoff._typing import (
+        ContextDetails,
         Details,
         _BaseDetails,
         _CallDetails,
@@ -156,6 +157,25 @@ def retry_predicate(
     return retry  # type: ignore[return-value] # ty:ignore[invalid-return-type]
 
 
+def _adapt_context_handlers(
+    handlers: Iterable[_AsyncHandler],
+    target: Callable[..., Any],
+    args: tuple[Any, ...],
+    kwargs: dict[str, Any],
+) -> list[_ContextHandler]:
+    async def adapted(details: ContextDetails) -> None:
+        full_details: Details = {
+            "target": target,
+            "args": args,
+            "kwargs": kwargs,
+            **details,
+        }
+        for hdlr in handlers:
+            await hdlr(full_details)
+
+    return [adapted]
+
+
 def retry_exception(
     target: Callable[P, T],
     wait_gen: _WaitGenerator,
@@ -185,57 +205,25 @@ def retry_exception(
         *args: P.args,
         **kwargs: P.kwargs,
     ) -> T:
-        state = _RetryState(
+        ret: T = None  # type: ignore[assignment] # ty:ignore[invalid-assignment]
+
+        async for attempt in aretry_context(
+            exception,
             wait_gen,
-            wait_gen_kwargs,
             max_tries=max_tries,
             max_time=max_time,
-        )
-        while True:
-            state.start_attempt()
-            details: _BaseDetails = {
-                "target": target,
-                "args": args,
-                "kwargs": kwargs,
-                "tries": state.tries,
-                "elapsed": 0,
-            }
-
-            try:
+            jitter=jitter,
+            giveup=giveup,
+            on_success=_adapt_context_handlers(on_success, target, args, kwargs),
+            on_backoff=_adapt_context_handlers(on_backoff, target, args, kwargs),
+            on_giveup=_adapt_context_handlers(on_giveup, target, args, kwargs),
+            raise_on_giveup=raise_on_giveup,
+            wait_gen_kwargs=wait_gen_kwargs,
+        ):
+            with attempt:
                 ret = await target(*args, **kwargs)  # type: ignore[misc] # ty:ignore[invalid-await]
-            except exception as e:
-                details["elapsed"] = state.record_elapsed()
-                giveup_result = await giveup(e)
 
-                if giveup_result or state.exhausted():
-                    await _call_handlers(on_giveup, **details, exception=e)
-                    if raise_on_giveup:
-                        raise
-                    return None  # type: ignore[return-value] # ty:ignore[invalid-return-type]
-
-                try:
-                    seconds = state.next_wait(e, jitter)
-                except StopIteration:
-                    await _call_handlers(on_giveup, **details, exception=e)
-                    raise e from None
-
-                await _call_handlers(on_backoff, **details, wait=seconds, exception=e)
-
-                # Note: there is no convenient way to pass explicit event
-                # loop to decorator, so here we assume that either default
-                # thread event loop is set and correct (it mostly is
-                # by default), or Python >= 3.5.3 or Python >= 3.6 is used
-                # where loop.get_event_loop() in coroutine guaranteed to
-                # return correct value.
-                # See for details:
-                #   <https://groups.google.com/forum/#!topic/python-tulip/yF9C-rFpiKk>
-                #   <https://bugs.python.org/issue28613>
-                await asyncio.sleep(seconds)
-            else:
-                details["elapsed"] = state.record_elapsed()
-                await _call_handlers(on_success, **details)
-
-                return ret
+        return ret
 
     return retry  # type: ignore[return-value] # ty:ignore[invalid-return-type]
 
