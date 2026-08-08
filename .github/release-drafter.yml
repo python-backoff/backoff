@@ -1,0 +1,88 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+
+categories:
+  - type: 'pre-exclude'
+    when:
+      label: 'skip-changelog'
+
+  - title: '🚀 Added'
+    when:
+      labels:
+        - 'feature'
+        - 'enhancement'
+
+  - title: '🔄 Changed'
+    when:
+      label: 'changed'
+
+  - title: '🐛 Fixed'
+    when:
+      labels:
+        - 'bug'
+        - 'fix'
+
+  - title: '📚 Documentation'
+    when:
+      label: 'documentation'
+
+  - title: '🧰 Internal'
+    when:
+      labels:
+        - 'internal'
+        - 'chore'
+        - 'dependencies'
+
+  - type: 'version-resolver'
+    semver-increment: 'major'
+    when:
+      label: 'major'
+
+  - type: 'version-resolver'
+    semver-increment: 'minor'
+    when:
+      labels:
+        - 'feature'
+        - 'enhancement'
+
+  - type: 'version-resolver'
+    semver-increment: 'patch'
+    when:
+      labels:
+        - 'fix'
+        - 'bug'
+        - 'changed'
+        - 'chore'
+        - 'internal'
+        - 'dependencies'
+        - 'documentation'
+
+autolabeler:
+  - label: 'feature'
+    title:
+      - '/^feat(\(.+\))?!?:/i'
+  - label: 'fix'
+    title:
+      - '/^fix(\(.+\))?!?:/i'
+  - label: 'changed'
+    title:
+      - '/^refactor(\(.+\))?!?:/i'
+  - label: 'documentation'
+    title:
+      - '/^docs(\(.+\))?!?:/i'
+  - label: 'dependencies'
+    title:
+      - '/^chore\(deps\)(\(.+\))?!?:/i'
+  - label: 'internal'
+    title:
+      - '/^(chore|ci|test|build)(\(.+\))?!?:/i'
+
+category-template: '### $TITLE'
+change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
+change-title-escapes: '\<*_&'
+
+version-resolver:
+  default: patch
+
+template: |
+  $CHANGES

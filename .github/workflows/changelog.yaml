@@ -1,0 +1,57 @@
+name: Changelog
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  update-changelog:
+    name: Update CHANGELOG.md
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write  # for the create-pull-request branch push
+      pull-requests: write  # to open the PR
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Update CHANGELOG.md from the current draft release
+        id: draft
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          draft="$(gh api "repos/${GH_REPO}/releases" --jq '[.[] | select(.draft == true)] | first')"
+          if [ -z "$draft" ] || [ "$draft" = "null" ]; then
+            echo "::error::No draft release found. Push to main first so release-drafter creates one."
+            exit 1
+          fi
+
+          tag="$(jq -r '.tag_name' <<< "$draft")"
+          url="$(jq -r '.html_url' <<< "$draft")"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+          RELEASE_TAG="$tag" \
+          RELEASE_DATE="$(date -u +%Y-%m-%d)" \
+          RELEASE_BODY="$(jq -r '.body' <<< "$draft")" \
+          python3 .github/scripts/update_changelog.py
+
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        # zizmor: ignore[superfluous-actions]
+        with:
+          commit-message: "docs: Update changelog for ${{ steps.draft.outputs.tag }}"
+          title: "docs: Update changelog for ${{ steps.draft.outputs.tag }}"
+          body: >-
+            Automated update of `CHANGELOG.md` ahead of publishing
+            [${{ steps.draft.outputs.tag }}](${{ steps.draft.outputs.url }}).
+            Merge this before publishing the release so the tag includes
+            the updated changelog.
+          branch: changelog/${{ steps.draft.outputs.tag }}
+          add-paths: CHANGELOG.md
