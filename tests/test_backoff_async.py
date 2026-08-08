@@ -3,7 +3,6 @@ from __future__ import annotations
 import asyncio
 import contextlib
 import itertools
-import time
 from typing import TYPE_CHECKING
 
 import pytest
@@ -724,7 +723,6 @@ async def test_on_exception_coro_cancelling() -> None:
 
 @pytest.mark.asyncio
 async def test_max_time(monkeypatch):
-    start = time.monotonic()
     elapsed: float = 0
 
     async def patch_sleep(n: float):
@@ -732,8 +730,7 @@ async def test_max_time(monkeypatch):
         elapsed += n
 
     def monotonic():
-        nonlocal start, elapsed
-        return start + elapsed
+        return elapsed
 
     monkeypatch.setattr("asyncio.sleep", patch_sleep)
     monkeypatch.setattr("time.monotonic", monotonic)
