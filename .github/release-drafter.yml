@@ -12,6 +12,11 @@ categories:
         - 'feature'
         - 'enhancement'
 
+  - title: '⚠️ Breaking Changes'
+    when:
+      labels:
+        - 'major'
+
   - title: '🏎️ Performance'
     when:
       label: 'performance'
@@ -67,27 +72,30 @@ categories:
         - 'performance'
 
 autolabeler:
+  - label: 'major'
+    title:
+      - '/^([A-Za-z]+)(\(.+\))?!:/i'
   - label: 'feature'
     title:
-      - '/^feat(\(.+\))?!?:/i'
+      - '/^feat(\(.+\))?:/i'
   - label: 'fix'
     title:
-      - '/^fix(\(.+\))?!?:/i'
+      - '/^fix(\(.+\))?:/i'
   - label: 'performance'
     title:
-      - '/^perf(\(.+\))?!?:/i'
+      - '/^perf(\(.+\))?:/i'
   - label: 'internal'
     title:
-      - '/^refactor(\(.+\))?!?:/i'
+      - '/^refactor(\(.+\))?:/i'
   - label: 'documentation'
     title:
-      - '/^docs(\(.+\))?!?:/i'
+      - '/^docs(\(.+\))?:/i'
   - label: 'dependencies'
     title:
-      - '/^chore\(deps\)(\(.+\))?!?:/i'
+      - '/^chore\(deps\)(\(.+\))?:/i'
   - label: 'chore'
     title:
-      - '/^(chore|ci|test|build)(\(.+\))?!?:/i'
+      - '/^(chore|ci|test|build)(\(.+\))?:/i'
 
 category-template: '### $TITLE'
 change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
