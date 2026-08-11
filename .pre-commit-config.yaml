@@ -41,9 +41,9 @@ repos:
         -   "--python-version=3.14"
         -   "--output-file=requirements/docs.requirements.txt"
 -   repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.37.4
+    rev: 0.38.0
     hooks:
-    -   id: check-github-workflows
+    -   id: check-github-workflows-require-timeout
     -   id: check-renovate
 -   repo: https://github.com/adamtheturtle/doccmd-pre-commit
     rev: v2026.7.19

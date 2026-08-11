@@ -17,6 +17,7 @@ jobs:
   update_release_draft:
     name: Update release draft
     runs-on: ubuntu-24.04
+    timeout-minutes: 5
     permissions:
       contents: write  # to create/update the draft release
       pull-requests: write  # to autolabel PRs
