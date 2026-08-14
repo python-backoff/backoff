@@ -540,9 +540,7 @@ def test_on_predicate_iterable_handlers() -> None:
         }
 
 
-# To maintain backward compatibility,
-# on_predicate should support 0-argument jitter function.
-def test_on_exception_success_0_arg_jitter(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_on_exception_jitter(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
     backoffs: list[Details] = []
@@ -555,7 +553,7 @@ def test_on_exception_success_0_arg_jitter(monkeypatch: pytest.MonkeyPatch) -> N
         on_success=successes.append,
         on_backoff=backoffs.append,
         on_giveup=giveups.append,
-        jitter=lambda: 0.0,  # type:ignore[arg-type,misc] # ty:ignore[invalid-argument-type]
+        jitter=lambda value: 0.0,
         interval=0,
     )
     @_save_target
@@ -564,10 +562,7 @@ def test_on_exception_success_0_arg_jitter(monkeypatch: pytest.MonkeyPatch) -> N
         if len(backoffs) < 2:
             raise ValueError("catch me")
 
-    with pytest.deprecated_call(
-        match="Nullary jitter function signature is deprecated",
-    ):
-        succeeder(1, 2, 3, foo=1, bar=2)
+    succeeder(1, 2, 3, foo=1, bar=2)
 
     # we try 3 times, backing off twice before succeeding
     assert len(successes) == 1
@@ -596,9 +591,7 @@ def test_on_exception_success_0_arg_jitter(monkeypatch: pytest.MonkeyPatch) -> N
     }
 
 
-# To maintain backward compatibility,
-# on_predicate should support 0-argument jitter function.
-def test_on_predicate_success_0_arg_jitter(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_on_predicate_jitter(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("time.sleep", lambda x: None)
 
     backoffs: list[Details] = []
@@ -610,7 +603,7 @@ def test_on_predicate_success_0_arg_jitter(monkeypatch: pytest.MonkeyPatch) -> N
         on_success=successes.append,
         on_backoff=backoffs.append,
         on_giveup=giveups.append,
-        jitter=lambda: 0.0,  # type:ignore[arg-type,misc] # ty:ignore[invalid-argument-type]
+        jitter=lambda value: 0.0,
         interval=0,
     )
     @_save_target
@@ -618,10 +611,7 @@ def test_on_predicate_success_0_arg_jitter(monkeypatch: pytest.MonkeyPatch) -> N
         # succeed after we've backed off twice
         return len(backoffs) == 2
 
-    with pytest.deprecated_call(
-        match="Nullary jitter function signature is deprecated",
-    ):
-        success(1, 2, 3, foo=1, bar=2)
+    success(1, 2, 3, foo=1, bar=2)
 
     # we try 3 times, backing off twice before succeeding
     assert len(successes) == 1
