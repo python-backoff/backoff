@@ -75,7 +75,7 @@ def _next_wait(
             stacklevel=2,
         )
 
-        seconds = value + jitter()  # type: ignore[call-arg, misc] # ty:ignore[missing-argument, call-non-callable]
+        seconds = value + jitter()  # type: ignore[call-arg, misc] # ty:ignore[missing-argument]
 
     # don't sleep longer than remaining allotted max_time
     if max_time is not None:
