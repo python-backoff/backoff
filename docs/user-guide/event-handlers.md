@@ -9,6 +9,7 @@ Backoff decorators accept three types of event handlers:
 - **on_success** - Called when function succeeds
 - **on_backoff** - Called before each retry wait
 - **on_giveup** - Called when all retries are exhausted
+- **on_try** - Called for every attempt
 
 ## Handler Signature
 
@@ -128,6 +129,25 @@ def log_giveup(details):
     backoff.expo,
     Exception,
     on_giveup=log_giveup,
+    max_tries=5,
+)
+def my_function():
+    pass
+```
+
+## on_try Handler
+
+Called for every attempt.
+
+```python
+def log_try(details):
+    print(f"Attempt {details['tries']}: on {details['target'].__name__}")
+
+
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    on_try=log_try,
     max_tries=5,
 )
 def my_function():

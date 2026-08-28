@@ -49,6 +49,7 @@ def on_predicate(
     max_tries: _MaybeCallable[int] | None = None,
     max_time: _MaybeCallable[float] | None = None,
     jitter: _Jitterer | None = full_jitter,
+    on_try: _Handler | Iterable[_Handler] | None = None,
     on_success: _Handler | Iterable[_Handler] | None = None,
     on_backoff: _Handler | Iterable[_Handler] | None = None,
     on_giveup: _Handler | Iterable[_Handler] | None = None,
@@ -81,6 +82,9 @@ def on_predicate(
             concurrent clients. Wait times are jittered by default
             using the full_jitter function. Jittering may be disabled
             altogether by passing jitter=None.
+        on_try: Callable (or iterable of callables) with a unary
+            signature to be called before each attempt. The parameter
+            is a dict containing details about the invocation.
         on_success: Callable (or iterable of callables) with a unary
             signature to be called in the event of success. The
             parameter is a dict containing details about the invocation.
@@ -102,9 +106,10 @@ def on_predicate(
     """
 
     def decorate(target: Callable[P, T]) -> Callable[P, T]:
-        nonlocal logger, on_success, on_backoff, on_giveup
+        nonlocal logger, on_try, on_success, on_backoff, on_giveup
 
         logger = _prepare_logger(logger)
+        on_try = _config_handlers(on_try)
         on_success = _config_handlers(on_success)
         on_backoff = _config_handlers(
             on_backoff,
@@ -131,6 +136,7 @@ def on_predicate(
             max_tries=max_tries,
             max_time=max_time,
             jitter=jitter,
+            on_try=on_try,
             on_success=on_success,
             on_backoff=on_backoff,
             on_giveup=on_giveup,
@@ -149,6 +155,7 @@ def on_exception(
     max_time: _MaybeCallable[float] | None = None,
     jitter: _Jitterer | None = full_jitter,
     giveup: _Predicate[Exception] = lambda e: False,
+    on_try: _Handler | Iterable[_Handler] | None = None,
     on_success: _Handler | Iterable[_Handler] | None = None,
     on_backoff: _Handler | Iterable[_Handler] | None = None,
     on_giveup: _Handler | Iterable[_Handler] | None = None,
@@ -183,6 +190,9 @@ def on_exception(
         giveup: Function accepting an exception instance and
             returning whether or not to give up. Optional. The default
             is to always continue.
+        on_try: Callable (or iterable of callables) with a unary
+            signature to be called before each attempt. The parameter
+            is a dict containing details about the invocation.
         on_success: Callable (or iterable of callables) with a unary
             signature to be called in the event of success. The
             parameter is a dict containing details about the invocation.
@@ -205,9 +215,10 @@ def on_exception(
     """
 
     def decorate(target: Callable[P, T]) -> Callable[P, T]:
-        nonlocal logger, on_success, on_backoff, on_giveup
+        nonlocal logger, on_try, on_success, on_backoff, on_giveup
 
         logger = _prepare_logger(logger)
+        on_try = _config_handlers(on_try)
         on_success = _config_handlers(on_success)
         on_backoff = _config_handlers(
             on_backoff,
@@ -235,6 +246,7 @@ def on_exception(
             max_time=max_time,
             jitter=jitter,
             giveup=giveup,
+            on_try=on_try,
             on_success=on_success,
             on_backoff=on_backoff,
             on_giveup=on_giveup,
@@ -254,6 +266,7 @@ def retry_context(
     max_time: _MaybeCallable[float] | None = None,
     jitter: _Jitterer | None = full_jitter,
     giveup: _Predicate[BaseException] = lambda e: False,
+    on_try: _ContextHandler | Iterable[_ContextHandler] | None = None,
     on_success: _ContextHandler | Iterable[_ContextHandler] | None = None,
     on_backoff: _ContextHandler | Iterable[_ContextHandler] | None = None,
     on_giveup: _ContextHandler | Iterable[_ContextHandler] | None = None,
@@ -313,6 +326,7 @@ def retry_context(
             passed to wait_gen when it is initialized.
     """
     logger = _prepare_logger(logger)
+    on_try = _config_handlers(on_try)
     on_success = _config_handlers(on_success)
     on_backoff = _config_handlers(
         on_backoff,
@@ -334,6 +348,7 @@ def retry_context(
         max_time=max_time,
         jitter=jitter,
         giveup=giveup,
+        on_try=on_try,
         on_success=on_success,
         on_backoff=on_backoff,
         on_giveup=on_giveup,
@@ -350,6 +365,7 @@ def aretry_context(
     max_time: _MaybeCallable[float] | None = None,
     jitter: _Jitterer | None = full_jitter,
     giveup: _Predicate[BaseException] = lambda e: False,
+    on_try: _ContextHandler | Iterable[_ContextHandler] | None = None,
     on_success: _ContextHandler | Iterable[_ContextHandler] | None = None,
     on_backoff: _ContextHandler | Iterable[_ContextHandler] | None = None,
     on_giveup: _ContextHandler | Iterable[_ContextHandler] | None = None,
@@ -369,6 +385,7 @@ def aretry_context(
     `retry_context` for the full argument reference.
     """
     logger = _prepare_logger(logger)
+    on_try = _config_handlers(on_try)
     on_success = _config_handlers(on_success)
     on_backoff = _config_handlers(
         on_backoff,
@@ -390,6 +407,7 @@ def aretry_context(
         max_time=max_time,
         jitter=jitter,
         giveup=giveup,
+        on_try=on_try,
         on_success=on_success,
         on_backoff=on_backoff,
         on_giveup=on_giveup,

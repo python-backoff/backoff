@@ -33,6 +33,7 @@ def get_url(url):
 - **on_success** - Callback when function succeeds
 - **on_backoff** - Callback when backing off
 - **on_giveup** - Callback when giving up
+- **on_try** - Callback for every attempt
 - **raise_on_giveup** - Whether to raise exception on giveup (default: True)
 - **logger** - Logger for retry events (default: 'backoff' logger)
 
@@ -123,6 +124,7 @@ def poll_for_result(job_id):
 - **on_success** - Callback when predicate returns False
 - **on_backoff** - Callback when predicate returns True
 - **on_giveup** - Callback when giving up
+- **on_try** - Called for every attempt
 - **logger** - Logger for retry events (default: 'backoff' logger)
 
 ### Default Predicate (Falsey Check)

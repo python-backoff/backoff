@@ -194,7 +194,7 @@ async def fetch_data(url):
 
 ### Can event handlers be async?
 
-Yes, you can use async functions for `on_success`, `on_backoff`, and `on_giveup`:
+Yes, you can use async functions for `on_success`, `on_backoff`, `on_giveup` and `on_try`:
 
 ```python
 async def log_retry(details):
