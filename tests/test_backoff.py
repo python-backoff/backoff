@@ -13,13 +13,12 @@ import pytest
 from dirty_equals import IsFloat, IsInstance
 
 import backoff
-from tests.common import _save_target
+from tests.common import EventAppender, _save_target
 
 if TYPE_CHECKING:
     from collections.abc import Generator
 
     from backoff._typing import Details
-    from tests.conftest import EventAppender
 
 
 @pytest.fixture(autouse=True)
@@ -103,7 +102,10 @@ def test_on_predicate_max_time_callable(monkeypatch: pytest.MonkeyPatch) -> None
         return 10
 
     @backoff.on_predicate(
-        backoff.expo, jitter=None, max_time=lookup_max_time, on_giveup=giveup
+        backoff.expo,
+        jitter=None,
+        max_time=lookup_max_time,
+        on_giveup=giveup,
     )
     def return_true(log: list[bool], n):
         val = len(log) == n
@@ -183,12 +185,10 @@ def test_on_exception_max_tries_callable() -> None:
 
 
 def test_on_exception_constant_iterable() -> None:
-    backoffs: list[Details] = []
-    giveups: list[Details] = []
-    successes: list[Details] = []
+    appender = EventAppender()
 
     def on_backoff(details: Details):
-        nonlocal backoffs
+        backoffs = appender.events["backoff"]
         assert details["tries"] == len(backoffs) + 1
         assert "exception" in details
         assert isinstance(details["exception"], KeyError)
@@ -196,7 +196,7 @@ def test_on_exception_constant_iterable() -> None:
         backoffs.append(details)
 
     def on_giveup(details: Details):
-        nonlocal giveups
+        giveups = appender.events["giveup"]
         assert details["tries"] == 4
         assert "exception" in details
         assert isinstance(details["exception"], KeyError)
@@ -204,9 +204,14 @@ def test_on_exception_constant_iterable() -> None:
         giveups.append(details)
 
     def on_success(details: Details):
-        nonlocal successes
+        successes = appender.events["success"]
 
         successes.append(details)
+
+    def on_try(details: Details):
+        tries = appender.events["try"]
+
+        tries.append(details)
 
     @backoff.on_exception(
         backoff.constant,
@@ -215,6 +220,7 @@ def test_on_exception_constant_iterable() -> None:
         on_backoff=on_backoff,
         on_giveup=on_giveup,
         on_success=on_success,
+        on_try=on_try,
     )
     def endless_exceptions():
         raise KeyError("foo")
@@ -222,9 +228,12 @@ def test_on_exception_constant_iterable() -> None:
     with pytest.raises(KeyError):
         endless_exceptions()
 
-    assert len(backoffs) == 3
-    assert len(giveups) == 1
-    assert len(successes) == 0
+    assert appender.counts() == {
+        "backoff": 3,
+        "giveup": 1,
+        "success": 0,
+        "try": 4,
+    }
 
 
 def test_on_exception_success_random_jitter(appender: EventAppender) -> None:
@@ -234,6 +243,7 @@ def test_on_exception_success_random_jitter(appender: EventAppender) -> None:
         on_backoff=appender.on_event("backoff"),
         on_giveup=appender.on_event("giveup"),
         on_success=appender.on_event("success"),
+        on_try=appender.on_event("try"),
         jitter=backoff.random_jitter,
         factor=0.5,
     )
@@ -250,6 +260,7 @@ def test_on_exception_success_random_jitter(appender: EventAppender) -> None:
         "backoff": 2,
         "giveup": 0,
         "success": 1,
+        "try": 3,
     }
 
     for i in range(2):
@@ -264,6 +275,7 @@ def test_on_exception_success_full_jitter(appender: EventAppender) -> None:
         on_backoff=appender.on_event("backoff"),
         on_giveup=appender.on_event("giveup"),
         on_success=appender.on_event("success"),
+        on_try=appender.on_event("try"),
         jitter=backoff.full_jitter,
         factor=0.5,
     )
@@ -280,6 +292,7 @@ def test_on_exception_success_full_jitter(appender: EventAppender) -> None:
         "backoff": 2,
         "giveup": 0,
         "success": 1,
+        "try": 3,
     }
 
     for i in range(2):
@@ -294,6 +307,7 @@ def test_on_exception_success(appender: EventAppender) -> None:
         on_backoff=appender.on_event("backoff"),
         on_giveup=appender.on_event("giveup"),
         on_success=appender.on_event("success"),
+        on_try=appender.on_event("try"),
         jitter=None,
         interval=0,
     )
@@ -310,6 +324,7 @@ def test_on_exception_success(appender: EventAppender) -> None:
         "backoff": 2,
         "giveup": 0,
         "success": 1,
+        "try": 3,
     }
 
     for i in range(2):
@@ -334,6 +349,38 @@ def test_on_exception_success(appender: EventAppender) -> None:
     }
 
 
+def test_on_exception_on_try_runs_before_attempt() -> None:
+    calls: list[object] = []
+
+    @backoff.on_exception(
+        backoff.constant,
+        ValueError,
+        on_try=lambda details: calls.append((
+            "try",
+            details["tries"],
+            details["elapsed"],
+        )),
+        jitter=None,
+        interval=0,
+        max_tries=3,
+    )
+    def fails():
+        calls.append("call")
+        raise ValueError("nope")
+
+    with pytest.raises(ValueError, match="nope"):
+        fails()
+
+    assert calls == [
+        ("try", 1, 0),
+        "call",
+        ("try", 2, IsFloat(gt=0)),
+        "call",
+        ("try", 3, IsFloat(gt=0)),
+        "call",
+    ]
+
+
 @pytest.mark.parametrize("raise_on_giveup", [True, False])
 def test_on_exception_giveup(raise_on_giveup: bool, appender: EventAppender) -> None:
     @backoff.on_exception(
@@ -342,6 +389,7 @@ def test_on_exception_giveup(raise_on_giveup: bool, appender: EventAppender) -> 
         on_backoff=appender.on_event("backoff"),
         on_giveup=appender.on_event("giveup"),
         on_success=appender.on_event("success"),
+        on_try=appender.on_event("try"),
         max_tries=3,
         jitter=None,
         raise_on_giveup=raise_on_giveup,
@@ -362,6 +410,7 @@ def test_on_exception_giveup(raise_on_giveup: bool, appender: EventAppender) -> 
         "backoff": 2,
         "giveup": 1,
         "success": 0,
+        "try": 3,
     }
 
     details = appender.events["giveup"][0]
@@ -397,6 +446,7 @@ def test_on_predicate_success(appender: EventAppender) -> None:
         on_backoff=appender.on_event("backoff"),
         on_giveup=appender.on_event("giveup"),
         on_success=appender.on_event("success"),
+        on_try=appender.on_event("try"),
         jitter=None,
         interval=0,
     )
@@ -412,6 +462,7 @@ def test_on_predicate_success(appender: EventAppender) -> None:
         "backoff": 2,
         "giveup": 0,
         "success": 1,
+        "try": 3,
     }
 
     for i in range(2):
@@ -438,12 +489,43 @@ def test_on_predicate_success(appender: EventAppender) -> None:
     }
 
 
+def test_on_predicate_on_try_runs_before_attempt() -> None:
+    calls: list[object] = []
+
+    @backoff.on_predicate(
+        backoff.constant,
+        on_try=lambda details: calls.append((
+            "try",
+            details["tries"],
+            details["elapsed"],
+        )),
+        jitter=None,
+        interval=0,
+        max_tries=3,
+    )
+    def falsey():
+        calls.append("call")
+        return False
+
+    falsey()
+
+    assert calls == [
+        ("try", 1, 0),
+        "call",
+        ("try", 2, IsFloat(gt=0)),
+        "call",
+        ("try", 3, IsFloat(gt=0)),
+        "call",
+    ]
+
+
 def test_on_predicate_giveup(appender: EventAppender) -> None:
     @backoff.on_predicate(
         backoff.constant,
         on_backoff=appender.on_event("backoff"),
         on_giveup=appender.on_event("giveup"),
         on_success=appender.on_event("success"),
+        on_try=appender.on_event("try"),
         max_tries=3,
         jitter=None,
         interval=0,
@@ -459,6 +541,7 @@ def test_on_predicate_giveup(appender: EventAppender) -> None:
         "backoff": 2,
         "giveup": 1,
         "success": 0,
+        "try": 3,
     }
 
     details = appender.events["giveup"][0]
@@ -475,17 +558,16 @@ def test_on_predicate_giveup(appender: EventAppender) -> None:
 def test_on_predicate_iterable_handlers() -> None:
     class Logger:
         def __init__(self):
-            self.backoffs: list[Details] = []
-            self.giveups: list[Details] = []
-            self.successes: list[Details] = []
+            self.appender = EventAppender()
 
     loggers = [Logger() for _ in range(3)]
 
     @backoff.on_predicate(
         backoff.constant,
-        on_backoff=(l.backoffs.append for l in loggers),
-        on_giveup=(l.giveups.append for l in loggers),
-        on_success=(l.successes.append for l in loggers),
+        on_backoff=(l.appender.on_event("backoff") for l in loggers),
+        on_giveup=(l.appender.on_event("giveup") for l in loggers),
+        on_success=(l.appender.on_event("success") for l in loggers),
+        on_try=(l.appender.on_event("try") for l in loggers),
         max_tries=3,
         jitter=None,
         interval=0,
@@ -497,11 +579,14 @@ def test_on_predicate_iterable_handlers() -> None:
     emptiness(1, 2, 3, foo=1, bar=2)
 
     for logger in loggers:
-        assert len(logger.successes) == 0
-        assert len(logger.backoffs) == 2
-        assert len(logger.giveups) == 1
+        assert logger.appender.counts() == {
+            "backoff": 2,
+            "giveup": 1,
+            "success": 0,
+            "try": 3,
+        }
 
-        details = logger.giveups[0]
+        details = logger.appender.events["giveup"][0]
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
@@ -519,6 +604,7 @@ def test_on_exception_jitter(appender: EventAppender) -> None:
         on_backoff=appender.on_event("backoff"),
         on_giveup=appender.on_event("giveup"),
         on_success=appender.on_event("success"),
+        on_try=appender.on_event("try"),
         jitter=lambda value: 0.0,
         interval=0,
     )
@@ -535,6 +621,7 @@ def test_on_exception_jitter(appender: EventAppender) -> None:
         "backoff": 2,
         "giveup": 0,
         "success": 1,
+        "try": 3,
     }
 
     for i in range(2):
@@ -565,6 +652,7 @@ def test_on_predicate_jitter(appender: EventAppender) -> None:
         on_backoff=appender.on_event("backoff"),
         on_giveup=appender.on_event("giveup"),
         on_success=appender.on_event("success"),
+        on_try=appender.on_event("try"),
         jitter=lambda value: 0.0,
         interval=0,
     )
@@ -580,6 +668,7 @@ def test_on_predicate_jitter(appender: EventAppender) -> None:
         "backoff": 2,
         "giveup": 0,
         "success": 1,
+        "try": 3,
     }
 
     for i in range(2):
@@ -697,6 +786,7 @@ def test_on_predicate_constant_iterable(appender: EventAppender) -> None:
         on_backoff=appender.on_event("backoff"),
         on_giveup=appender.on_event("giveup"),
         on_success=appender.on_event("success"),
+        on_try=appender.on_event("try"),
         jitter=None,
     )
     def falsey():
@@ -707,6 +797,7 @@ def test_on_predicate_constant_iterable(appender: EventAppender) -> None:
         "backoff": len(waits),
         "giveup": 1,
         "success": 0,
+        "try": 6,
     }
 
     for i, wait in enumerate(waits):

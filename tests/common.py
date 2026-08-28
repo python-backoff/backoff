@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import collections
-import functools
-from typing import TYPE_CHECKING, Callable, TypeVar
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Callable, Literal, TypeVar
 
 if TYPE_CHECKING:
     import sys
@@ -11,31 +10,15 @@ if TYPE_CHECKING:
     from backoff._typing import Details
 
     if sys.version_info >= (3, 10):
-        from typing import ParamSpec
+        from typing import ParamSpec, TypeAlias
     else:
-        from typing_extensions import ParamSpec
+        from typing_extensions import ParamSpec, TypeAlias
+
+    Event: TypeAlias = Literal["backoff", "giveup", "success", "try"]
+    Events: TypeAlias = dict[Event, list[Details]]
 
     T = TypeVar("T")
     P = ParamSpec("P")
-
-
-# create event handler which log their invocations to a dict
-def _log_hdlrs() -> tuple[
-    collections.defaultdict[str, list[Details]],
-    Callable[[Details], None],
-    Callable[[Details], None],
-    Callable[[Details], None],
-]:
-    log = collections.defaultdict(list)
-
-    def log_hdlr(event: str, details: Details):
-        log[event].append(details)
-
-    log_success = functools.partial(log_hdlr, "success")
-    log_backoff = functools.partial(log_hdlr, "backoff")
-    log_giveup = functools.partial(log_hdlr, "giveup")
-
-    return log, log_success, log_backoff, log_giveup
 
 
 # decorator that that saves the target as
@@ -43,3 +26,23 @@ def _log_hdlrs() -> tuple[
 def _save_target(f: Callable[P, T]) -> Callable[P, T]:
     f._target = f  # type: ignore[attr-defined] # ty:ignore[unresolved-attribute]
     return f
+
+
+def _init_events() -> Events:
+    return {
+        "backoff": [],
+        "giveup": [],
+        "success": [],
+        "try": [],
+    }
+
+
+@dataclass
+class EventAppender:
+    events: Events = field(default_factory=_init_events)
+
+    def on_event(self, event: Event) -> Callable[[Details], None]:
+        return self.events[event].append
+
+    def counts(self) -> dict[Event, int]:
+        return {k: len(v) for k, v in self.events.items()}

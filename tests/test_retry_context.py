@@ -136,6 +136,42 @@ def test_retry_context_handlers() -> None:
     assert isinstance(backoffs[0].get("exception"), ValueError)
 
 
+def test_retry_context_on_try_runs_before_attempt() -> None:
+    calls: list[object] = []
+    tries: list[ContextDetails] = []
+
+    def on_try(details: ContextDetails) -> None:
+        tries.append(details)
+        calls.append("try")
+
+    def run() -> None:
+        for attempt in backoff.retry_context(
+            ValueError,
+            backoff.constant,
+            interval=0,
+            max_tries=3,
+            jitter=None,
+            on_try=on_try,
+        ):
+            with attempt:
+                calls.append("call")
+                raise ValueError("always fails")
+
+    with pytest.raises(ValueError, match="always fails"):
+        run()
+
+    # on_try fires before the attempt body runs, for every attempt.
+    assert calls == ["try", "call", "try", "call", "try", "call"]
+    assert [t["tries"] for t in tries] == [1, 2, 3]
+
+    # elapsed reflects time as of the *previous* attempt, so it's 0 for the
+    # first try and increases (but doesn't include the just-finished sleep)
+    # for subsequent ones.
+    assert tries[0]["elapsed"] == 0
+    assert tries[1]["elapsed"] > 0
+    assert tries[2]["elapsed"] > tries[1]["elapsed"]
+
+
 def test_retry_context_wait_gen_exhausted() -> None:
     calls = []
     giveups: list[ContextDetails] = []
@@ -276,6 +312,39 @@ async def test_aretry_context_async_handlers() -> None:
     assert len(backoffs) == 2
     assert backoffs[0]["tries"] == 1
     assert isinstance(backoffs[0]["exception"], ValueError)
+
+
+@pytest.mark.asyncio
+async def test_aretry_context_on_try_runs_before_attempt() -> None:
+    calls: list[object] = []
+    tries: list[ContextDetails] = []
+
+    def on_try(details: ContextDetails) -> None:
+        tries.append(details)
+        calls.append("try")
+
+    async def run() -> None:
+        async for attempt in backoff.aretry_context(
+            ValueError,
+            backoff.constant,
+            interval=0,
+            max_tries=3,
+            jitter=None,
+            on_try=on_try,
+        ):
+            with attempt:
+                calls.append("call")
+                raise ValueError("always fails")
+
+    with pytest.raises(ValueError, match="always fails"):
+        await run()
+
+    # on_try fires before the attempt body runs, for every attempt.
+    assert calls == ["try", "call", "try", "call", "try", "call"]
+    assert [t["tries"] for t in tries] == [1, 2, 3]
+    assert tries[0]["elapsed"] == 0
+    assert tries[1]["elapsed"] > 0
+    assert tries[2]["elapsed"] > tries[1]["elapsed"]
 
 
 @pytest.mark.asyncio

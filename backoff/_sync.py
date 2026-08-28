@@ -68,6 +68,7 @@ def retry_predicate(
     max_tries: _MaybeCallable[int] | None,
     max_time: _MaybeCallable[float] | None,
     jitter: _Jitterer | None,
+    on_try: Iterable[_Handler],
     on_success: Iterable[_Handler],
     on_backoff: Iterable[_Handler],
     on_giveup: Iterable[_Handler],
@@ -83,14 +84,16 @@ def retry_predicate(
         )
         while True:
             state.start_attempt()
-            ret = target(*args, **kwargs)
             details: _BaseDetails = {
                 "target": target,
                 "args": args,
                 "kwargs": kwargs,
                 "tries": state.tries,
-                "elapsed": state.record_elapsed(),
+                "elapsed": state.elapsed,
             }
+            _call_handlers(on_try, **details)
+            ret = target(*args, **kwargs)
+            details["elapsed"] = state.record_elapsed()
 
             if predicate(ret):
                 if state.exhausted():
@@ -143,6 +146,7 @@ def retry_exception(
     max_time: _MaybeCallable[float] | None,
     jitter: _Jitterer | None,
     giveup: _Predicate[Exception],
+    on_try: Iterable[_Handler],
     on_success: Iterable[_Handler],
     on_backoff: Iterable[_Handler],
     on_giveup: Iterable[_Handler],
@@ -160,6 +164,7 @@ def retry_exception(
             max_time=max_time,
             jitter=jitter,
             giveup=giveup,  # type: ignore[arg-type] # ty:ignore[invalid-argument-type]
+            on_try=_adapt_context_handlers(on_try, target, args, kwargs),
             on_success=_adapt_context_handlers(on_success, target, args, kwargs),
             on_backoff=_adapt_context_handlers(on_backoff, target, args, kwargs),
             on_giveup=_adapt_context_handlers(on_giveup, target, args, kwargs),
@@ -182,6 +187,7 @@ def retry_context(
     max_time: _MaybeCallable[float] | None,
     jitter: _Jitterer | None,
     giveup: _Predicate[BaseException],
+    on_try: Iterable[_ContextHandler],
     on_success: Iterable[_ContextHandler],
     on_backoff: Iterable[_ContextHandler],
     on_giveup: Iterable[_ContextHandler],
@@ -197,6 +203,7 @@ def retry_context(
     while True:
         state.start_attempt()
         attempt = _Attempt(exception)
+        _dispatch_handlers(handlers=on_try, tries=state.tries, elapsed=state.elapsed)
         yield attempt
         elapsed = state.record_elapsed()
 

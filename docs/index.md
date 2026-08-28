@@ -13,7 +13,7 @@ This module provides function decorators which can be used to wrap a function su
 - **Simple decorators** - Easy-to-use `@backoff.on_exception` and `@backoff.on_predicate` decorators
 - **Multiple wait strategies** - Exponential, fibonacci, constant, and runtime-configurable strategies
 - **Flexible configuration** - Control retry limits with `max_time`, `max_tries`, and custom give-up conditions
-- **Event handlers** - Hook into retry lifecycle with `on_success`, `on_backoff`, and `on_giveup` callbacks
+- **Event handlers** - Hook into retry lifecycle with `on_success`, `on_backoff`, `on_giveup` and `on_try` callbacks
 - **Async support** - Full support for `asyncio` coroutines
 - **Type hints** - Fully typed for better IDE support
 - **Battle-tested** - Used in production by thousands of projects
