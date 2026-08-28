@@ -13,6 +13,8 @@ if TYPE_CHECKING:
     from backoff._typing import (
         ContextDetails,
         Details,
+        _AnyLogger,
+        _AnyLoggerOrName,
         _ContextHandler,
         _Jitterer,
         _MaybeCallable,
@@ -166,9 +168,7 @@ def _dispatch_handlers(handlers: Iterable[_ContextHandler], **details: Any) -> N
         hdlr(details)  # type: ignore[arg-type] # ty:ignore[invalid-argument-type]
 
 
-def _prepare_logger(
-    logger: str | logging.Logger | logging.LoggerAdapter | None,
-) -> logging.Logger | logging.LoggerAdapter | None:
+def _prepare_logger(logger: _AnyLoggerOrName | None) -> _AnyLogger | None:
     if isinstance(logger, str):
         logger = logging.getLogger(logger)
     return logger
@@ -180,7 +180,7 @@ def _config_handlers(
     user_handlers: _HandlerT | Iterable[_HandlerT] | None,
     *,
     default_handler: Callable[..., None] | None = None,
-    logger: logging.Logger | logging.LoggerAdapter | None = None,
+    logger: _AnyLogger | None = None,
     log_level: int | None = None,
 ) -> list[_HandlerT]:
     handlers: list[_HandlerT] = []
@@ -213,11 +213,7 @@ def _config_handlers(
 
 
 # Default backoff handler
-def _log_backoff(
-    details: Details,
-    logger: logging.Logger | logging.LoggerAdapter,
-    log_level: int,
-) -> None:
+def _log_backoff(details: Details, logger: _AnyLogger, log_level: int) -> None:
     msg = "Backing off %s(...) for %.1fs (%s)"
     log_args = [details["target"].__name__, details["wait"]]  # ty:ignore[unresolved-attribute]
 
@@ -231,11 +227,7 @@ def _log_backoff(
 
 
 # Default giveup handler
-def _log_giveup(
-    details: Details,
-    logger: logging.Logger | logging.LoggerAdapter,
-    log_level: int,
-) -> None:
+def _log_giveup(details: Details, logger: _AnyLogger, log_level: int) -> None:
     msg = "Giving up %s(...) after %d tries (%s)"
     log_args = [details["target"].__name__, details["tries"]]  # ty:ignore[unresolved-attribute]
 
@@ -254,7 +246,7 @@ def _log_giveup(
 # directly since it's no longer the active exception by this point).
 def _log_backoff_context(
     details: ContextDetails,
-    logger: logging.Logger | logging.LoggerAdapter,
+    logger: _AnyLogger,
     log_level: int,
 ) -> None:
     logger.log(
@@ -268,7 +260,7 @@ def _log_backoff_context(
 # Default giveup handler for retry_context/aretry_context.
 def _log_giveup_context(
     details: ContextDetails,
-    logger: logging.Logger | logging.LoggerAdapter,
+    logger: logging.Logger | logging.LoggerAdapter[Any],
     log_level: int,
 ) -> None:
     logger.log(

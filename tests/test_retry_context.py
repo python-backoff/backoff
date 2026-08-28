@@ -292,7 +292,7 @@ async def test_aretry_context_async_giveup_predicate() -> None:
 async def test_aretry_context_async_handlers() -> None:
     backoffs = []
 
-    async def on_backoff(details) -> None:
+    async def on_backoff(details: ContextDetails) -> None:
         backoffs.append(details)
 
     calls = []

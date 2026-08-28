@@ -4,14 +4,6 @@ import logging
 from collections.abc import Callable, Coroutine, Generator
 from typing import Any, TypeAlias, TypedDict, TypeVar
 
-__all__ = [
-    "_ContextHandler",
-    "_Handler",
-    "_MaybeCallable",
-    "_MaybeLogger",
-    "_MaybeTuple",
-]
-
 
 class _BaseDetails(TypedDict):
     target: Callable[..., Any]
@@ -38,6 +30,7 @@ class _BaseContextDetails(TypedDict):
 
 class _ContextCallDetails(TypedDict, total=False):
     wait: float  # present in the on_backoff handler case
+    value: Any  # present in the on_predicate decorator case
     exception: Exception  # present in the on_giveup handler case
 
 
@@ -50,17 +43,16 @@ class ContextDetails(_BaseContextDetails, _ContextCallDetails, total=False):
 
 T = TypeVar("T")
 
+_AnyLogger = logging.Logger | logging.LoggerAdapter  # type: ignore[type-arg]
+_AnyLoggerOrName = str | _AnyLogger
 _CallableT = TypeVar("_CallableT", bound=Callable[..., Any])  # ruff:ignore[unused-private-type-var]
-_Handler: TypeAlias = (
-    Callable[[Details], None] | Callable[[Details], Coroutine[Any, Any, None]]
-)
-_ContextHandler: TypeAlias = (
+_ContextHandler = (
     Callable[[ContextDetails], None]
     | Callable[[ContextDetails], Coroutine[Any, Any, None]]
 )
+_Handler = Callable[[Details], None] | Callable[[Details], Coroutine[Any, Any, None]]
 _Jitterer = Callable[[float], float]
-_MaybeCallable: TypeAlias = T | Callable[[], T]
-_MaybeLogger: TypeAlias = str | logging.Logger | logging.LoggerAdapter | None
-_MaybeTuple: TypeAlias = T | tuple[T, ...]
+_MaybeCallable: TypeAlias = T | Callable[[], T]  # ruff: ignore[unused-private-type-alias]
+_MaybeTuple: TypeAlias = T | tuple[T, ...]  # ruff: ignore[unused-private-type-alias]
 _Predicate = Callable[[T], bool] | Callable[[T], Coroutine[Any, Any, bool]]
 _WaitGenerator = Callable[..., Generator[float, Any, None]]
