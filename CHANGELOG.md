@@ -4,56 +4,56 @@
 
 ### 🚀 Added
 
-- feat: Add a retry context manager [#191](https://github.com/python-backoff/backoff/pull/191) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- feat: Add type annotations to decorator functions [#182](https://github.com/python-backoff/backoff/pull/182) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- feat: Add a retry context manager [#191](https://github.com/python-backoff/backoff/pull/191) (from @edgarrmondragon)
+- feat: Add type annotations to decorator functions [#182](https://github.com/python-backoff/backoff/pull/182) (from @edgarrmondragon)
 
 ### 🔄 Changed
 
-- Drop support for Python 3.8 [#152](https://github.com/python-backoff/backoff/pull/152) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- Drop support for Python 3.8 [#152](https://github.com/python-backoff/backoff/pull/152) (from @edgarrmondragon)
 
 ### 🐛 Fixed
 
-- fix: Updated the type annotation of the `exception` argument in `on_exception`, `on_predicate`, `retry_context` and `aretry_context` to correctly expect an exception type or a tuple of exception types [#192](https://github.com/python-backoff/backoff/pull/192) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- fix: Measure elapsed time after function call [#187](https://github.com/python-backoff/backoff/pull/187) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- fix: Updated the type annotation of the `exception` argument in `on_exception`, `on_predicate`, `retry_context` and `aretry_context` to correctly expect an exception type or a tuple of exception types [#192](https://github.com/python-backoff/backoff/pull/192) (from @edgarrmondragon)
+- fix: Measure elapsed time after function call [#187](https://github.com/python-backoff/backoff/pull/187) (from @edgarrmondragon)
 
 ### 📚 Documentation
 
-- docs: Enable offline usage of the docs [#154](https://github.com/python-backoff/backoff/pull/154) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- docs: Fixed some code examples [#116](https://github.com/python-backoff/backoff/pull/116) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- docs: Prepare for ReadTheDocs [#108](https://github.com/python-backoff/backoff/pull/108) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- docs: Format Python code blocks in Markdown files with native Ruff support [#102](https://github.com/python-backoff/backoff/pull/102) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- docs: Remove duplicate headers in API reference docs [#80](https://github.com/python-backoff/backoff/pull/80) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- docs: Enable offline usage of the docs [#154](https://github.com/python-backoff/backoff/pull/154) (from @edgarrmondragon)
+- docs: Fixed some code examples [#116](https://github.com/python-backoff/backoff/pull/116) (from @edgarrmondragon)
+- docs: Prepare for ReadTheDocs [#108](https://github.com/python-backoff/backoff/pull/108) (from @edgarrmondragon)
+- docs: Format Python code blocks in Markdown files with native Ruff support [#102](https://github.com/python-backoff/backoff/pull/102) (from @edgarrmondragon)
+- docs: Remove duplicate headers in API reference docs [#80](https://github.com/python-backoff/backoff/pull/80) (from @edgarrmondragon)
 
 ### 🧰 Internal
 
-- refactor: Use retry context internally inside our public decorators [#193](https://github.com/python-backoff/backoff/pull/193) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- refactor: Move retry loop logic into a dedicated object [#189](https://github.com/python-backoff/backoff/pull/189) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- refactor: Simplify `expo`, `decay`, and `fibo` wait generators [#188](https://github.com/python-backoff/backoff/pull/188) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- chore: Bump Ruff to v0.16 [#184](https://github.com/python-backoff/backoff/pull/184) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- refactor: Simplify `backoff.constant` wait generator implementation [#181](https://github.com/python-backoff/backoff/pull/181) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- chore: Check types with `ty` and update some type annotations [#179](https://github.com/python-backoff/backoff/pull/179) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- test: Update parametrized tests to address pytest 9.1.0 deprecations [#170](https://github.com/python-backoff/backoff/pull/170) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- ci: add zizmor GitHub Actions security analysis [#165](https://github.com/python-backoff/backoff/pull/165) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- chore: Create CODEOWNERS [#115](https://github.com/python-backoff/backoff/pull/115) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- Apply the Ruff `FA` rules [#104](https://github.com/python-backoff/backoff/pull/104) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- chore: Enable more Ruff rules [#103](https://github.com/python-backoff/backoff/pull/103) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- Apply the Ruff `B` rules [#100](https://github.com/python-backoff/backoff/pull/100) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- Apply the Ruff `I` rules [#99](https://github.com/python-backoff/backoff/pull/99) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- Apply the Ruff `RET` rules [#92](https://github.com/python-backoff/backoff/pull/92) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- chore: Add a tox env for building docs [#91](https://github.com/python-backoff/backoff/pull/91) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- chore: Do not use a uv.lock file [#87](https://github.com/python-backoff/backoff/pull/87) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- refactor: Use retry context internally inside our public decorators [#193](https://github.com/python-backoff/backoff/pull/193) (from @edgarrmondragon)
+- refactor: Move retry loop logic into a dedicated object [#189](https://github.com/python-backoff/backoff/pull/189) (from @edgarrmondragon)
+- refactor: Simplify `expo`, `decay`, and `fibo` wait generators [#188](https://github.com/python-backoff/backoff/pull/188) (from @edgarrmondragon)
+- chore: Bump Ruff to v0.16 [#184](https://github.com/python-backoff/backoff/pull/184) (from @edgarrmondragon)
+- refactor: Simplify `backoff.constant` wait generator implementation [#181](https://github.com/python-backoff/backoff/pull/181) (from @edgarrmondragon)
+- chore: Check types with `ty` and update some type annotations [#179](https://github.com/python-backoff/backoff/pull/179) (from @edgarrmondragon)
+- test: Update parametrized tests to address pytest 9.1.0 deprecations [#170](https://github.com/python-backoff/backoff/pull/170) (from @edgarrmondragon)
+- ci: add zizmor GitHub Actions security analysis [#165](https://github.com/python-backoff/backoff/pull/165) (from @edgarrmondragon)
+- chore: Create CODEOWNERS [#115](https://github.com/python-backoff/backoff/pull/115) (from @edgarrmondragon)
+- Apply the Ruff `FA` rules [#104](https://github.com/python-backoff/backoff/pull/104) (from @edgarrmondragon)
+- chore: Enable more Ruff rules [#103](https://github.com/python-backoff/backoff/pull/103) (from @edgarrmondragon)
+- Apply the Ruff `B` rules [#100](https://github.com/python-backoff/backoff/pull/100) (from @edgarrmondragon)
+- Apply the Ruff `I` rules [#99](https://github.com/python-backoff/backoff/pull/99) (from @edgarrmondragon)
+- Apply the Ruff `RET` rules [#92](https://github.com/python-backoff/backoff/pull/92) (from @edgarrmondragon)
+- chore: Add a tox env for building docs [#91](https://github.com/python-backoff/backoff/pull/91) (from @edgarrmondragon)
+- chore: Do not use a uv.lock file [#87](https://github.com/python-backoff/backoff/pull/87) (from @edgarrmondragon)
 
 ### 🛠️ Maintenance
 
-- ci: Wire up release drafter [#194](https://github.com/python-backoff/backoff/pull/194) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- ci: Simplify CodeQL analysis workflow [#186](https://github.com/python-backoff/backoff/pull/186) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- chore: Check types with `ty` and update some type annotations [#179](https://github.com/python-backoff/backoff/pull/179) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- test: Update parametrized tests to address pytest 9.1.0 deprecations [#170](https://github.com/python-backoff/backoff/pull/170) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- chore: Migrate docs config to zensical.toml [#118](https://github.com/python-backoff/backoff/pull/118) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- ci: Future-proof tested Python versions [#117](https://github.com/python-backoff/backoff/pull/117) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- chore: Create CODEOWNERS [#115](https://github.com/python-backoff/backoff/pull/115) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- ci: Use actionlint in CI [#112](https://github.com/python-backoff/backoff/pull/112) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
-- Pin Zensical while it is unstable [#93](https://github.com/python-backoff/backoff/pull/93) (from [@edgarrmondragon](https://github.com/edgarrmondragon))
+- ci: Wire up release drafter [#194](https://github.com/python-backoff/backoff/pull/194) (from @edgarrmondragon)
+- ci: Simplify CodeQL analysis workflow [#186](https://github.com/python-backoff/backoff/pull/186) (from @edgarrmondragon)
+- chore: Check types with `ty` and update some type annotations [#179](https://github.com/python-backoff/backoff/pull/179) (from @edgarrmondragon)
+- test: Update parametrized tests to address pytest 9.1.0 deprecations [#170](https://github.com/python-backoff/backoff/pull/170) (from @edgarrmondragon)
+- chore: Migrate docs config to zensical.toml [#118](https://github.com/python-backoff/backoff/pull/118) (from @edgarrmondragon)
+- ci: Future-proof tested Python versions [#117](https://github.com/python-backoff/backoff/pull/117) (from @edgarrmondragon)
+- chore: Create CODEOWNERS [#115](https://github.com/python-backoff/backoff/pull/115) (from @edgarrmondragon)
+- ci: Use actionlint in CI [#112](https://github.com/python-backoff/backoff/pull/112) (from @edgarrmondragon)
+- Pin Zensical while it is unstable [#93](https://github.com/python-backoff/backoff/pull/93) (from @edgarrmondragon)
 
 ## [v2.3.1] - 2025-12-18
 
