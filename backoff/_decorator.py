@@ -3,7 +3,7 @@ from __future__ import annotations
 import inspect
 import logging
 import operator
-from typing import TYPE_CHECKING, Any, Callable, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, cast
 
 from backoff import _async, _sync
 from backoff._common import (
@@ -18,11 +18,11 @@ from backoff._jitter import full_jitter
 from backoff._wait_gen import expo
 
 if TYPE_CHECKING:
-    import sys
     from collections.abc import AsyncGenerator, Generator, Iterable
 
     from backoff._common import _Attempt
     from backoff._typing import (
+        _CallableT,
         _ContextHandler,
         _Handler,
         _Jitterer,
@@ -32,14 +32,6 @@ if TYPE_CHECKING:
         _Predicate,
         _WaitGenerator,
     )
-
-    if sys.version_info >= (3, 10):
-        from typing import ParamSpec
-    else:
-        from typing_extensions import ParamSpec
-
-    T = TypeVar("T")
-    P = ParamSpec("P")
 
 
 def on_predicate(
@@ -57,7 +49,7 @@ def on_predicate(
     backoff_log_level: int = logging.INFO,
     giveup_log_level: int = logging.ERROR,
     **wait_gen_kwargs: Any,
-) -> Callable[[Callable[P, T]], Callable[P, T]]:
+) -> Callable[[_CallableT], _CallableT]:
     """Returns decorator for backoff and retry triggered by predicate.
 
     Args:
@@ -105,7 +97,7 @@ def on_predicate(
             This is useful for runtime configuration.
     """
 
-    def decorate(target: Callable[P, T]) -> Callable[P, T]:
+    def decorate(target: _CallableT) -> _CallableT:
         nonlocal logger, on_try, on_success, on_backoff, on_giveup
 
         logger = _prepare_logger(logger)
@@ -125,22 +117,38 @@ def on_predicate(
         )
 
         if inspect.iscoroutinefunction(target):
-            retry = _async.retry_predicate
-        else:
-            retry = _sync.retry_predicate
+            return cast(
+                "_CallableT",
+                _async.retry_predicate(
+                    target,
+                    wait_gen,
+                    predicate,
+                    max_tries=max_tries,
+                    max_time=max_time,
+                    jitter=jitter,
+                    on_try=on_try,
+                    on_success=on_success,
+                    on_backoff=on_backoff,
+                    on_giveup=on_giveup,
+                    wait_gen_kwargs=wait_gen_kwargs,
+                ),
+            )
 
-        return retry(
-            target,
-            wait_gen,
-            predicate,
-            max_tries=max_tries,
-            max_time=max_time,
-            jitter=jitter,
-            on_try=on_try,
-            on_success=on_success,
-            on_backoff=on_backoff,
-            on_giveup=on_giveup,
-            wait_gen_kwargs=wait_gen_kwargs,
+        return cast(
+            "_CallableT",
+            _sync.retry_predicate(
+                target,
+                wait_gen,
+                predicate,
+                max_tries=max_tries,
+                max_time=max_time,
+                jitter=jitter,
+                on_try=on_try,
+                on_success=on_success,
+                on_backoff=on_backoff,
+                on_giveup=on_giveup,
+                wait_gen_kwargs=wait_gen_kwargs,
+            ),
         )
 
     # Return a function which decorates a target with a retry loop.
@@ -164,7 +172,7 @@ def on_exception(
     backoff_log_level: int = logging.INFO,
     giveup_log_level: int = logging.ERROR,
     **wait_gen_kwargs: Any,
-) -> Callable[[Callable[P, T]], Callable[P, T]]:
+) -> Callable[[_CallableT], _CallableT]:
     """Returns decorator for backoff and retry triggered by exception.
 
     Args:
@@ -214,7 +222,7 @@ def on_exception(
             This is useful for runtime configuration.
     """
 
-    def decorate(target: Callable[P, T]) -> Callable[P, T]:
+    def decorate(target: _CallableT) -> _CallableT:
         nonlocal logger, on_try, on_success, on_backoff, on_giveup
 
         logger = _prepare_logger(logger)
@@ -234,24 +242,42 @@ def on_exception(
         )
 
         if inspect.iscoroutinefunction(target):
-            retry = _async.retry_exception
-        else:
-            retry = _sync.retry_exception
+            return cast(
+                "_CallableT",
+                _async.retry_exception(
+                    target,
+                    wait_gen,
+                    exception,
+                    max_tries=max_tries,
+                    max_time=max_time,
+                    jitter=jitter,
+                    giveup=giveup,
+                    on_try=on_try,
+                    on_success=on_success,
+                    on_backoff=on_backoff,
+                    on_giveup=on_giveup,
+                    raise_on_giveup=raise_on_giveup,
+                    wait_gen_kwargs=wait_gen_kwargs,
+                ),
+            )
 
-        return retry(
-            target,
-            wait_gen,
-            exception,
-            max_tries=max_tries,
-            max_time=max_time,
-            jitter=jitter,
-            giveup=giveup,
-            on_try=on_try,
-            on_success=on_success,
-            on_backoff=on_backoff,
-            on_giveup=on_giveup,
-            raise_on_giveup=raise_on_giveup,
-            wait_gen_kwargs=wait_gen_kwargs,
+        return cast(
+            "_CallableT",
+            _sync.retry_exception(
+                target,
+                wait_gen,
+                exception,
+                max_tries=max_tries,
+                max_time=max_time,
+                jitter=jitter,
+                giveup=giveup,
+                on_try=on_try,
+                on_success=on_success,
+                on_backoff=on_backoff,
+                on_giveup=on_giveup,
+                raise_on_giveup=raise_on_giveup,
+                wait_gen_kwargs=wait_gen_kwargs,
+            ),
         )
 
     # Return a function which decorates a target with a retry loop.

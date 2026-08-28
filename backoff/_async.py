@@ -84,7 +84,7 @@ async def _call_handlers(
 
 
 def retry_predicate(
-    target: Callable[P, T],
+    target: Callable[P, Coroutine[object, object, T]],
     wait_gen: _WaitGenerator,
     predicate: _Predicate[T],
     *,
@@ -96,7 +96,7 @@ def retry_predicate(
     on_backoff: Iterable[_Handler],
     on_giveup: Iterable[_Handler],
     wait_gen_kwargs: dict[str, Any],
-) -> Callable[P, T]:
+) -> Callable[P, Coroutine[object, object, T]]:
     on_try = _ensure_coroutines(on_try)
     on_success = _ensure_coroutines(on_success)
     on_backoff = _ensure_coroutines(on_backoff)
@@ -158,7 +158,7 @@ def retry_predicate(
 
         return ret
 
-    return retry  # type: ignore[return-value] # ty:ignore[invalid-return-type]
+    return retry
 
 
 def _adapt_context_handlers(
@@ -181,7 +181,7 @@ def _adapt_context_handlers(
 
 
 def retry_exception(
-    target: Callable[P, T],
+    target: Callable[P, Coroutine[object, object, T]],
     wait_gen: _WaitGenerator,
     exception: _MaybeTuple[type[Exception]],
     *,
@@ -195,7 +195,7 @@ def retry_exception(
     on_giveup: Iterable[_Handler],
     raise_on_giveup: bool,
     wait_gen_kwargs: dict[str, Any],
-) -> Callable[P, T]:
+) -> Callable[P, Coroutine[object, object, T]]:
     on_try = _ensure_coroutines(on_try)
     on_success = _ensure_coroutines(on_success)
     on_backoff = _ensure_coroutines(on_backoff)
@@ -228,11 +228,11 @@ def retry_exception(
             wait_gen_kwargs=wait_gen_kwargs,
         ):
             with attempt:
-                ret = await target(*args, **kwargs)  # type: ignore[misc] # ty:ignore[invalid-await]
+                ret = await target(*args, **kwargs)
 
         return ret
 
-    return retry  # type: ignore[return-value] # ty:ignore[invalid-return-type]
+    return retry
 
 
 async def _dispatch_handlers(
