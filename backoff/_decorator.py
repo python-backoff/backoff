@@ -40,6 +40,7 @@ if TYPE_CHECKING:
 
     T = TypeVar("T")
     P = ParamSpec("P")
+    CallableT = TypeVar("CallableT", bound=Callable[..., Any])
 
 
 def on_predicate(
@@ -57,7 +58,7 @@ def on_predicate(
     backoff_log_level: int = logging.INFO,
     giveup_log_level: int = logging.ERROR,
     **wait_gen_kwargs: Any,
-) -> Callable[[Callable[P, T]], Callable[P, T]]:
+) -> Callable[[CallableT], CallableT]:
     """Returns decorator for backoff and retry triggered by predicate.
 
     Args:
@@ -125,11 +126,21 @@ def on_predicate(
         )
 
         if inspect.iscoroutinefunction(target):
-            retry = _async.retry_predicate
-        else:
-            retry = _sync.retry_predicate
+            return _async.retry_predicate(  # type: ignore[return-value] # ty:ignore[invalid-return-type]
+                target,
+                wait_gen,
+                predicate,
+                max_tries=max_tries,
+                max_time=max_time,
+                jitter=jitter,
+                on_try=on_try,
+                on_success=on_success,
+                on_backoff=on_backoff,
+                on_giveup=on_giveup,
+                wait_gen_kwargs=wait_gen_kwargs,
+            )
 
-        return retry(
+        return _sync.retry_predicate(
             target,
             wait_gen,
             predicate,
@@ -144,7 +155,7 @@ def on_predicate(
         )
 
     # Return a function which decorates a target with a retry loop.
-    return decorate
+    return decorate  # type: ignore[return-value]
 
 
 def on_exception(
@@ -164,7 +175,7 @@ def on_exception(
     backoff_log_level: int = logging.INFO,
     giveup_log_level: int = logging.ERROR,
     **wait_gen_kwargs: Any,
-) -> Callable[[Callable[P, T]], Callable[P, T]]:
+) -> Callable[[CallableT], CallableT]:
     """Returns decorator for backoff and retry triggered by exception.
 
     Args:
@@ -234,11 +245,23 @@ def on_exception(
         )
 
         if inspect.iscoroutinefunction(target):
-            retry = _async.retry_exception
-        else:
-            retry = _sync.retry_exception
+            return _async.retry_exception(  # type: ignore[return-value] # ty:ignore[invalid-return-type]
+                target,
+                wait_gen,
+                exception,
+                max_tries=max_tries,
+                max_time=max_time,
+                jitter=jitter,
+                giveup=giveup,
+                on_try=on_try,
+                on_success=on_success,
+                on_backoff=on_backoff,
+                on_giveup=on_giveup,
+                raise_on_giveup=raise_on_giveup,
+                wait_gen_kwargs=wait_gen_kwargs,
+            )
 
-        return retry(
+        return _sync.retry_exception(
             target,
             wait_gen,
             exception,
@@ -255,7 +278,7 @@ def on_exception(
         )
 
     # Return a function which decorates a target with a retry loop.
-    return decorate
+    return decorate  # type: ignore[return-value]
 
 
 def retry_context(

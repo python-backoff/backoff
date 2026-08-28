@@ -48,7 +48,6 @@ class ContextDetails(_BaseContextDetails, _ContextCallDetails, total=False):
 
 T = TypeVar("T")
 
-_CallableT = TypeVar("_CallableT", bound=Callable[..., Any])  # ruff:ignore[unused-private-type-var]
 _Handler = Union[
     Callable[[Details], None],
     Callable[[Details], Coroutine[Any, Any, None]],
