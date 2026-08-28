@@ -98,7 +98,7 @@ autolabeler:
       - '/^(chore|ci|test|build)(\(.+\))?:/i'
 
 category-template: '### $TITLE'
-change-template: '- $TITLE (#$NUMBER) @$AUTHOR'
+change-template: '- $TITLE [#$NUMBER](https://github.com/python-backoff/backoff/pull/$NUMBER) (from [@$AUTHOR](https://github.com/$AUTHOR))'
 change-title-escapes: '\<*_&'
 
 version-resolver:
