@@ -62,8 +62,6 @@ jobs:
       - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
       - name: Install tox
         run: uv tool install --with tox-uv tox
-      - name: Type checks
-        run: tox -e typing
       - name: Lint code
         run: tox -e lint
 
@@ -83,6 +81,10 @@ jobs:
         with:
           persist-credentials: false
       - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+      - name: Type checks
+        env:
+          TOXENV: typing-${{ matrix.python-version }}
+        run: uvx --with tox-uv tox
       - name: Run tests
         env:
           TOXENV: ${{ matrix.python-version }}

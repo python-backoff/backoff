@@ -49,9 +49,8 @@ def _call_handlers(
         "kwargs": kwargs,
         "tries": tries,
         "elapsed": elapsed,
+        **extra,
     }
-    # pyrefly: ignore [no-matching-overload]
-    details.update(extra)
     for hdlr in hdlrs:
         hdlr(details)
 

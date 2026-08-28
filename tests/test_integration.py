@@ -16,7 +16,7 @@ import backoff
 def test_on_predicate_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
     log = []
 
-    def sleep(seconds):
+    def sleep(seconds: float) -> None:
         log.append(seconds)
 
     monkeypatch.setattr("time.sleep", sleep)
@@ -34,7 +34,7 @@ def test_on_predicate_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
         value=lambda r: int(r.headers.get("Retry-After")),
         jitter=None,
     )
-    def get_url():
+    def get_url() -> requests.Response:
         return requests.get(url)
 
     resp = get_url()
@@ -47,7 +47,7 @@ def test_on_predicate_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_on_exception_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
     log = []
 
-    def sleep(seconds):
+    def sleep(seconds: float) -> None:
         log.append(seconds)
 
     monkeypatch.setattr("time.sleep", sleep)
@@ -65,7 +65,7 @@ def test_on_exception_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
         value=lambda e: int(e.response.headers.get("Retry-After")),
         jitter=None,
     )
-    def get_url():
+    def get_url() -> requests.Response:
         resp = requests.get(url)
         resp.raise_for_status()
         return resp

@@ -10,7 +10,7 @@ import backoff
     jitter=None,
     max_tries=3,
 )
-def foo():
+def foo() -> None:
     raise ValueError()
 
 
@@ -20,7 +20,7 @@ def foo():
     interval=1,
     max_tries=3,
 )
-def bar():
+def bar() -> None:
     raise ValueError()
 
 
@@ -30,5 +30,5 @@ def bar():
     value=lambda r: int(r.headers.get("Retry-After")),
     jitter=None,
 )
-def baz():
+def baz() -> None:
     pass

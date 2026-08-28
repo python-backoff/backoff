@@ -82,7 +82,10 @@ env_list = [
   ] },
   "coverage",
   "lint",
-  "typing",
+  { product = [
+    [ "typing" ],
+    { prefix = "3.", start = 10 },
+  ] },
   "docs",
 ]
 
@@ -132,8 +135,11 @@ commands = [
     ],
 ]
 
-[tool.tox.env.typing]
-description = "run type checking"
+[tool.tox.env_base.typing]
+factors = [
+  { prefix = "3.", start = 9 },
+]
+description = "run type checking on Python {py_dot_ver}"
 dependency_groups = [ "typing" ]
 labels = [ "check" ]
 commands = [
@@ -150,7 +156,7 @@ commands = [
     "--strict",
     "--disallow-any-decorated",
     "--follow-imports=silent",
-    "tests/typing_decorators.py",
+    "tests/typing",
   ],
   [
     "ty",
@@ -163,6 +169,16 @@ commands = [
   ],
   [
     "pyrefly",
+    "check",
+    { replace = "if", condition = "env.GITHUB_ACTIONS == 'true'", then = [ "--output-format=github" ], else = [], extend = true },
+    { replace = "posargs", default = [
+      "backoff",
+      "tests",
+    ], extend = true },
+  ],
+  [
+    "pyrefly",
+    "coverage",
     "check",
     { replace = "if", condition = "env.GITHUB_ACTIONS == 'true'", then = [ "--output-format=github" ], else = [], extend = true },
     { replace = "posargs", default = [
@@ -232,6 +248,7 @@ ignore = [
 [tool.mypy]
 check_untyped_defs = true
 follow_untyped_imports = true
+strict = true
 warn_unreachable = true
 warn_unused_configs = true
 warn_unused_ignores = true
