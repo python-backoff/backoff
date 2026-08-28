@@ -1,5 +1,35 @@
 # Changelog
 
+## [v3.0.0] - 2026-08-31
+
+### 🚀 Added
+
+- feat: Full typing coverage and type regression tests [#205](https://github.com/python-backoff/backoff/pull/205) (from @edgarrmondragon)
+- feat: Add an `on_try` callback [#201](https://github.com/python-backoff/backoff/pull/201) (from @edgarrmondragon)
+
+### ⚠️ Breaking Changes
+
+- feat!: Rename private class `_Attempt` to `backoff.Attempt` and make it part of the public API [#210](https://github.com/python-backoff/backoff/pull/210) (from @edgarrmondragon)
+- fix!: Drop support for nullary (i.e. zero-argument) jitter functions [#196](https://github.com/python-backoff/backoff/pull/196) (from @edgarrmondragon)
+
+### 🔄 Changed
+
+- build: Drop suppprt for Python 3.9 [#206](https://github.com/python-backoff/backoff/pull/206) (from @edgarrmondragon)
+
+### 🐛 Fixed
+
+- fix: Preserve the types of annotated async functions wrapped with `on_exception` or `on_predicate` [#202](https://github.com/python-backoff/backoff/pull/202) (from @MeisQuietude)
+
+### 📚 Documentation
+
+- docs: Added an example to the docstring of `backoff.runtime()` [#209](https://github.com/python-backoff/backoff/pull/209) (from @edgarrmondragon)
+
+### 🛠️ Maintenance
+
+- chore: Add PR links to changelog [#208](https://github.com/python-backoff/backoff/pull/208) (from @edgarrmondragon)
+- ci: Split PR labeling job [#204](https://github.com/python-backoff/backoff/pull/204) (from @edgarrmondragon)
+- chore: Use `!` in PR titles to indicate breaking changes [#197](https://github.com/python-backoff/backoff/pull/197) (from @edgarrmondragon)
+
 ## [v2.4.0] - 2026-08-07
 
 ### 🚀 Added
