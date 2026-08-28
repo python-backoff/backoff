@@ -4,7 +4,6 @@ import functools
 import logging
 import time
 import traceback
-import warnings
 from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 if TYPE_CHECKING:
@@ -64,18 +63,7 @@ def _next_wait(
     max_time: float | None,
 ) -> float:
     value = wait.send(send_value)
-    try:
-        seconds = jitter(value) if jitter is not None else value
-    except TypeError:
-        warnings.warn(
-            "Nullary jitter function signature is deprecated. Use "
-            "unary signature accepting a wait value in seconds and "
-            "returning a jittered version of it.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-
-        seconds = value + jitter()  # type: ignore[call-arg, misc] # ty:ignore[missing-argument]
+    seconds = jitter(value) if jitter is not None else value
 
     # don't sleep longer than remaining allotted max_time
     if max_time is not None:
