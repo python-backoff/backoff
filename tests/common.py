@@ -1,18 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Callable, Literal, TypeVar
+from typing import TYPE_CHECKING, Literal, TypeVar
 
 if TYPE_CHECKING:
-    import sys
     from collections.abc import Callable
+    from typing import ParamSpec, TypeAlias
 
     from backoff._typing import Details
-
-    if sys.version_info >= (3, 10):
-        from typing import ParamSpec, TypeAlias
-    else:
-        from typing_extensions import ParamSpec, TypeAlias
 
     Event: TypeAlias = Literal["backoff", "giveup", "success", "try"]
     Events: TypeAlias = dict[Event, list[Details]]

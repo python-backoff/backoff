@@ -1,14 +1,16 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Coroutine, Generator
-from typing import (
-    Any,
-    Callable,
-    TypedDict,
-    TypeVar,
-    Union,
-)
+from collections.abc import Callable, Coroutine, Generator
+from typing import Any, TypeAlias, TypedDict, TypeVar
+
+__all__ = [
+    "_ContextHandler",
+    "_Handler",
+    "_MaybeCallable",
+    "_MaybeLogger",
+    "_MaybeTuple",
+]
 
 
 class _BaseDetails(TypedDict):
@@ -49,20 +51,16 @@ class ContextDetails(_BaseContextDetails, _ContextCallDetails, total=False):
 T = TypeVar("T")
 
 _CallableT = TypeVar("_CallableT", bound=Callable[..., Any])  # ruff:ignore[unused-private-type-var]
-_Handler = Union[
-    Callable[[Details], None],
-    Callable[[Details], Coroutine[Any, Any, None]],
-]
-_ContextHandler = Union[
-    Callable[[ContextDetails], None],
-    Callable[[ContextDetails], Coroutine[Any, Any, None]],
-]
+_Handler: TypeAlias = (
+    Callable[[Details], None] | Callable[[Details], Coroutine[Any, Any, None]]
+)
+_ContextHandler: TypeAlias = (
+    Callable[[ContextDetails], None]
+    | Callable[[ContextDetails], Coroutine[Any, Any, None]]
+)
 _Jitterer = Callable[[float], float]
-_MaybeCallable = Union[T, Callable[[], T]]
-_MaybeLogger = Union[str, logging.Logger, logging.LoggerAdapter, None]
-_MaybeTuple = Union[T, tuple[T, ...]]
-_Predicate = Union[
-    Callable[[T], bool],
-    Callable[[T], Coroutine[Any, Any, bool]],
-]
+_MaybeCallable: TypeAlias = T | Callable[[], T]
+_MaybeLogger: TypeAlias = str | logging.Logger | logging.LoggerAdapter | None
+_MaybeTuple: TypeAlias = T | tuple[T, ...]
+_Predicate = Callable[[T], bool] | Callable[[T], Coroutine[Any, Any, bool]]
 _WaitGenerator = Callable[..., Generator[float, Any, None]]

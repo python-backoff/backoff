@@ -4,7 +4,7 @@ version = "2.4.0"
 description = "Function decoration for backoff and retry"
 authors = [{ name = "Bob Green", email = "rgreen@aquent.com" }]
 maintainers = [{ name = "Edgar Ramírez-Mondragón", email = "edgarrm358@gmail.com" }]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 readme = "README.rst"
 license = "MIT"
 keywords = [
@@ -19,7 +19,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -79,7 +78,7 @@ requires = [ "tox>=4.53", "tox-uv" ]
 env_list = [
   "format",
   { product = [
-    { prefix = "3.", start = 9 },
+    { prefix = "3.", start = 10 },
   ] },
   "coverage",
   "lint",

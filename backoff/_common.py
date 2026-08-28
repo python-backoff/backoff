@@ -4,11 +4,11 @@ import functools
 import logging
 import time
 import traceback
-from typing import TYPE_CHECKING, Any, Callable, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 if TYPE_CHECKING:
     import sys
-    from collections.abc import Generator, Iterable
+    from collections.abc import Callable, Generator, Iterable
 
     from backoff._typing import (
         ContextDetails,

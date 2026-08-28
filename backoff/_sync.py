@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import functools
 import time
-from typing import TYPE_CHECKING, Any, Callable, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from backoff._common import _Attempt, _dispatch_handlers, _RetryState
 
 if TYPE_CHECKING:
     import sys
-    from collections.abc import Generator, Iterable
+    from collections.abc import Callable, Generator, Iterable
+    from typing import ParamSpec
 
     from backoff._typing import (
         ContextDetails,
@@ -23,11 +24,6 @@ if TYPE_CHECKING:
         _Predicate,
         _WaitGenerator,
     )
-
-    if sys.version_info >= (3, 10):
-        from typing import ParamSpec
-    else:
-        from typing_extensions import ParamSpec
 
     if sys.version_info >= (3, 11):
         from typing import Unpack
