@@ -85,8 +85,8 @@ jobs:
       - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
       - name: Run tests
         env:
-          PYTHON: ${{ matrix.python-version }}
-        run: uvx --with tox-uv tox -e "$PYTHON"
+          TOXENV: ${{ matrix.python-version }}
+        run: uvx --with tox-uv tox
       - name: Upload coverage data
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
