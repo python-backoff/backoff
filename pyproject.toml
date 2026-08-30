@@ -74,7 +74,7 @@ include = ["backoff", "tests"]
 include = ["backoff"]
 
 [tool.tox]
-requires = [ "tox>=4.53", "tox-uv" ]
+requires = [ "tox>=4.61", "tox-uv" ]
 env_list = [
   "format",
   { product = [
@@ -82,10 +82,7 @@ env_list = [
   ] },
   "coverage",
   "lint",
-  { product = [
-    [ "typing" ],
-    { prefix = "3.", start = 10 },
-  ] },
+  "typing",
   "docs",
 ]
 
@@ -135,9 +132,14 @@ commands = [
     ],
 ]
 
+[tool.tox.env.typing]
+base = [ "tool.tox.env_base.typing" ]
+base_python_file = [ ".python-version" ]
+description = "run type checking on the default Python version"
+
 [tool.tox.env_base.typing]
 factors = [
-  { prefix = "3.", start = 9 },
+  { prefix = "3.", start = 10 },
 ]
 description = "run type checking on Python {py_dot_ver}"
 dependency_groups = [ "typing" ]
