@@ -1,5 +1,6 @@
-from ._typing import Details
+from ._typing import ContextDetails, Details
 
 __all__ = [
+    "ContextDetails",
     "Details",
 ]

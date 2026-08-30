@@ -6,7 +6,7 @@ import inspect
 from collections.abc import Callable
 from typing import TYPE_CHECKING, Any, TypeVar
 
-from backoff._common import _Attempt, _RetryState
+from backoff._common import Attempt, _RetryState
 
 if TYPE_CHECKING:
     import sys
@@ -252,7 +252,7 @@ async def aretry_context(
     on_giveup: Iterable[_ContextHandler],
     raise_on_giveup: bool,
     wait_gen_kwargs: dict[str, Any],
-) -> AsyncGenerator[_Attempt, None]:
+) -> AsyncGenerator[Attempt, None]:
     giveup = _ensure_coroutine(giveup)
 
     state = _RetryState(
@@ -263,7 +263,7 @@ async def aretry_context(
     )
     while True:
         state.start_attempt()
-        attempt = _Attempt(exception)
+        attempt = Attempt(exception)
         await _dispatch_handlers(
             handlers=on_try,
             tries=state.tries,

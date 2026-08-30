@@ -20,7 +20,7 @@ from backoff._wait_gen import expo
 if TYPE_CHECKING:
     from collections.abc import AsyncGenerator, Callable, Generator, Iterable
 
-    from backoff._common import _Attempt
+    from backoff._common import Attempt
     from backoff._typing import (
         _AnyLoggerOrName,
         _CallableT,
@@ -301,7 +301,7 @@ def retry_context(
     backoff_log_level: int = logging.INFO,
     giveup_log_level: int = logging.ERROR,
     **wait_gen_kwargs: Any,
-) -> Generator[_Attempt, None, None]:
+) -> Generator[Attempt, None, None]:
     """Returns a generator of retry attempts, for direct use with a `for` loop.
 
     Unlike `on_exception`, this doesn't wrap a whole function; it lets a
@@ -400,7 +400,7 @@ def aretry_context(
     backoff_log_level: int = logging.INFO,
     giveup_log_level: int = logging.ERROR,
     **wait_gen_kwargs: Any,
-) -> AsyncGenerator[_Attempt, None]:
+) -> AsyncGenerator[Attempt, None]:
     """Async counterpart to `retry_context`, for use with `async for`.
 
         async for attempt in backoff.aretry_context(ValueError, backoff.expo):

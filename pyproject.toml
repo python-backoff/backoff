@@ -133,20 +133,13 @@ commands = [
 ]
 
 [tool.tox.env.typing]
-base = [ "tool.tox.env_base.typing" ]
-base_python_file = [ ".python-version" ]
-description = "run type checking on the default Python version"
-
-[tool.tox.env_base.typing]
-factors = [
-  { prefix = "3.", start = 10 },
-]
 description = "run type checking on Python {py_dot_ver}"
 dependency_groups = [ "typing" ]
 labels = [ "check" ]
 commands = [
   [
     "mypy",
+    "--python-version={py_dot_ver}",
     "--show-error-codes",
     { replace = "posargs", default = [
       "backoff",
@@ -155,6 +148,7 @@ commands = [
   ],
   [
     "mypy",
+    "--python-version={py_dot_ver}",
     "--strict",
     "--disallow-any-decorated",
     "--follow-imports=silent",
@@ -163,6 +157,7 @@ commands = [
   [
     "ty",
     "check",
+    "--python-version={py_dot_ver}",
     { replace = "if", condition = "env.GITHUB_ACTIONS == 'true'", then = [ "--output-format=github" ], else = [], extend = true },
     { replace = "posargs", default = [
       "backoff",
@@ -172,6 +167,7 @@ commands = [
   [
     "pyrefly",
     "check",
+    "--python-version={py_dot_ver}",
     { replace = "if", condition = "env.GITHUB_ACTIONS == 'true'", then = [ "--output-format=github" ], else = [], extend = true },
     { replace = "posargs", default = [
       "backoff",
@@ -182,6 +178,7 @@ commands = [
     "pyrefly",
     "coverage",
     "check",
+    "--python-version={py_dot_ver}",
     { replace = "if", condition = "env.GITHUB_ACTIONS == 'true'", then = [ "--output-format=github" ], else = [], extend = true },
     { replace = "posargs", default = [
       "backoff",
