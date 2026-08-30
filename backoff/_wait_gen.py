@@ -103,6 +103,27 @@ def runtime(*, value: Callable[[Any], float]) -> Generator[float, Any, None]:
     """Generator that is based on parsing the return value or thrown
         exception of the decorated method
 
+    Useful for honoring a server-specified retry delay, e.g. an HTTP
+    `Retry-After` header, rather than a fixed wait sequence:
+
+        # with on_predicate, `value` receives the return value
+        @backoff.on_predicate(
+            backoff.runtime,
+            predicate=lambda r: r.status_code == 429,
+            value=lambda r: int(r.headers.get("Retry-After", 1)),
+        )
+        def get_page():
+            return requests.get(url)
+
+        # with on_exception, `value` receives the raised exception
+        @backoff.on_exception(
+            backoff.runtime,
+            RetryableError,
+            value=lambda e: e.wait_seconds,
+        )
+        def get_page():
+            ...
+
     Args:
         value: a callable which takes as input the decorated
             function's return value or thrown exception and
