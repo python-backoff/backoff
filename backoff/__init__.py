@@ -12,11 +12,13 @@ For examples and full documentation see the README at
 https://github.com/python-backoff/backoff
 """
 
+from backoff._common import Attempt
 from backoff._decorator import aretry_context, on_exception, on_predicate, retry_context
 from backoff._jitter import full_jitter, random_jitter
 from backoff._wait_gen import constant, decay, expo, fibo, runtime
 
 __all__ = [
+    "Attempt",
     "aretry_context",
     "constant",
     "decay",

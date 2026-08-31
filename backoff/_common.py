@@ -4,7 +4,8 @@ import functools
 import logging
 import time
 import traceback
-from typing import TYPE_CHECKING, Any, TypeVar
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Any, TypeAlias, TypeVar
 
 if TYPE_CHECKING:
     import sys
@@ -25,6 +26,8 @@ if TYPE_CHECKING:
         from typing import Self
     else:
         from typing_extensions import Self
+
+    ExceptionTypes: TypeAlias = type[Exception] | tuple[type[Exception], ...]
 
 
 # Use module-specific logger with a default null handler.
@@ -122,7 +125,8 @@ class _RetryState:
         return _next_wait(self.wait, send_value, jitter, self.elapsed, self.max_time)
 
 
-class _Attempt:
+@dataclass(slots=True)
+class Attempt:
     """A single attempt yielded by `retry_context`/`aretry_context`.
 
     Used as `with attempt: ...`. Exceptions matching `exception_types` are
@@ -131,16 +135,10 @@ class _Attempt:
     exception at all, is left for the `with` block's normal exit behavior.
     """
 
-    __slots__ = (
-        "exception",
-        "exception_types",
-    )
+    exception_types: ExceptionTypes
+    exception: BaseException | None = field(init=False)
 
-    def __init__(
-        self,
-        exception_types: type[Exception] | tuple[type[Exception], ...],
-    ) -> None:
-        self.exception_types = exception_types
+    def __post_init__(self) -> None:
         self.exception: BaseException | None = None
 
     def __enter__(self) -> Self:
@@ -153,7 +151,6 @@ class _Attempt:
         tb: object,
     ) -> bool:
         if exc_type is None:
-            # self.outcome = _Success()
             return False
 
         if not issubclass(exc_type, self.exception_types):

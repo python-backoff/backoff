@@ -4,7 +4,7 @@ import functools
 import time
 from typing import TYPE_CHECKING, Any, TypeVar
 
-from backoff._common import _Attempt, _dispatch_handlers, _RetryState
+from backoff._common import Attempt, _dispatch_handlers, _RetryState
 
 if TYPE_CHECKING:
     import sys
@@ -188,7 +188,7 @@ def retry_context(
     on_giveup: Iterable[_ContextHandler],
     raise_on_giveup: bool,
     wait_gen_kwargs: dict[str, Any],
-) -> Generator[_Attempt, None, None]:
+) -> Generator[Attempt, None, None]:
     state = _RetryState(
         wait_gen,
         wait_gen_kwargs,
@@ -197,7 +197,7 @@ def retry_context(
     )
     while True:
         state.start_attempt()
-        attempt = _Attempt(exception)
+        attempt = Attempt(exception)
         _dispatch_handlers(handlers=on_try, tries=state.tries, elapsed=state.elapsed)
         yield attempt
         elapsed = state.record_elapsed()

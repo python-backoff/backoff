@@ -26,6 +26,12 @@ Complete API documentation for the backoff module.
       show_root_heading: true
       show_source: true
 
+::: backoff.Attempt
+    options:
+      show_root_heading: true
+      show_source: true
+      summary: true
+
 ## Wait Generators
 
 ::: backoff.expo
