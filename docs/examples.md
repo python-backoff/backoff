@@ -437,8 +437,8 @@ config = RetryConfig()
 @backoff.on_exception(
     backoff.expo,
     Exception,
-    max_time=lambda: config.get_max_time(),
-    max_tries=lambda: config.get_max_tries(),
+    max_time=config.get_max_time,
+    max_tries=config.get_max_trie,
 )
 def configurable_retry():
     pass
