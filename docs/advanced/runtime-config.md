@@ -74,7 +74,7 @@ def get_wait_gen():
     return backoff.expo
 
 
-@backoff.on_exception(lambda: get_wait_gen(), Exception)
+@backoff.on_exception(get_wait_gen, Exception)
 def dynamic_wait():
     pass
 ```
