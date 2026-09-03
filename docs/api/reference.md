@@ -54,6 +54,11 @@ Complete API documentation for the backoff module.
       show_root_heading: true
       show_source: true
 
+::: backoff.capped
+    options:
+      show_root_heading: true
+      show_source: true
+
 ## Jitter Functions
 
 ::: backoff.full_jitter
