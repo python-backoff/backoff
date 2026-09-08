@@ -43,7 +43,7 @@ _HandlerT = TypeVar("_HandlerT")
 def _maybe_call(f: _MaybeCallable[T] | None, *args: Any, **kwargs: Any) -> T | None:
     if callable(f):
         try:
-            return f(*args, **kwargs)  # ty:ignore[call-top-callable, invalid-return-type]
+            return f(*args, **kwargs)  # ty:ignore[invalid-return-type]
         except TypeError:
             return f  # type: ignore[return-value] # ty:ignore[invalid-return-type]
     else:
