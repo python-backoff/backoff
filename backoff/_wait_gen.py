@@ -7,6 +7,8 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     from collections.abc import Callable, Generator, Iterable
 
+    from backoff._typing import _WaitGenerator
+
 
 def expo(
     base: float = 2,
@@ -97,6 +99,49 @@ def constant(interval: float | Iterable[float] = 1) -> Generator[float, Any, Non
 
     for val in itr:
         yield val
+
+
+def capped(
+    wait_gen: _WaitGenerator,
+    *,
+    min_value: float | None = None,
+    max_value: float | None = None,
+) -> _WaitGenerator:
+    """Wraps a wait generator, clamping each value it yields.
+
+    Useful for wait generators without their own bound, such as
+    `constant` or `runtime` (e.g. capping a server-provided
+    `Retry-After` value so a misbehaving server can't stall retries
+    indefinitely):
+
+        backoff.on_predicate(
+            backoff.capped(backoff.runtime, max_value=60),
+            predicate=lambda r: r.status_code == 429,
+            value=lambda r: int(r.headers.get("Retry-After", 1)),
+        )
+
+    Args:
+        wait_gen: The wait generator to wrap.
+        min_value: The minimum value to yield. Values below this are
+            raised to min_value.
+        max_value: The maximum value to yield. Values above this are
+            lowered to max_value.
+    """
+
+    def generator(**kwargs: Any) -> Generator[float, Any, None]:
+        gen = wait_gen(**kwargs)
+        gen.send(None)
+
+        send_value = yield 0
+        while True:
+            value = gen.send(send_value)
+            if max_value is not None:
+                value = min(value, max_value)
+            if min_value is not None:
+                value = max(value, min_value)
+            send_value = yield value
+
+    return generator
 
 
 def runtime(*, value: Callable[[Any], float]) -> Generator[float, Any, None]:

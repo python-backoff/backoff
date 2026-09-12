@@ -112,3 +112,25 @@ def test_runtime() -> None:
     gen.send(None)
     for i in range(20):
         assert i == gen.send(i)
+
+
+def test_capped_max_value() -> None:
+    gen = backoff.capped(backoff.expo, max_value=10)()
+    gen.send(None)
+    expected = [1, 2, 4, 8, 10, 10, 10]
+    for expect in expected:
+        assert expect == next(gen)
+
+
+def test_capped_min_value() -> None:
+    gen = backoff.capped(backoff.decay, min_value=5)(decay_factor=3)
+    gen.send(None)
+    for i in range(10):
+        assert max(math.e ** (-i * 3), 5) == pytest.approx(next(gen))
+
+
+def test_capped_passes_through_kwargs_and_send_value() -> None:
+    gen = backoff.capped(backoff.runtime, max_value=60)(value=lambda x: x)
+    gen.send(None)
+    assert gen.send(30) == 30
+    assert gen.send(100) == 60
