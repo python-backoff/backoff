@@ -4,11 +4,11 @@ click==8.5.0
     # via
     #   mkdocs
     #   zensical
-deepmerge==3.0
+deepmerge==3.0.1
     # via zensical
 ghp-import==2.1.0
     # via mkdocs
-griffelib==2.2.0
+griffelib==2.3.0
     # via mkdocstrings-python
 jinja2==3.1.6
     # via
@@ -46,17 +46,17 @@ mkdocstrings==1.0.6
     # via
     #   python-backoff (pyproject.toml:docs)
     #   mkdocstrings-python
-mkdocstrings-python==2.0.7
+mkdocstrings-python==2.0.8
     # via mkdocstrings
 packaging==26.3
     # via mkdocs
 pathspec==1.1.1
     # via mkdocs
-platformdirs==4.11.4
+platformdirs==4.11.10
     # via mkdocs-get-deps
 pygments==2.21.0
     # via zensical
-pymdown-extensions==11.0.2
+pymdown-extensions==12.0.1
     # via
     #   mkdocstrings
     #   zensical
