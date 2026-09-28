@@ -46,7 +46,7 @@ repos:
     -   id: check-github-workflows-require-timeout
     -   id: check-renovate
 -   repo: https://github.com/adamtheturtle/doccmd-pre-commit
-    rev: v2026.9.16
+    rev: v2026.9.16.1
     hooks:
     -   id: doccmd
         name: Ruff check fix docs
