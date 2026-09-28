@@ -38,7 +38,7 @@ def decay(
     decay_factor: float = 1,
     min_value: float | None = None,
 ) -> Generator[float, Any, None]:
-    """Generator for exponential decay[1]:
+    """Generator for [exponential decay](https://en.wikipedia.org/wiki/Exponential_decay).
 
     Args:
         initial_value: initial quantity
@@ -46,8 +46,6 @@ def decay(
         min_value: The minimum value to yield. Once the value in the
              true exponential sequence is lower than this, the value
              of min_value will forever after be yielded.
-
-    [1] https://en.wikipedia.org/wiki/Exponential_decay
     """
     # Advance past initial .send() call
     yield 0
@@ -106,23 +104,39 @@ def runtime(*, value: Callable[[Any], float]) -> Generator[float, Any, None]:
     Useful for honoring a server-specified retry delay, e.g. an HTTP
     `Retry-After` header, rather than a fixed wait sequence:
 
-        # with on_predicate, `value` receives the return value
-        @backoff.on_predicate(
-            backoff.runtime,
-            predicate=lambda r: r.status_code == 429,
-            value=lambda r: int(r.headers.get("Retry-After", 1)),
+    ```python
+    # with on_predicate, `value` receives the return value
+    @backoff.on_predicate(
+        backoff.runtime,
+        predicate=lambda r: (
+            r.status_code
+            == 429
+        ),
+        value=lambda r: (
+            int(
+                r.headers.get(
+                    "Retry-After",
+                    1,
+                )
+            )
+        ),
+    )
+    def get_page():
+        return requests.get(
+            url
         )
-        def get_page():
-            return requests.get(url)
 
-        # with on_exception, `value` receives the raised exception
-        @backoff.on_exception(
-            backoff.runtime,
-            RetryableError,
-            value=lambda e: e.wait_seconds,
-        )
-        def get_page():
-            ...
+
+    # with on_exception, `value` receives the raised exception
+    @backoff.on_exception(
+        backoff.runtime,
+        RetryableError,
+        value=lambda e: (
+            e.wait_seconds
+        ),
+    )
+    def get_page(): ...
+    ```
 
     Args:
         value: a callable which takes as input the decorated

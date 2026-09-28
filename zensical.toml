@@ -22,7 +22,7 @@ nav = [
         { "Custom Strategies" = "advanced/custom-strategies.md" },
     ] },
     { "Examples" = "examples.md" },
-    { "API Reference" = "api/reference.md" },
+    { "API Reference" = "api/backoff/index.md" },
     { "FAQ" = "faq.md" },
     { "Changelog" = "changelog.md" },
 ]
@@ -34,6 +34,14 @@ pygments_lang_class = true
 [project.markdown_extensions.pymdownx.snippets]
 [project.markdown_extensions.pymdownx.superfences]
 
+[project.plugins.mkdocs-autoapi]
+autoapi_dir = "./backoff"
+autoapi_file_patterns = [
+    "__init__.py"
+]
+autoapi_keep_files = true
+autoapi_root = "api"
+
 [project.plugins.mkdocstrings.handlers.python.options]
 docstring_style = "google"
 inherited_members = true
@@ -42,6 +50,9 @@ show_source = true
 
 [project.plugins.offline]
 enabled = true
+
+[project.plugins.redirects.redirect_maps]
+"api/reference.md" = "api/backoff/index.md"
 
 [project.theme]
 name = "material"
