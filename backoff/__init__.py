@@ -1,5 +1,5 @@
 """
-Function decoration for backoff and retry
+Function decoration for backoff and retry.
 
 This module provides function decorators which can be used to wrap a
 function such that it will be retried until some condition is met. It
@@ -8,8 +8,8 @@ potential for intermittent failures i.e. network resources and external
 APIs. Somewhat more generally, it may also be of use for dynamically
 polling resources for externally generated content.
 
-For examples and full documentation see the README at
-https://github.com/python-backoff/backoff
+For examples and full documentation, see
+[the official documentation](https://backoff.readthedocs.io/en/latest/).
 """
 
 from backoff._common import Attempt

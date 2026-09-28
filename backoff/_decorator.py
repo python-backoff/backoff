@@ -307,9 +307,14 @@ def retry_context(
     Unlike `on_exception`, this doesn't wrap a whole function; it lets a
     caller retry an arbitrary block of code:
 
-        for attempt in backoff.retry_context(ValueError, backoff.expo):
-            with attempt:
-                do_something()
+    ```python
+    for attempt in backoff.retry_context(
+        ValueError,
+        backoff.expo,
+    ):
+        with attempt:
+            do_something()
+    ```
 
     Each `attempt` is a context manager: exceptions matching `exception`
     are caught, and the loop either sleeps and retries or lets the
@@ -403,9 +408,14 @@ def aretry_context(
 ) -> AsyncGenerator[Attempt, None]:
     """Async counterpart to `retry_context`, for use with `async for`.
 
-        async for attempt in backoff.aretry_context(ValueError, backoff.expo):
-            with attempt:
-                await do_something()
+    ```python
+    async for attempt in backoff.aretry_context(
+        ValueError,
+        backoff.expo,
+    ):
+        with attempt:
+            await do_something()
+    ```
 
     `giveup` and the handlers may be sync or async callables. See
     `retry_context` for the full argument reference.
