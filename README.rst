@@ -12,7 +12,7 @@ backoff
 
 **Function decoration for backoff and retry**
 
-This module provides function decorators which can be used to wrap a
+This library provides function decorators which can be used to wrap a
 function such that it will be retried until some condition is met. It
 is meant to be of use when accessing unreliable resources with the
 potential for intermittent failures i.e. network resources and external
@@ -22,6 +22,8 @@ polling resources for externally generated content.
 Decorators support both regular functions for synchronous code and
 `asyncio <https://docs.python.org/3/library/asyncio.html>`__'s coroutines
 for asynchronous code.
+
+Context managers are also available to enable retries of arbitrary code blocks.
 
 Examples
 ========

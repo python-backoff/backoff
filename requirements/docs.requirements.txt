@@ -79,5 +79,5 @@ tomli==2.4.1
     # via zensical
 watchdog==6.0.0
     # via mkdocs
-zensical==0.0.66
+zensical==0.0.67
     # via python-backoff (pyproject.toml:docs)
