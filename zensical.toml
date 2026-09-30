@@ -35,6 +35,8 @@ pygments_lang_class = true
 [project.markdown_extensions.pymdownx.superfences]
 
 [project.plugins.llmstxt]
+base_url = "https://backoff.readthedocs.io/en/latest"
+full_output = "llms-full.txt"
 markdown_description = """
 This library provides function decorators which can be \
 used to wrap a function such that it will be retried \
@@ -51,7 +53,6 @@ code and `asyncio` coroutines for asynchronous code.
 Context managers are also available to enable retries of \
 arbitrary code blocks.
 """
-full_output = "llms-full.txt"
 
 [project.plugins.llmstxt.sections]
 "Usage documentation" = [
