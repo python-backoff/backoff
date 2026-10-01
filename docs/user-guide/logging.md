@@ -49,6 +49,11 @@ def my_function():
 
 ### Logger Instance
 
+!!! info "New in version 2.2.2"
+
+    `logging.LoggerAdapter` instances are accepted in addition to
+    `logging.Logger` instances.
+
 ```python
 import logging
 

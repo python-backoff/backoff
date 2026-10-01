@@ -2,6 +2,11 @@
 
 Backoff provides a context manager generator for non-decorator usage.
 
+!!! info "New in version 2.4.0"
+
+    `backoff.retry_context()` and its async counterpart `backoff.aretry_context()`
+    were added in v2.4.0.
+
 ## Basic Usage
 
 ```python
@@ -17,6 +22,12 @@ for attempt in backoff.retry_context():
         else:
             print(f"Got it (choice={choice})")
 ```
+
+!!! info "New in version 3.0.0"
+
+    `backoff.Attempt` was previously a private class (`_Attempt`) and is now part
+    of the public API. Code that imported `backoff._Attempt` must switch to
+    `backoff.Attempt`.
 
 `attempt` is an instance of `backoff.Attempt`, so a helper that
 accepts one (e.g. for logging) can be typed against it directly:

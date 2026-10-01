@@ -10,6 +10,11 @@ Install backoff using pip:
 pip install python-backoff
 ```
 
+!!! note "Supported Python versions"
+
+    backoff requires Python 3.10 or newer. Support for Python 3.7, 3.8 and 3.9
+    was dropped in v2.3.0, v2.4.0 and v3.0.0 respectively.
+
 ## Basic Concepts
 
 Backoff provides two main decorators:
