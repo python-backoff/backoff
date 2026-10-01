@@ -24,6 +24,14 @@ def my_handler(details):
 
 The `details` dict contains:
 
+!!! note "Changes to `details`"
+
+    - v2.2.2: the `exception` key is available to `on_backoff` and `on_giveup`
+      handlers when `on_exception` is used.
+    - v2.3.1: the type of the `target` key was corrected to represent an actual
+      function.
+    - v2.4.0: `elapsed` is now measured after the function call returns.
+
 | Key | Type | Description | Available In |
 |-----|------|-------------|--------------|
 | `target` | function | Function being called | All handlers |
@@ -138,6 +146,10 @@ def my_function():
 ## on_try Handler
 
 Called for every attempt.
+
+!!! info "New in version 3.0.0"
+
+    The `on_try` handler was added in v3.0.0.
 
 ```python
 def log_try(details):

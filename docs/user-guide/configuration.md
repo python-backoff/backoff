@@ -193,6 +193,11 @@ Exact wait times, no randomization.
 
 ### Custom Jitter
 
+!!! warning "Breaking change in version 3.0.0"
+
+    Jitter functions must accept the wait value as an argument. Nullary
+    (zero-argument) jitter functions are no longer supported.
+
 ```python
 import random
 

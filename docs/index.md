@@ -18,6 +18,12 @@ This module provides function decorators which can be used to wrap a function su
 - **Type hints** - Fully typed for better IDE support
 - **Battle-tested** - Used in production by thousands of projects
 
+!!! info "Type annotations"
+
+    The decorators were annotated in v2.4.0, and v3.0.0 brought full typing
+    coverage. Async functions wrapped with `on_exception` or `on_predicate` now
+    keep their types.
+
 ## Quick Start
 
 Install via pip:
