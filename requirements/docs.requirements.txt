@@ -22,7 +22,7 @@ markdown==3.11
     #   mkdocstrings
     #   pymdown-extensions
     #   zensical
-markupsafe==3.0.3
+markupsafe==3.0.4
     # via
     #   jinja2
     #   mkdocs
@@ -54,7 +54,7 @@ pathspec==1.1.1
     # via
     #   mkdocs
     #   zensical
-platformdirs==4.12.1
+platformdirs==4.12.3
     # via mkdocs-get-deps
 pygments==2.21.0
     # via zensical
