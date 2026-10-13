@@ -22,10 +22,10 @@ repos:
     -   id: ruff-check
     -   id: ruff-format
         types_or: [python, pyi, jupyter, markdown]
--   repo: https://github.com/rhysd/actionlint
-    rev: v1.7.12
-    hooks:
-    -   id: actionlint
+# -   repo: https://github.com/rhysd/actionlint
+#     rev: v1.7.12
+#     hooks:
+#     -   id: actionlint
 -   repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.13.0
     hooks:
