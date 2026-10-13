@@ -8,7 +8,7 @@ deepmerge==3.0.1
     # via zensical
 ghp-import==2.1.0
     # via mkdocs
-griffelib==2.3.0
+griffelib==2.3.2
     # via mkdocstrings-python
 jinja2==3.1.6
     # via
@@ -22,7 +22,7 @@ markdown==3.11
     #   mkdocstrings
     #   pymdown-extensions
     #   zensical
-markupsafe==3.0.3
+markupsafe==3.0.4
     # via
     #   jinja2
     #   mkdocs
@@ -42,7 +42,7 @@ mkdocs-autorefs==1.4.4
     #   mkdocstrings-python
 mkdocs-get-deps==0.2.2
     # via mkdocs
-mkdocstrings==1.0.6
+mkdocstrings==1.0.7
     # via
     #   python-backoff (pyproject.toml:docs)
     #   mkdocstrings-python
@@ -54,11 +54,11 @@ pathspec==1.1.1
     # via
     #   mkdocs
     #   zensical
-platformdirs==4.12.1
+platformdirs==4.13.0
     # via mkdocs-get-deps
 pygments==2.21.0
     # via zensical
-pymdown-extensions==12.1
+pymdown-extensions==12.2
     # via
     #   mkdocstrings
     #   zensical
@@ -75,7 +75,7 @@ pyyaml-env-tag==1.1
     # via mkdocs
 six==1.17.0
     # via python-dateutil
-tomli==2.4.1
+tomli==2.5.0
     # via zensical
 watchdog==6.0.0
     # via mkdocs
