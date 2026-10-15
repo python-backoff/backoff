@@ -191,6 +191,34 @@ def custom_retry():
 - Custom retry logic from application responses
 - API rate limiting with Retry-After headers
 
+## Capped
+
+Wraps another wait generator and clamps each value it yields. Useful for
+bounding a wait strategy that has no cap of its own — `constant` or
+`runtime`, for example — such as when a misbehaving server sends an
+excessive `Retry-After` value:
+
+```python
+@backoff.on_predicate(
+    backoff.capped(backoff.runtime, max_value=60),
+    predicate=lambda r: r.status_code == 429,
+    value=lambda r: int(r.headers.get("Retry-After", 1)),
+)
+def api_call():
+    return requests.get(api_url)
+```
+
+### Parameters
+
+- **wait_gen** - The wait generator to wrap
+- **min_value** - Minimum value to yield (default: None)
+- **max_value** - Maximum value to yield (default: None)
+
+### Best For
+
+- Bounding `runtime`/`constant` wait times that have no built-in cap
+- Guarding against untrusted or misbehaving server-provided delays
+
 ## Jitter
 
 All wait strategies support jitter to add randomness and prevent thundering herd problems.
