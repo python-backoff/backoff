@@ -221,7 +221,7 @@ def test_retry_context_wait_gen_exhausted_always_raises() -> None:
     assert isinstance(giveups[0].get("exception"), ValueError)
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_aretry_context_success_after_failures() -> None:
     calls = []
 
@@ -240,7 +240,7 @@ async def test_aretry_context_success_after_failures() -> None:
     assert len(calls) == 3
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_aretry_context_giveup_raises() -> None:
     calls = []
 
@@ -262,7 +262,7 @@ async def test_aretry_context_giveup_raises() -> None:
     assert len(calls) == 3
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_aretry_context_async_giveup_predicate() -> None:
     calls = []
 
@@ -288,7 +288,7 @@ async def test_aretry_context_async_giveup_predicate() -> None:
     assert len(calls) == 1
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_aretry_context_async_handlers() -> None:
     backoffs = []
 
@@ -314,7 +314,7 @@ async def test_aretry_context_async_handlers() -> None:
     assert isinstance(backoffs[0]["exception"], ValueError)
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_aretry_context_on_try_runs_before_attempt() -> None:
     calls: list[object] = []
     tries: list[ContextDetails] = []
@@ -347,7 +347,7 @@ async def test_aretry_context_on_try_runs_before_attempt() -> None:
     assert tries[2]["elapsed"] > tries[1]["elapsed"]
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_aretry_context_async_giveup_no_raise() -> None:
     calls = []
 
@@ -366,7 +366,7 @@ async def test_aretry_context_async_giveup_no_raise() -> None:
     assert len(calls) == 3
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_aretry_context_wait_gen_exhausted() -> None:
     calls = []
     giveups: list[ContextDetails] = []
@@ -391,7 +391,7 @@ async def test_aretry_context_wait_gen_exhausted() -> None:
     assert isinstance(giveups[0].get("exception"), ValueError)
 
 
-@pytest.mark.asyncio
+@pytest.mark.anyio
 async def test_aretry_context_wait_gen_exhausted_always_raises() -> None:
     calls = []
     giveups: list[ContextDetails] = []
