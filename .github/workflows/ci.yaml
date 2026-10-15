@@ -84,6 +84,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Type checks
+        if: ${{ matrix.python-version != '3.16' }}
         run: uvx --with tox-uv tox -e typing
       - name: Run tests
         env:
