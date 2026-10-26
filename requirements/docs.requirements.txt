@@ -4,18 +4,18 @@ click==8.5.0
     # via
     #   mkdocs
     #   zensical
-deepmerge==3.0.1
+deepmerge==4.0.0
     # via zensical
 ghp-import==2.1.0
     # via mkdocs
-griffelib==2.3.2
+griffelib==2.4.1
     # via mkdocstrings-python
 jinja2==3.1.6
     # via
     #   mkdocs
     #   mkdocstrings
     #   zensical
-markdown==3.11
+markdown==3.11.2
     # via
     #   mkdocs
     #   mkdocs-autorefs
@@ -36,17 +36,17 @@ mkdocs==1.6.1
     # via
     #   mkdocs-autorefs
     #   mkdocstrings
-mkdocs-autorefs==1.4.4
+mkdocs-autorefs==1.4.5
     # via
     #   mkdocstrings
     #   mkdocstrings-python
 mkdocs-get-deps==0.2.2
     # via mkdocs
-mkdocstrings==1.0.7
+mkdocstrings==1.0.8
     # via
     #   python-backoff (pyproject.toml:docs)
     #   mkdocstrings-python
-mkdocstrings-python==2.0.9
+mkdocstrings-python==2.0.10
     # via mkdocstrings
 packaging==26.3
     # via mkdocs
@@ -54,15 +54,15 @@ pathspec==1.1.1
     # via
     #   mkdocs
     #   zensical
-platformdirs==4.13.0
+platformdirs==4.13.5
     # via mkdocs-get-deps
 pygments==2.21.0
     # via zensical
-pymdown-extensions==12.2
+pymdown-extensions==12.3
     # via
     #   mkdocstrings
     #   zensical
-python-dateutil==2.9.0.post0
+python-dateutil==3.0.0
     # via ghp-import
 pyyaml==6.0.3
     # via
@@ -77,6 +77,8 @@ six==1.17.0
     # via python-dateutil
 tomli==2.5.0
     # via zensical
+tzdata==2026.5
+    # via python-dateutil
 watchdog==6.0.0
     # via mkdocs
 zensical==0.0.67
