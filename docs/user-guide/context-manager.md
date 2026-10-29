@@ -4,7 +4,7 @@ Backoff provides a context manager generator for non-decorator usage.
 
 !!! info "New in version 2.4.0"
 
-    `backoff.retry_context()` and its async counterpart `backoff.aretry_context()`
+    [`backoff.retry_context()`][backoff.retry_context] and its async counterpart [`backoff.aretry_context()`][backoff.aretry_context]
     were added in v2.4.0.
 
 ## Basic Usage
