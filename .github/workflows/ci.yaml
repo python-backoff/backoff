@@ -5,6 +5,7 @@ on:
     branches:
       - main
   pull_request:
+  merge_group:
   workflow_dispatch:
   schedule:
     # Daily at 12:00 UTC
