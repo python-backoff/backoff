@@ -10,6 +10,8 @@ backoff
 .. image:: https://img.shields.io/github/license/python-backoff/backoff
     :target: https://github.com/python-backoff/backoff/blob/main/LICENSE
 
+*Note: this is an actively maintained fork of https://github.com/litl/backoff.*
+
 **Function decoration for backoff and retry**
 
 This library provides function decorators which can be used to wrap a
