@@ -796,6 +796,7 @@ async def test_max_time() -> None:
             RuntimeError,
             max_time=max_time,
             jitter=None,
+            interval=max_time + 1,  # Overshoot max time
         )
         async def on_exception() -> None:
             await patch_sleep(function_runtime)  # ruff: ignore[function-uses-loop-variable]
@@ -815,15 +816,17 @@ async def test_max_time() -> None:
         # backoff never sleeps past max_time, but the time spent in the
         # target's own call isn't capped, so the total can run up to one
         # more function call past max_time before giving up.
-        assert elapsed <= max_time + function_runtime + 1e-9
+        assert elapsed <= max_time + function_runtime
+        assert max_time <= elapsed
 
         elapsed = 0
 
         @backoff.on_predicate(
             backoff.constant,
-            lambda x: False,
+            lambda _: True,
             max_time=max_time,
             jitter=None,
+            interval=max_time + 1,  # Overshoot max time
         )
         async def on_predicate() -> None:
             await patch_sleep(function_runtime)  # ruff: ignore[function-uses-loop-variable]
@@ -838,4 +841,5 @@ async def test_max_time() -> None:
         ):
             await on_predicate()
 
-        assert elapsed <= max_time + function_runtime + 1e-9
+        assert elapsed <= max_time + function_runtime
+        assert max_time <= elapsed
