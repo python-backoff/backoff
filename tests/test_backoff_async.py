@@ -3,12 +3,15 @@ from __future__ import annotations
 import asyncio
 import contextlib
 import itertools
+from types import SimpleNamespace
 from typing import TYPE_CHECKING, Any, Literal
+from unittest.mock import patch
 
 import pytest
 from dirty_equals import IsFloat, IsInstance
 
 import backoff
+import backoff._async
 from tests.common import EventAppender, _save_target
 
 if TYPE_CHECKING:
@@ -18,13 +21,14 @@ if TYPE_CHECKING:
 asyncio_sleep = asyncio.sleep
 
 
-async def _await_none(x: Any) -> None:
+async def _await_none(_: Any) -> None:
     return None
 
 
 @pytest.fixture(autouse=True)
-def _patch_sleep(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("asyncio.sleep", _await_none)
+def _patch_sleep() -> Generator[None, None]:
+    with patch.object(backoff._async, "asyncio", SimpleNamespace(sleep=_await_none)):
+        yield
 
 
 @pytest.mark.anyio
@@ -749,8 +753,7 @@ async def test_on_exception_callable_gen_kwargs() -> None:
 
 
 @pytest.mark.anyio
-async def test_on_exception_coro_cancelling(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("asyncio.sleep", asyncio_sleep)
+async def test_on_exception_coro_cancelling() -> None:
     sleep_started_event = asyncio.Event()
 
     @backoff.on_predicate(backoff.expo)
@@ -764,9 +767,9 @@ async def test_on_exception_coro_cancelling(monkeypatch: pytest.MonkeyPatch) -> 
 
         return False
 
-    task = asyncio.create_task(coro())
-
-    await sleep_started_event.wait()
+    with patch.object(backoff._async, "asyncio", SimpleNamespace(sleep=asyncio_sleep)):
+        task = asyncio.create_task(coro())
+        await sleep_started_event.wait()
 
     task.cancel()
 
@@ -774,7 +777,7 @@ async def test_on_exception_coro_cancelling(monkeypatch: pytest.MonkeyPatch) -> 
 
 
 @pytest.mark.anyio
-async def test_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
+async def test_max_time() -> None:
     elapsed: float = 0
 
     async def patch_sleep(n: float) -> None:
@@ -783,9 +786,6 @@ async def test_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
 
     def monotonic() -> float:
         return elapsed
-
-    monkeypatch.setattr("asyncio.sleep", patch_sleep)
-    monkeypatch.setattr("time.monotonic", monotonic)
 
     # A good place for property-based testing
     for function_runtime, max_time in itertools.product(range(10), repeat=2):
@@ -801,7 +801,15 @@ async def test_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
             await patch_sleep(function_runtime)  # ruff: ignore[function-uses-loop-variable]
             raise RuntimeError
 
-        with contextlib.suppress(BaseException):
+        with (
+            contextlib.suppress(RuntimeError),
+            patch.object(backoff._common, "time", SimpleNamespace(monotonic=monotonic)),
+            patch.object(
+                backoff._async,
+                "asyncio",
+                SimpleNamespace(sleep=patch_sleep),
+            ),
+        ):
             await on_exception()
 
         # backoff never sleeps past max_time, but the time spent in the
@@ -820,5 +828,14 @@ async def test_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
         async def on_predicate() -> None:
             await patch_sleep(function_runtime)  # ruff: ignore[function-uses-loop-variable]
 
-        await on_predicate()
+        with (
+            patch.object(
+                backoff._async,
+                "asyncio",
+                SimpleNamespace(sleep=patch_sleep),
+            ),
+            patch.object(backoff._common, "time", SimpleNamespace(monotonic=monotonic)),
+        ):
+            await on_predicate()
+
         assert elapsed <= max_time + function_runtime + 1e-9

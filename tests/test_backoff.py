@@ -6,13 +6,15 @@ import logging
 import re
 import sys
 import threading
-import unittest.mock
+from types import SimpleNamespace
 from typing import TYPE_CHECKING, Any, Literal
+from unittest.mock import Mock, patch
 
 import pytest
 from dirty_equals import IsFloat, IsInstance
 
 import backoff
+import backoff._sync
 from tests.common import EventAppender, _save_target
 
 if TYPE_CHECKING:
@@ -22,8 +24,9 @@ if TYPE_CHECKING:
 
 
 @pytest.fixture(autouse=True)
-def _patch_sleep(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("time.sleep", lambda x: None)
+def _patch_sleep() -> Generator[None, None, None]:
+    with patch.object(backoff._sync, "time", SimpleNamespace(sleep=Mock())):
+        yield
 
 
 def test_on_predicate() -> None:
@@ -34,6 +37,7 @@ def test_on_predicate() -> None:
         return val
 
     log: list[bool] = []
+
     ret = return_true(log, 3)
     assert ret is True
     assert len(log) == 3
@@ -47,12 +51,13 @@ def test_on_predicate_max_tries() -> None:
         return val
 
     log: list[bool] = []
+
     ret = return_true(log, 10)
     assert ret is False
     assert len(log) == 3
 
 
-def test_on_predicate_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_on_predicate_max_time() -> None:
     nows = [
         10.000005,
         9,
@@ -62,8 +67,6 @@ def test_on_predicate_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
 
     def monotonic() -> float:
         return nows.pop()
-
-    monkeypatch.setattr("time.monotonic", monotonic)
 
     def giveup(details: Details) -> None:
         assert details["tries"] == 3
@@ -76,12 +79,15 @@ def test_on_predicate_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
         return val
 
     log: list[bool] = []
-    ret = return_true(log, 10)
+
+    with patch.object(backoff._common, "time", SimpleNamespace(monotonic=monotonic)):
+        ret = return_true(log, 10)
+
     assert ret is False
     assert len(log) == 3
 
 
-def test_on_predicate_max_time_callable(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_on_predicate_max_time_callable() -> None:
     nows = [
         10.000005,
         9,
@@ -91,8 +97,6 @@ def test_on_predicate_max_time_callable(monkeypatch: pytest.MonkeyPatch) -> None
 
     def monotonic() -> float:
         return nows.pop()
-
-    monkeypatch.setattr("time.monotonic", monotonic)
 
     def giveup(details: Details) -> None:
         assert details["tries"] == 3
@@ -113,7 +117,10 @@ def test_on_predicate_max_time_callable(monkeypatch: pytest.MonkeyPatch) -> None
         return val
 
     log: list[bool] = []
-    ret = return_true(log, 10)
+
+    with patch.object(backoff._common, "time", SimpleNamespace(monotonic=monotonic)):
+        ret = return_true(log, 10)
+
     assert ret is False
     assert len(log) == 3
 
@@ -146,6 +153,7 @@ def test_on_exception_tuple() -> None:
         raise e
 
     log: list[Exception] = []
+
     assert keyerror_valueerror_then_true(log) is True
     assert len(log) == 2
     assert isinstance(log[0], KeyError)
@@ -166,6 +174,7 @@ def test_on_exception_max_tries() -> None:
         raise e
 
     log: list[Exception] = []
+
     with pytest.raises(KeyError):
         keyerror_then_true(log, 10, foo="bar")
 
@@ -982,7 +991,7 @@ def test_event_log_levels(
     func = func_factory(backoff_log_level, giveup_log_level, max_tries)
 
     with (
-        unittest.mock.patch("time.sleep", return_value=None),
+        patch.object(backoff._sync, "time", SimpleNamespace(sleep=lambda x: None)),
         caplog.at_level(
             min(backoff_log_level, giveup_log_level),
             logger="backoff",
@@ -1005,7 +1014,7 @@ def test_event_log_levels(
     assert giveup_log_count == 1
 
 
-def test_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_max_time() -> None:
     elapsed: float = 0
 
     def patch_sleep(n: float) -> None:
@@ -1014,9 +1023,6 @@ def test_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
 
     def monotonic() -> float:
         return elapsed
-
-    monkeypatch.setattr("time.sleep", patch_sleep)
-    monkeypatch.setattr("time.monotonic", monotonic)
 
     # A good place for property-based testing
     for function_runtime, max_time in itertools.product(range(10), repeat=2):
@@ -1032,7 +1038,11 @@ def test_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
             patch_sleep(function_runtime)  # ruff: ignore[function-uses-loop-variable]
             raise RuntimeError
 
-        with contextlib.suppress(BaseException):
+        with (
+            contextlib.suppress(RuntimeError),
+            patch.object(backoff._common, "time", SimpleNamespace(monotonic=monotonic)),
+            patch.object(backoff._sync, "time", SimpleNamespace(sleep=patch_sleep)),
+        ):
             on_exception()
 
         # backoff never sleeps past max_time, but the time spent in the
@@ -1051,5 +1061,10 @@ def test_max_time(monkeypatch: pytest.MonkeyPatch) -> None:
         def on_predicate() -> None:
             patch_sleep(function_runtime)  # ruff: ignore[function-uses-loop-variable]
 
-        on_predicate()
+        with (
+            patch.object(backoff._common, "time", SimpleNamespace(monotonic=monotonic)),
+            patch.object(backoff._sync, "time", SimpleNamespace(sleep=patch_sleep)),
+        ):
+            on_predicate()
+
         assert elapsed <= max_time + function_runtime + 1e-9

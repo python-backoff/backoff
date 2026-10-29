@@ -4,22 +4,23 @@ Higher-level tests integrating with 3rd party modules using iodiomatic
 backoff patterns.
 """
 
-import pytest
+from types import SimpleNamespace
+from unittest.mock import patch
+
 import requests
 import responses
 from requests import HTTPError
 
 import backoff
+import backoff._sync
 
 
 @responses.activate
-def test_on_predicate_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_on_predicate_runtime() -> None:
     log = []
 
     def sleep(seconds: float) -> None:
         log.append(seconds)
-
-    monkeypatch.setattr("time.sleep", sleep)
 
     url = "http://example.com"
 
@@ -37,20 +38,20 @@ def test_on_predicate_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
     def get_url() -> requests.Response:
         return requests.get(url)
 
-    resp = get_url()
+    with patch.object(backoff._sync, "time", SimpleNamespace(sleep=sleep)):
+        resp = get_url()
+
     assert resp.status_code == 200
 
     assert log == [1, 3, 7]
 
 
 @responses.activate
-def test_on_exception_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_on_exception_runtime() -> None:
     log = []
 
     def sleep(seconds: float) -> None:
         log.append(seconds)
-
-    monkeypatch.setattr("time.sleep", sleep)
 
     url = "http://example.com"
 
@@ -70,7 +71,9 @@ def test_on_exception_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
         resp.raise_for_status()
         return resp
 
-    resp = get_url()
+    with patch.object(backoff._sync, "time", SimpleNamespace(sleep=sleep)):
+        resp = get_url()
+
     assert resp.status_code == 200
 
     assert log == [1, 3, 7]
