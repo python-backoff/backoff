@@ -21,7 +21,7 @@ Use backoff when:
 Backoff provides:
 
 - Automatic retry logic with configurable strategies
-- Built-in exponential/fibonacci/constant wait patterns
+- Built-in exponential/Fibonacci/constant wait patterns
 - Jitter to prevent thundering herd
 - Event handlers for logging and monitoring
 - Clean decorator syntax
@@ -155,19 +155,19 @@ def my_function():
 
 ### Which wait strategy should I use?
 
-- **Exponential** (`backoff.expo`) - Most common, fast backoff for network/API calls
-- **Fibonacci** (`backoff.fibo`) - Gentler backoff, good for polling
-- **Constant** (`backoff.constant`) - Fixed intervals, good for regular polling
-- **Runtime** (`backoff.runtime`) - Server-directed wait times (Retry-After headers)
-- **Capped** (`backoff.capped`) - Wraps another strategy to clamp its wait times, e.g. bounding `runtime`
+- **Exponential** ([`backoff.expo`][backoff.expo]) - Most common, fast backoff for network/API calls
+- **Fibonacci** ([`backoff.fibo`][backoff.fibo]) - Gentler backoff, good for polling
+- **Constant** ([`backoff.constant`][backoff.constant]) - Fixed intervals, good for regular polling
+- **Runtime** ([`backoff.runtime`][backoff.runtime]) - Server-directed wait times ([`Retry-After`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Retry-After) headers)
+- **Capped** ([`backoff.capped`][backoff.capped]) - Wraps another strategy to clamp its wait times, e.g. bounding [`runtime`][backoff.runtime]
 
 ### What is jitter and why is it important?
 
-Jitter adds randomness to wait times to prevent the "thundering herd" problem (many clients retrying simultaneously). The default `full_jitter` uses AWS's algorithm where actual wait time is random between 0 and the calculated wait time.
+Jitter adds randomness to wait times to prevent the "thundering herd" problem (many clients retrying simultaneously). The default [`full_jitter`][backoff.full_jitter] uses [AWS's algorithm](https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/) where actual wait time is random between 0 and the calculated wait time.
 
 ### How do I respect Retry-After headers?
 
-Use `backoff.runtime`:
+Use [`backoff.runtime`][backoff.runtime]:
 
 ```python
 @backoff.on_predicate(
@@ -264,9 +264,9 @@ Event handlers receive a dict with:
 - `kwargs` - Keyword arguments
 - `tries` - Number of attempts
 - `elapsed` - Total elapsed time
-- `wait` - Time to wait (on_backoff only)
-- `value` - Return value (on_predicate only)
-- `exception` - Exception raised (on_exception only)
+- `wait` - Time to wait (`on_backoff` only)
+- `value` - Return value ([`on_predicate`][backoff.on_predicate] only)
+- `exception` - Exception raised ([`on_exception`][backoff.on_exception] only)
 
 ## Performance Questions
 
@@ -397,7 +397,7 @@ Check:
 
 ### Why are wait times not what I expect?
 
-The default `full_jitter` adds randomness. To see exact wait times, disable jitter:
+The default [`full_jitter`][backoff.full_jitter] adds randomness. To see exact wait times, disable jitter:
 
 ```python
 @backoff.on_exception(backoff.expo, Exception, jitter=None)
