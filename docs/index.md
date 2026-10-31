@@ -10,8 +10,8 @@ This module provides function decorators which can be used to wrap a function su
 
 ## Features
 
-- **Simple decorators** - Easy-to-use `@backoff.on_exception` and `@backoff.on_predicate` decorators
-- **Context managers** - `backoff.retry_context()` and `backoff.aretry_context()` add retries to arbitrary blocks of code
+- **Simple decorators** - Easy-to-use [`@backoff.on_exception`][backoff.on_exception] and [`@backoff.on_predicate`][backoff.on_predicate] decorators
+- **Context managers** - [`backoff.retry_context()`][backoff.retry_context] and [`backoff.aretry_context()`][backoff.aretry_context] add retries to arbitrary blocks of code
 - **Multiple wait strategies** - Exponential, fibonacci, constant, and runtime-configurable strategies
 - **Flexible configuration** - Control retry limits with `max_time`, `max_tries`, and custom give-up conditions
 - **Event handlers** - Hook into retry lifecycle with `on_success`, `on_backoff`, `on_giveup` and `on_try` callbacks
@@ -22,8 +22,8 @@ This module provides function decorators which can be used to wrap a function su
 !!! info "Type annotations"
 
     The decorators were annotated in v2.4.0, and v3.0.0 brought full typing
-    coverage. Async functions wrapped with `on_exception` or `on_predicate` now
-    keep their types.
+    coverage. Async functions wrapped with [`on_exception`][backoff.on_exception] or
+    [`on_predicate`][backoff.on_predicate] now keep their types.
 
 ## Quick Start
 

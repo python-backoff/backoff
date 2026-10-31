@@ -61,12 +61,12 @@ def decay(
 
 
 def fibo(max_value: int | None = None) -> Generator[int, Any, None]:
-    """Generator for fibonaccial decay.
+    """Generator for Fibonacci decay.
 
     Args:
         max_value: The maximum value to yield. Once the value in the
-             true fibonacci sequence exceeds this, the value
-             of max_value will forever after be yielded.
+             true Fibonacci sequence exceeds this, the value
+             of `max_value` will forever after be yielded.
     """
     # Advance past initial .send() call
     yield 0
@@ -108,15 +108,30 @@ def capped(
     """Wraps a wait generator, clamping each value it yields.
 
     Useful for wait generators without their own bound, such as
-    `constant` or `runtime` (e.g. capping a server-provided
-    `Retry-After` value so a misbehaving server can't stall retries
-    indefinitely):
+    [`constant`][backoff.constant] or [`runtime`][backoff.runtime] (e.g.
+    capping a server-provided `Retry-After` value so a misbehaving server
+    can't stall retries indefinitely):
 
-        backoff.on_predicate(
-            backoff.capped(backoff.runtime, max_value=60),
-            predicate=lambda r: r.status_code == 429,
-            value=lambda r: int(r.headers.get("Retry-After", 1)),
-        )
+    ```python
+    backoff.on_predicate(
+        backoff.capped(
+            backoff.runtime,
+            max_value=60,
+        ),
+        predicate=lambda r: (
+            r.status_code
+            == 429
+        ),
+        value=lambda r: (
+            int(
+                r.headers.get(
+                    "Retry-After",
+                    1,
+                )
+            )
+        ),
+    )
+    ```
 
     Args:
         wait_gen: The wait generator to wrap.
