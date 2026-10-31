@@ -145,7 +145,7 @@ def respect_retry_after():
 
 ### Examples
 
-#### HTTP Retry-After Header
+#### HTTP [Retry-After][retry-after] Header
 
 ```python
 def get_retry_after(response):
@@ -189,14 +189,14 @@ def custom_retry():
 
 - Respecting server-specified retry delays
 - Custom retry logic from application responses
-- API rate limiting with Retry-After headers
+- API rate limiting with [`Retry-After`][retry-after] headers
 
 ## Capped
 
 Wraps another wait generator and clamps each value it yields. Useful for
 bounding a wait strategy that has no cap of its own — `constant` or
 `runtime`, for example — such as when a misbehaving server sends an
-excessive `Retry-After` value:
+excessive [`Retry-After`][retry-after] value:
 
 ```python
 @backoff.on_predicate(
@@ -314,7 +314,7 @@ def my_function():
 - Dealing with network or API calls
 - Following industry best practices
 
-**Use fibonacci when:**
+**Use Fibonacci when:**
 
 - You want gentler backoff than exponential
 - Resource constraints matter
@@ -330,4 +330,4 @@ def my_function():
 
 - Server tells you how long to wait
 - Retry delay is in the response/exception
-- Implementing Retry-After headers
+- Implementing [Retry-After][retry-after] headers
