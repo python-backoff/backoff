@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import itertools
 import math
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ParamSpec
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Generator, Iterable
+
+    P = ParamSpec("P")
 
 
 def expo(
@@ -95,6 +97,55 @@ def constant(interval: float | Iterable[float] = 1) -> Generator[float, Any, Non
 
     for val in itr:
         yield val
+
+
+def capped(
+    wait_gen: Callable[P, Generator[float, Any, None]],
+    *,
+    min_value: float | None = None,
+    max_value: float | None = None,
+) -> Callable[P, Generator[float, Any, None]]:
+    """Wraps a wait generator, clamping each value it yields.
+
+    Useful for wait generators without their own bound, such as
+    `constant` or `runtime` (e.g. capping a server-provided
+    `Retry-After` value so a misbehaving server can't stall retries
+    indefinitely):
+
+        backoff.on_predicate(
+            backoff.capped(backoff.runtime, max_value=60),
+            predicate=lambda r: r.status_code == 429,
+            value=lambda r: int(r.headers.get("Retry-After", 1)),
+        )
+
+    Args:
+        wait_gen: The wait generator to wrap.
+        min_value: The minimum value to yield. Values below this are
+            raised to min_value.
+        max_value: The maximum value to yield. Values above this are
+            lowered to max_value.
+    """
+    if min_value is not None and max_value is not None and min_value > max_value:
+        msg = f"`min_value` {min_value} cannot be greater than `max_value` {max_value}"
+        raise ValueError(msg)
+
+    def generator(*args: P.args, **kwargs: P.kwargs) -> Generator[float, Any, None]:
+        gen = wait_gen(*args, **kwargs)
+        gen.send(None)
+
+        send_value = yield 0
+        while True:
+            try:
+                value = gen.send(send_value)
+            except StopIteration:
+                return
+            if max_value is not None:
+                value = min(value, max_value)
+            if min_value is not None:
+                value = max(value, min_value)
+            send_value = yield value
+
+    return generator
 
 
 def runtime(*, value: Callable[[Any], float]) -> Generator[float, Any, None]:

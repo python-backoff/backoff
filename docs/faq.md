@@ -159,6 +159,7 @@ def my_function():
 - **Fibonacci** (`backoff.fibo`) - Gentler backoff, good for polling
 - **Constant** (`backoff.constant`) - Fixed intervals, good for regular polling
 - **Runtime** (`backoff.runtime`) - Server-directed wait times (Retry-After headers)
+- **Capped** (`backoff.capped`) - Wraps another strategy to clamp its wait times, e.g. bounding `runtime`
 
 ### What is jitter and why is it important?
 
@@ -178,6 +179,9 @@ Use `backoff.runtime`:
 def api_call():
     return requests.get(url)
 ```
+
+To guard against an untrusted or misbehaving server sending an excessive
+value, wrap it with [`backoff.capped`][backoff.capped].
 
 ## Async Questions
 

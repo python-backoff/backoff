@@ -112,3 +112,42 @@ def test_runtime() -> None:
     gen.send(None)
     for i in range(20):
         assert i == gen.send(i)
+
+
+def test_capped_max_value() -> None:
+    gen = backoff.capped(backoff.expo, max_value=10)()
+    gen.send(None)
+    expected = [1, 2, 4, 8, 10, 10, 10]
+    for expect in expected:
+        assert expect == next(gen)
+
+
+def test_capped_min_value() -> None:
+    gen = backoff.capped(backoff.constant, min_value=5)(interval=[1, 10, 3])
+    gen.send(None)
+    assert list(gen) == [5, 10, 5]
+
+
+def test_capped_both_min_max() -> None:
+    gen = backoff.capped(
+        backoff.constant,
+        min_value=5,
+        max_value=15,
+    )(interval=[1, 10, 3, 20])
+    gen.send(None)
+    assert list(gen) == [5, 10, 5, 15]
+
+
+def test_capped_passes_through_kwargs_and_send_value() -> None:
+    gen = backoff.capped(backoff.runtime, max_value=60)(value=lambda x: x)
+    gen.send(None)
+    assert gen.send(30) == 30
+    assert gen.send(100) == 60
+
+
+def test_capped_min_max_value_error() -> None:
+    with pytest.raises(
+        ValueError,
+        match="`min_value` 10 cannot be greater than `max_value` 5",
+    ):
+        backoff.capped(backoff.expo, min_value=10, max_value=5)()
