@@ -207,7 +207,7 @@ The decorators are applied from bottom to top (inside out), so:
 
 1. Timeout exceptions get up to 300s of retries
 2. HTTP errors get up to 60s of retries
-3. None results trigger fibonacci backoff up to 13s
+3. None results trigger Fibonacci backoff up to 13s
 
 ## Event Handler Details
 

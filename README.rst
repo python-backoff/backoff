@@ -157,7 +157,7 @@ The ``on_predicate`` decorator is used to retry when a particular
 condition is true of the return value of the target function.  This may
 be useful when polling a resource for externally generated content.
 
-Here's an example which uses a fibonacci sequence backoff when the
+Here's an example which uses a Fibonacci sequence backoff when the
 return value of the target function is the empty list:
 
 .. code-block:: python

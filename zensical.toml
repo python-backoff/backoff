@@ -26,12 +26,18 @@ nav = [
     { "FAQ" = "faq.md" },
     { "Changelog" = "changelog.md" },
 ]
+watch = [
+    "includes",
+]
 
 [project.markdown_extensions.admonition]
 [project.markdown_extensions.pymdownx.highlight]
 pygments_lang_class = true
 [project.markdown_extensions.pymdownx.inlinehilite]
 [project.markdown_extensions.pymdownx.snippets]
+auto_append = [
+    "includes/ext-links.md",
+]
 [project.markdown_extensions.pymdownx.superfences]
 
 [project.plugins.llmstxt]
