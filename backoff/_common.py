@@ -214,8 +214,7 @@ def _log_backoff(details: Details, logger: _AnyLogger, log_level: int) -> None:
     msg = "Backing off %s(...) for %.1fs (%s)"
     log_args = [details["target"].__name__, details["wait"]]  # ty:ignore[unresolved-attribute]
 
-    exc = details.get("exception")
-    if exc is not None:
+    if (exc := details.get("exception")) is not None:
         exc_fmt = traceback.format_exception_only(type(exc), exc)[-1]
         log_args.append(exc_fmt.rstrip("\n"))
     else:
@@ -228,8 +227,7 @@ def _log_giveup(details: Details, logger: _AnyLogger, log_level: int) -> None:
     msg = "Giving up %s(...) after %d tries (%s)"
     log_args = [details["target"].__name__, details["tries"]]  # ty:ignore[unresolved-attribute]
 
-    exc = details.get("exception")
-    if exc is not None:
+    if (exc := details.get("exception")) is not None:
         exc_fmt = traceback.format_exception_only(type(exc), exc)[-1]
         log_args.append(exc_fmt.rstrip("\n"))
     else:
