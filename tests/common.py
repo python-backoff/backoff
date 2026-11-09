@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 # decorator that that saves the target as
 # an attribute of the decorated function
 def _save_target(f: Callable[P, T]) -> Callable[P, T]:
-    f._target = f  # type: ignore[attr-defined] # ty:ignore[unresolved-attribute]
+    f._target = f  # type: ignore[attr-defined] # ty:ignore[missing-attribute]
     return f
 
 

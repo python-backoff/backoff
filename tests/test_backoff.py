@@ -349,7 +349,7 @@ def test_on_exception_success(appender: EventAppender) -> None:
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
+            "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[missing-attribute]
             "tries": i + 1,
             "wait": 0,
             "elapsed": IsFloat(gt=0),
@@ -360,7 +360,7 @@ def test_on_exception_success(appender: EventAppender) -> None:
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
+        "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[missing-attribute]
         "tries": 3,
         "elapsed": IsFloat(gt=0),
     }
@@ -434,7 +434,7 @@ def test_on_exception_giveup(raise_on_giveup: bool, appender: EventAppender) -> 
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": exceptor._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
+        "target": exceptor._target,  # type:ignore[attr-defined] # ty:ignore[missing-attribute]
         "tries": 3,
         "elapsed": IsFloat(gt=0),
         "exception": IsInstance(ValueError),
@@ -488,7 +488,7 @@ def test_on_predicate_success(appender: EventAppender) -> None:
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
+            "target": success._target,  # type:ignore[attr-defined] # ty:ignore[missing-attribute]
             "tries": i + 1,
             "value": False,
             "wait": 0,
@@ -499,7 +499,7 @@ def test_on_predicate_success(appender: EventAppender) -> None:
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
+        "target": success._target,  # type:ignore[attr-defined] # ty:ignore[missing-attribute]
         "tries": 3,
         "value": True,
         "elapsed": IsFloat(gt=0),
@@ -565,7 +565,7 @@ def test_on_predicate_giveup(appender: EventAppender) -> None:
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": emptiness._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
+        "target": emptiness._target,  # type:ignore[attr-defined] # ty:ignore[missing-attribute]
         "tries": 3,
         "value": None,
         "elapsed": IsFloat(gt=0),
@@ -607,7 +607,7 @@ def test_on_predicate_iterable_handlers() -> None:
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": emptiness._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
+            "target": emptiness._target,  # type:ignore[attr-defined] # ty:ignore[missing-attribute]
             "tries": 3,
             "value": None,
             "elapsed": IsFloat(gt=0),
@@ -646,7 +646,7 @@ def test_on_exception_jitter(appender: EventAppender) -> None:
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
+            "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[missing-attribute]
             "tries": i + 1,
             "wait": 0,
             "elapsed": IsFloat(gt=0),
@@ -657,7 +657,7 @@ def test_on_exception_jitter(appender: EventAppender) -> None:
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
+        "target": succeeder._target,  # type:ignore[attr-defined] # ty:ignore[missing-attribute]
         "tries": 3,
         "elapsed": IsFloat(gt=0),
     }
@@ -693,7 +693,7 @@ def test_on_predicate_jitter(appender: EventAppender) -> None:
         assert details == {
             "args": (1, 2, 3),
             "kwargs": {"foo": 1, "bar": 2},
-            "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
+            "target": success._target,  # type:ignore[attr-defined] # ty:ignore[missing-attribute]
             "tries": i + 1,
             "value": False,
             "wait": 0,
@@ -704,7 +704,7 @@ def test_on_predicate_jitter(appender: EventAppender) -> None:
     assert details == {
         "args": (1, 2, 3),
         "kwargs": {"foo": 1, "bar": 2},
-        "target": success._target,  # type:ignore[attr-defined] # ty:ignore[unresolved-attribute]
+        "target": success._target,  # type:ignore[attr-defined] # ty:ignore[missing-attribute]
         "tries": 3,
         "value": True,
         "elapsed": IsFloat(gt=0),
