@@ -1,5 +1,32 @@
 # Changelog
 
+## [v3.1.0] - 2026-11-09
+
+### 🚀 Added
+
+- feat: Add a capping wrapper for wait generators [#211](https://github.com/python-backoff/backoff/pull/211) (from @edgarrmondragon)
+
+### 📚 Documentation
+
+- docs: Add more cross links to the docs [#234](https://github.com/python-backoff/backoff/pull/234) (from @edgarrmondragon)
+- docs: Mention context managers in docs index page [#232](https://github.com/python-backoff/backoff/pull/232) (from @edgarrmondragon)
+- docs: Add version admonitions [#225](https://github.com/python-backoff/backoff/pull/225) (from @edgarrmondragon)
+- docs: Customize base URL for llms.txt output [#224](https://github.com/python-backoff/backoff/pull/224) (from @edgarrmondragon)
+- docs: Expose an `/llms.txt` route in the documentation [#223](https://github.com/python-backoff/backoff/pull/223) (from @edgarrmondragon)
+- docs: Use Zensical support for `mkdocs-autoapi` to auto-generate API documentation [#222](https://github.com/python-backoff/backoff/pull/222) (from @edgarrmondragon)
+- docs: Simplify the application state example [#218](https://github.com/python-backoff/backoff/pull/218) (from @edgarrmondragon)
+- docs: Simplify the runtime dynamic wait generator example [#217](https://github.com/python-backoff/backoff/pull/217) (from @edgarrmondragon)
+- docs: Simplify the dynamic configuration example [#216](https://github.com/python-backoff/backoff/pull/216) (from @edgarrmondragon)
+
+### 🧰 Internal
+
+- test: Use `anyio` instead of `pytest-asyncio` to run async tests [#230](https://github.com/python-backoff/backoff/pull/230) (from @edgarrmondragon)
+
+### 🛠️ Maintenance
+
+- build: Use `import-names` pyproject metadata (aka PEP 794) [#233](https://github.com/python-backoff/backoff/pull/233) (from @edgarrmondragon)
+- ci: Start testing with Python 3.16 [#229](https://github.com/python-backoff/backoff/pull/229) (from @edgarrmondragon)
+
 ## [v3.0.0] - 2026-08-31
 
 ### 🚀 Added
