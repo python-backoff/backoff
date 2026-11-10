@@ -61,7 +61,7 @@ This will retry the function with exponential backoff whenever a `RequestExcepti
 ## Next Steps
 
 - [Getting Started Guide](getting-started.md) - Detailed tutorial
-- [User Guide](user-guide/decorators.md) - Complete reference
+- [User Guide](user-guide/decorators.md) - Decorator recipes
 - [Examples](examples.md) - Real-world patterns
 - [API Reference](api/backoff/index.md) - Full API documentation
 
