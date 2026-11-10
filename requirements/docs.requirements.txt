@@ -4,8 +4,6 @@ click==8.5.0
     # via
     #   mkdocs
     #   zensical
-deepmerge==4.0.0
-    # via zensical
 ghp-import==2.1.0
     # via mkdocs
 griffelib==2.4.1
@@ -81,5 +79,7 @@ tzdata==2026.5
     # via python-dateutil
 watchdog==6.0.0
     # via mkdocs
-zensical==0.0.67
+zensical==0.1.1
     # via python-backoff (pyproject.toml:docs)
+zensical-ui==0.0.42
+    # via zensical
