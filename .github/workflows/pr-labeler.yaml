@@ -21,6 +21,6 @@ jobs:
     permissions:
       pull-requests: write  # to autolabel PRs
     steps:
-      - uses: release-drafter/release-drafter/autolabeler@978bb0b30c5ee8cdd332ced253758157150d43f0 # v7.10.0
+      - uses: release-drafter/release-drafter/autolabeler@v7.11.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
